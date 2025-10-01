@@ -349,12 +349,10 @@ if __name__ == "__main__":
     with open('text.txt', 'r', encoding='utf-8') as f:
         text = f.read()
     
-    # Обработка текста
     count_spaces(text)
     text = re.sub(r'[^А-Яа-яёЁ1-9,0\s]', '', text)
     text_list = list(text)
     
-    # Учет заглавных букв
     list_upper_case = [i for i in text_list if i.isupper()]
     value_passing_fingers(0, len(list_upper_case) * 2)
     value_passing_fingers_qwer(0, len(list_upper_case) * 2)
@@ -370,7 +368,6 @@ if __name__ == "__main__":
         count_steps(text_lower[i - 1], text_lower[i])
         count_steps_qwer(text_lower[i - 1], text_lower[i])
     
-    # Вывод результатов
     print_detailed_analysis(movements_info)
     print_movement_statistics(movements_info)
     print_final_results()
