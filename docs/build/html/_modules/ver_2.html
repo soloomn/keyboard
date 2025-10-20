@@ -1,0 +1,873 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ver_2 &mdash; документация keyboard 0.4</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=11064190"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=cd1d70c9"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            keyboard
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <p class="caption" role="heading"><span class="caption-text">Содержание:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">keyboard</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">keyboard</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Код модуля</a></li>
+      <li class="breadcrumb-item active">ver_2</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Исходный код ver_2</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">МОДУЛЬ АНАЛИЗА ЭРГОНОМИКИ КЛАВИАТУРНЫХ РАСКЛАДОК</span>
+<span class="sd">------------------------------------------------</span>
+<span class="sd">ОПИСАНИЕ:</span>
+<span class="sd">---------</span>
+<span class="sd">Данный модуль предназначен для сравнительного анализа эргономичности трёх русских раскладок клавиатуры:</span>
+<span class="sd">&quot;Диктор&quot; и &quot;Вызов&quot; (альтернативные раскладки) и &quot;ЙЦУКЕН&quot; (стандартная раскладка).</span>
+
+<span class="sd">ОСНОВНЫЕ ВОЗМОЖНОСТИ:</span>
+<span class="sd">---------------------</span>
+<span class="sd">1. Расчет штрафных баллов за перемещения между клавишами</span>
+<span class="sd">2. Распределение нагрузки на пальцы обеих рук</span>
+<span class="sd">3. Сравнительный анализ эффективности раскладок</span>
+<span class="sd">4. Детальная статистика по типам перемещений</span>
+<span class="sd">5. Визуализация результатов в табличном формате</span>
+
+<span class="sd">ПРИНЦИП РАБОТЫ:</span>
+<span class="sd">---------------</span>
+<span class="sd">- Текст разбивается на последовательности символов</span>
+<span class="sd">- Для каждой пары символов вычисляются координаты в обеих раскладках</span>
+<span class="sd">- На основе расстояния между координатами начисляются штрафные баллы</span>
+<span class="sd">- Нагрузка распределяется по 10 пальцам согласно зонам ответственности</span>
+<span class="sd">- Сравнивается общая нагрузка и эффективность раскладок</span>
+
+<span class="sd">ВХОДНЫЕ ДАННЫЕ:</span>
+<span class="sd">---------------</span>
+<span class="sd">- Файл &#39;text.txt&#39; с русским текстом для анализа</span>
+<span class="sd">- Модуль dictr.py с конфигурацией клавиатурных раскладок (data_dict)</span>
+
+<span class="sd">ВЫХОДНЫЕ ДАННЫЕ:</span>
+<span class="sd">----------------</span>
+<span class="sd">- Детальный анализ первых 20 перемещений между символами</span>
+<span class="sd">- Статистика по типам перемещений (вертикальные, горизонтальные, диагональные, сложные)</span>
+<span class="sd">- Сравнительная таблица нагрузки на каждый палец для обеих раскладок</span>
+<span class="sd">- Общий вердикт по эффективности раскладок с итоговыми баллами</span>
+
+<span class="sd">СИСТЕМА ШТРАФНЫХ БАЛЛОВ:</span>
+<span class="sd">------------------------</span>
+<span class="sd">- 0 баллов: та же клавиша</span>
+<span class="sd">- 1 балл: вертикальные/горизонтальные перемещения на 1 позицию</span>
+<span class="sd">- 2 балла: диагональные перемещения</span>
+<span class="sd">- 3-4 балла: сложные перемещения (2+ позиции)</span>
+
+<span class="sd">РАСПРЕДЕЛЕНИЕ ПАЛЬЦЕВ:</span>
+<span class="sd">----------------------</span>
+<span class="sd">- f1l/f1r: большие пальцы (пробелы и спец. клавиши)</span>
+<span class="sd">- f2l/f2r: указательные пальцы</span>
+<span class="sd">- f3l/f3r: средние пальцы</span>
+<span class="sd">- f4l/f4r: безымянные пальцы</span>
+<span class="sd">- f5l/f5r: мизинцы</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dictr</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">counter_fingers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;f5l&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f4l&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f3l&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f2l&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f1l&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f1r&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f2r&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f3r&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f4r&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f5r&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+<span class="n">counter_fingers_qwer</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;f5l&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f4l&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f3l&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f2l&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f1l&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f1r&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f2r&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f3r&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f4r&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f5r&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+<span class="n">counter_fingers_call</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;f5l&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f4l&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f3l&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f2l&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f1l&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f1r&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f2r&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f3r&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f4r&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;f5r&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+
+
+<div class="viewcode-block" id="get_cords">
+<a class="viewcode-back" href="../ver_2.html#ver_2.get_cords">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_cords</span><span class="p">(</span><span class="n">symbol</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Получаем координаты символа для раскладки Диктор</span>
+
+<span class="sd">    ВХОД:</span>
+<span class="sd">        symbol (str): символ для поиска координат</span>
+
+<span class="sd">    ВЫХОД:</span>
+<span class="sd">        list | None: [номер_ряда, номер_колонки] или None если символ не найден</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data_dict</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;key&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="n">symbol</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">data_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;raw&#39;</span><span class="p">],</span> <span class="n">data_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;column&#39;</span><span class="p">]]</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_cords_qwer">
+<a class="viewcode-back" href="../ver_2.html#ver_2.get_cords_qwer">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_cords_qwer</span><span class="p">(</span><span class="n">symbol</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Получаем координаты символа для раскладки ЙЦУКЕН</span>
+
+<span class="sd">    ВХОД:</span>
+<span class="sd">        symbol (str): символ для поиска координат</span>
+
+<span class="sd">    ВЫХОД:</span>
+<span class="sd">        list | None: [номер_ряда, номер_колонки] или None если символ не найден</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data_dict</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;qwer&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="n">symbol</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">data_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;raw&#39;</span><span class="p">],</span> <span class="n">data_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;column&#39;</span><span class="p">]]</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_cords_vyzov">
+<a class="viewcode-back" href="../ver_2.html#ver_2.get_cords_vyzov">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_cords_vyzov</span><span class="p">(</span><span class="n">symbol</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Получаем координаты символа для раскладки Вызов и определяем, является ли символ вторым на клавише</span>
+
+<span class="sd">    ВХОД:</span>
+<span class="sd">        symbol (str): символ для поиска координат</span>
+
+<span class="sd">    ВЫХОД:</span>
+<span class="sd">        list | None: [номер_ряда, номер_колонки] или None если символ не найден</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data_dict</span><span class="p">:</span>
+        <span class="n">vyzov_chars</span> <span class="o">=</span> <span class="n">data_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;vyzov&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vyzov_chars</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="c1"># Клавиша с двумя символами</span>
+            <span class="k">if</span> <span class="n">vyzov_chars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">symbol</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">data_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;raw&#39;</span><span class="p">],</span> <span class="n">data_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;column&#39;</span><span class="p">],</span> <span class="kc">False</span><span class="p">]</span>  <span class="c1"># Первый символ</span>
+            <span class="k">elif</span> <span class="n">vyzov_chars</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">symbol</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">data_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;raw&#39;</span><span class="p">],</span> <span class="n">data_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;column&#39;</span><span class="p">],</span> <span class="kc">True</span><span class="p">]</span>  <span class="c1"># Второй символ</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">vyzov_chars</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># Клавиша с одним символом</span>
+            <span class="k">if</span> <span class="n">vyzov_chars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">symbol</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">data_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;raw&#39;</span><span class="p">],</span> <span class="n">data_dict</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;column&#39;</span><span class="p">],</span> <span class="kc">False</span><span class="p">]</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="calculate_penalty">
+<a class="viewcode-back" href="../ver_2.html#ver_2.calculate_penalty">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_penalty</span><span class="p">(</span><span class="n">current_pos</span><span class="p">,</span> <span class="n">next_pos</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Усовершенствованная система штрафных баллов согласно требованиям:</span>
+<span class="sd">    - Вверх/вниз/влево/вправо = 1 балл</span>
+<span class="sd">    - Диагональ = 2 балла</span>
+<span class="sd">    - Сложные перемещения = 3-4 балла</span>
+
+<span class="sd">    ВХОД:</span>
+<span class="sd">        current_pos (list): текущие координаты [ряд, колонка]</span>
+<span class="sd">        next_pos (list): следующие координаты [ряд, колонка]</span>
+
+<span class="sd">    ВЫХОД:</span>
+<span class="sd">        int: штрафные баллы (0-4)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">current_pos</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">next_pos</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="n">current_row</span><span class="p">,</span> <span class="n">current_col</span> <span class="o">=</span> <span class="n">current_pos</span>
+    <span class="n">next_row</span><span class="p">,</span> <span class="n">next_col</span> <span class="o">=</span> <span class="n">next_pos</span>
+
+    <span class="c1"># Если та же клавиша - штраф 0</span>
+    <span class="k">if</span> <span class="n">current_row</span> <span class="o">==</span> <span class="n">next_row</span> <span class="ow">and</span> <span class="n">current_col</span> <span class="o">==</span> <span class="n">next_col</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="n">row_diff</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">current_row</span> <span class="o">-</span> <span class="n">next_row</span><span class="p">)</span>
+    <span class="n">col_diff</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">current_col</span> <span class="o">-</span> <span class="n">next_col</span><span class="p">)</span>
+
+    <span class="c1"># Простые перемещения (1 балл)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">row_diff</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">col_diff</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">row_diff</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col_diff</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+    <span class="c1"># Диагональные перемещения (2 балла)</span>
+    <span class="k">elif</span> <span class="n">row_diff</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">col_diff</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">2</span>
+
+    <span class="c1"># Сложные перемещения (3-4 балла)</span>
+    <span class="k">elif</span> <span class="n">row_diff</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">col_diff</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">base_penalty</span> <span class="o">=</span> <span class="n">row_diff</span> <span class="o">+</span> <span class="n">col_diff</span>
+        <span class="k">if</span> <span class="n">next_col</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">]</span> <span class="ow">or</span> <span class="n">next_row</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">base_penalty</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">base_penalty</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span></div>
+
+
+
+<div class="viewcode-block" id="value_passing_fingers">
+<a class="viewcode-back" href="../ver_2.html#ver_2.value_passing_fingers">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">value_passing_fingers</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Распределение нагрузки по пальцам для Диктор</span>
+
+<span class="sd">    ВХОД:</span>
+<span class="sd">        column (int): номер колонки (0-12)</span>
+<span class="sd">        value (int): значение нагрузки для добавления</span>
+
+<span class="sd">    ВЫХОД:</span>
+<span class="sd">        None: обновляет глобальную переменную counter_fingers</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">match</span> <span class="n">column</span><span class="p">:</span>
+        <span class="k">case</span> <span class="mi">0</span> <span class="o">|</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">counter_fingers</span><span class="p">[</span><span class="s1">&#39;f5l&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">value</span>
+        <span class="k">case</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">counter_fingers</span><span class="p">[</span><span class="s1">&#39;f4l&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">value</span>
+        <span class="k">case</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">counter_fingers</span><span class="p">[</span><span class="s1">&#39;f3l&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">value</span>
+        <span class="k">case</span> <span class="mi">4</span> <span class="o">|</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">counter_fingers</span><span class="p">[</span><span class="s1">&#39;f2l&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">value</span>
+        <span class="k">case</span> <span class="mi">6</span> <span class="o">|</span> <span class="mi">7</span><span class="p">:</span>
+            <span class="n">counter_fingers</span><span class="p">[</span><span class="s1">&#39;f2r&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">value</span>
+        <span class="k">case</span> <span class="mi">8</span><span class="p">:</span>
+            <span class="n">counter_fingers</span><span class="p">[</span><span class="s1">&#39;f3r&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">value</span>
+        <span class="k">case</span> <span class="mi">9</span><span class="p">:</span>
+            <span class="n">counter_fingers</span><span class="p">[</span><span class="s1">&#39;f4r&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">value</span>
+        <span class="k">case</span> <span class="mi">10</span> <span class="o">|</span> <span class="mi">11</span> <span class="o">|</span> <span class="mi">12</span><span class="p">:</span>
+            <span class="n">counter_fingers</span><span class="p">[</span><span class="s1">&#39;f5r&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">value</span></div>
+
+
+
+<div class="viewcode-block" id="value_passing_fingers_qwer">
+<a class="viewcode-back" href="../ver_2.html#ver_2.value_passing_fingers_qwer">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">value_passing_fingers_qwer</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Распределение нагрузки по пальцам для ЙЦУКЕН</span>
+
+<span class="sd">    ВХОД:</span>
+<span class="sd">        column (int): номер колонки (0-12)</span>
+<span class="sd">        value (int): значение нагрузки для добавления</span>
+
+<span class="sd">    ВЫХОД:</span>
+<span class="sd">        None: обновляет глобальную переменную counter_fingers_qwer</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">match</span> <span class="n">column</span><span class="p">:</span>
+        <span class="k">case</span> <span class="mi">0</span> <span class="o">|</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">counter_fingers_qwer</span><span class="p">[</span><span class="s1">&#39;f5l&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">value</span>
+        <span class="k">case</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">counter_fingers_qwer</span><span class="p">[</span><span class="s1">&#39;f4l&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">value</span>
+        <span class="k">case</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">counter_fingers_qwer</span><span class="p">[</span><span class="s1">&#39;f3l&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">value</span>
+        <span class="k">case</span> <span class="mi">4</span> <span class="o">|</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">counter_fingers_qwer</span><span class="p">[</span><span class="s1">&#39;f2l&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">value</span>
+        <span class="k">case</span> <span class="mi">6</span> <span class="o">|</span> <span class="mi">7</span><span class="p">:</span>
+            <span class="n">counter_fingers_qwer</span><span class="p">[</span><span class="s1">&#39;f2r&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">value</span>
+        <span class="k">case</span> <span class="mi">8</span><span class="p">:</span>
+            <span class="n">counter_fingers_qwer</span><span class="p">[</span><span class="s1">&#39;f3r&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">value</span>
+        <span class="k">case</span> <span class="mi">9</span><span class="p">:</span>
+            <span class="n">counter_fingers_qwer</span><span class="p">[</span><span class="s1">&#39;f4r&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">value</span>
+        <span class="k">case</span> <span class="mi">10</span> <span class="o">|</span> <span class="mi">11</span> <span class="o">|</span> <span class="mi">12</span><span class="p">:</span>
+            <span class="n">counter_fingers_qwer</span><span class="p">[</span><span class="s1">&#39;f5r&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">value</span></div>
+
+
+
+<div class="viewcode-block" id="value_passing_fingers_call">
+<a class="viewcode-back" href="../ver_2.html#ver_2.value_passing_fingers_call">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">value_passing_fingers_call</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">is_second_symbol</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Распределение нагрузки по пальцам для Вызов</span>
+
+<span class="sd">    ВХОД:</span>
+<span class="sd">        column (int): номер колонки (0-12)</span>
+<span class="sd">        value (int): значение нагрузки для добавления</span>
+
+<span class="sd">    ВЫХОД:</span>
+<span class="sd">        None: обновляет глобальную переменную counter_fingers_qwer</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Добавляем штраф за использование второго символа</span>
+    <span class="n">total_value</span> <span class="o">=</span> <span class="n">value</span> <span class="o">+</span> <span class="p">(</span><span class="mi">4</span> <span class="k">if</span> <span class="n">is_second_symbol</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">match</span> <span class="n">column</span><span class="p">:</span>
+        <span class="k">case</span> <span class="mi">0</span> <span class="o">|</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">counter_fingers_call</span><span class="p">[</span><span class="s1">&#39;f5l&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">total_value</span>
+        <span class="k">case</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">counter_fingers_call</span><span class="p">[</span><span class="s1">&#39;f4l&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">total_value</span>
+        <span class="k">case</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">counter_fingers_call</span><span class="p">[</span><span class="s1">&#39;f3l&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">total_value</span>
+        <span class="k">case</span> <span class="mi">4</span> <span class="o">|</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">counter_fingers_call</span><span class="p">[</span><span class="s1">&#39;f2l&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">total_value</span>
+        <span class="k">case</span> <span class="mi">6</span> <span class="o">|</span> <span class="mi">7</span><span class="p">:</span>
+            <span class="n">counter_fingers_call</span><span class="p">[</span><span class="s1">&#39;f2r&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">total_value</span>
+        <span class="k">case</span> <span class="mi">8</span><span class="p">:</span>
+            <span class="n">counter_fingers_call</span><span class="p">[</span><span class="s1">&#39;f3r&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">total_value</span>
+        <span class="k">case</span> <span class="mi">9</span><span class="p">:</span>
+            <span class="n">counter_fingers_call</span><span class="p">[</span><span class="s1">&#39;f4r&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">total_value</span>
+        <span class="k">case</span> <span class="mi">10</span> <span class="o">|</span> <span class="mi">11</span> <span class="o">|</span> <span class="mi">12</span><span class="p">:</span>
+            <span class="n">counter_fingers_call</span><span class="p">[</span><span class="s1">&#39;f5r&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">total_value</span></div>
+
+
+
+<div class="viewcode-block" id="count_steps">
+<a class="viewcode-back" href="../ver_2.html#ver_2.count_steps">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">count_steps</span><span class="p">(</span><span class="n">first_sim</span><span class="p">,</span> <span class="n">second_sim</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Подсчет шагов для раскладки Диктор с улучшенной системой штрафов</span>
+
+<span class="sd">    ВХОД:</span>
+<span class="sd">        first_sim (str): первый символ</span>
+<span class="sd">        second_sim (str): второй символ</span>
+
+<span class="sd">    ВЫХОД:</span>
+<span class="sd">        tuple: (штрафные_баллы, используемый_палец)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">current_pos</span> <span class="o">=</span> <span class="n">get_cords</span><span class="p">(</span><span class="n">first_sim</span><span class="p">)</span>
+    <span class="n">next_pos</span> <span class="o">=</span> <span class="n">get_cords</span><span class="p">(</span><span class="n">second_sim</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">current_pos</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">next_pos</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;N/A&#39;</span>
+
+    <span class="n">penalty</span> <span class="o">=</span> <span class="n">calculate_penalty</span><span class="p">(</span><span class="n">current_pos</span><span class="p">,</span> <span class="n">next_pos</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">current_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">value_passing_fingers</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">penalty</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">current_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">next_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">match</span> <span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">case</span> <span class="mi">5</span> <span class="o">|</span> <span class="mi">6</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">next_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="n">value_passing_fingers</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">value_passing_fingers</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">penalty</span><span class="p">)</span>
+                <span class="k">case</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">2</span> <span class="o">|</span> <span class="mi">3</span> <span class="o">|</span> <span class="mi">4</span> <span class="o">|</span> <span class="mi">7</span> <span class="o">|</span> <span class="mi">8</span> <span class="o">|</span> <span class="mi">9</span> <span class="o">|</span> <span class="mi">10</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">next_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="k">pass</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">value_passing_fingers</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">penalty</span><span class="p">)</span>
+                <span class="k">case</span> <span class="mi">11</span><span class="p">:</span>
+                    <span class="n">value_passing_fingers</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">penalty</span><span class="p">)</span>
+                <span class="k">case</span> <span class="mi">12</span><span class="p">:</span>
+                    <span class="n">value_passing_fingers</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">penalty</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">current_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">next_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">match</span> <span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">case</span> <span class="mi">5</span> <span class="o">|</span> <span class="mi">6</span> <span class="o">|</span> <span class="mi">11</span><span class="p">:</span>
+                    <span class="n">value_passing_fingers</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">abs</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">case</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">2</span> <span class="o">|</span> <span class="mi">3</span> <span class="o">|</span> <span class="mi">4</span> <span class="o">|</span> <span class="mi">7</span> <span class="o">|</span> <span class="mi">8</span> <span class="o">|</span> <span class="mi">9</span> <span class="o">|</span> <span class="mi">10</span><span class="p">:</span>
+                    <span class="n">value_passing_fingers</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">abs</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span><span class="p">))</span>
+                <span class="k">case</span> <span class="mi">12</span><span class="p">:</span>
+                    <span class="n">value_passing_fingers</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">abs</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">penalty</span><span class="p">,</span> <span class="n">get_finger_by_column</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="count_steps_qwer">
+<a class="viewcode-back" href="../ver_2.html#ver_2.count_steps_qwer">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">count_steps_qwer</span><span class="p">(</span><span class="n">first_sim</span><span class="p">,</span> <span class="n">second_sim</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Подсчет шагов для раскладки ЙЦУКЕН с улучшенной системой штрафов</span>
+
+<span class="sd">    ВХОД:</span>
+<span class="sd">        first_sim (str): первый символ</span>
+<span class="sd">        second_sim (str): второй символ</span>
+
+<span class="sd">    ВЫХОД:</span>
+<span class="sd">        tuple: (штрафные_баллы, используемый_палец)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">current_pos</span> <span class="o">=</span> <span class="n">get_cords_qwer</span><span class="p">(</span><span class="n">first_sim</span><span class="p">)</span>
+    <span class="n">next_pos</span> <span class="o">=</span> <span class="n">get_cords_qwer</span><span class="p">(</span><span class="n">second_sim</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">current_pos</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">next_pos</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;N/A&#39;</span>
+
+    <span class="n">penalty</span> <span class="o">=</span> <span class="n">calculate_penalty</span><span class="p">(</span><span class="n">current_pos</span><span class="p">,</span> <span class="n">next_pos</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">current_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">value_passing_fingers_qwer</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">penalty</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">current_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">next_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">match</span> <span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">case</span> <span class="mi">5</span> <span class="o">|</span> <span class="mi">6</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">next_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="n">value_passing_fingers_qwer</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">value_passing_fingers_qwer</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">penalty</span><span class="p">)</span>
+                <span class="k">case</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">2</span> <span class="o">|</span> <span class="mi">3</span> <span class="o">|</span> <span class="mi">4</span> <span class="o">|</span> <span class="mi">7</span> <span class="o">|</span> <span class="mi">8</span> <span class="o">|</span> <span class="mi">9</span> <span class="o">|</span> <span class="mi">10</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">next_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="k">pass</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">value_passing_fingers_qwer</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">penalty</span><span class="p">)</span>
+                <span class="k">case</span> <span class="mi">11</span><span class="p">:</span>
+                    <span class="n">value_passing_fingers_qwer</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">penalty</span><span class="p">)</span>
+                <span class="k">case</span> <span class="mi">12</span><span class="p">:</span>
+                    <span class="n">value_passing_fingers_qwer</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">penalty</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">current_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">next_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">match</span> <span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">case</span> <span class="mi">5</span> <span class="o">|</span> <span class="mi">6</span> <span class="o">|</span> <span class="mi">11</span><span class="p">:</span>
+                    <span class="n">value_passing_fingers_qwer</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">abs</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">case</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">2</span> <span class="o">|</span> <span class="mi">3</span> <span class="o">|</span> <span class="mi">4</span> <span class="o">|</span> <span class="mi">7</span> <span class="o">|</span> <span class="mi">8</span> <span class="o">|</span> <span class="mi">9</span> <span class="o">|</span> <span class="mi">10</span><span class="p">:</span>
+                    <span class="n">value_passing_fingers_qwer</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">abs</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span><span class="p">))</span>
+                <span class="k">case</span> <span class="mi">12</span><span class="p">:</span>
+                    <span class="n">value_passing_fingers_qwer</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">abs</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">penalty</span><span class="p">,</span> <span class="n">get_finger_by_column</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="count_steps_call">
+<a class="viewcode-back" href="../ver_2.html#ver_2.count_steps_call">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">count_steps_call</span><span class="p">(</span><span class="n">first_sim</span><span class="p">,</span> <span class="n">second_sim</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Подсчет шагов для раскладки Вызов с улучшенной системой штрафов</span>
+
+<span class="sd">    ВХОД:</span>
+<span class="sd">        first_sim (str): первый символ</span>
+<span class="sd">        second_sim (str): второй символ</span>
+
+<span class="sd">    ВЫХОД:</span>
+<span class="sd">        tuple: (штрафные_баллы, используемый_палец)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">current_pos_info</span> <span class="o">=</span> <span class="n">get_cords_vyzov</span><span class="p">(</span><span class="n">first_sim</span><span class="p">)</span>
+    <span class="n">next_pos_info</span> <span class="o">=</span> <span class="n">get_cords_vyzov</span><span class="p">(</span><span class="n">second_sim</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">current_pos_info</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">next_pos_info</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;N/A&#39;</span>
+
+    <span class="c1"># Извлекаем координаты и информацию о втором символе</span>
+    <span class="n">current_pos</span> <span class="o">=</span> <span class="n">current_pos_info</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># row, column</span>
+    <span class="n">next_pos</span> <span class="o">=</span> <span class="n">next_pos_info</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># row, column</span>
+    <span class="n">is_second_symbol_current</span> <span class="o">=</span> <span class="n">current_pos_info</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_pos_info</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="k">else</span> <span class="kc">False</span>
+    <span class="n">is_second_symbol_next</span> <span class="o">=</span> <span class="n">next_pos_info</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">next_pos_info</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="k">else</span> <span class="kc">False</span>
+
+    <span class="n">penalty</span> <span class="o">=</span> <span class="n">calculate_penalty</span><span class="p">(</span><span class="n">current_pos</span><span class="p">,</span> <span class="n">next_pos</span><span class="p">)</span>
+
+    <span class="c1"># Учитываем штраф за второй символ только для конечной позиции</span>
+    <span class="k">if</span> <span class="n">current_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">value_passing_fingers_call</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">penalty</span><span class="p">,</span> <span class="n">is_second_symbol_next</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">current_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">next_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">match</span> <span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">case</span> <span class="mi">5</span> <span class="o">|</span> <span class="mi">6</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">next_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="n">value_passing_fingers_call</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">is_second_symbol_next</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">value_passing_fingers_call</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">penalty</span><span class="p">,</span> <span class="n">is_second_symbol_next</span><span class="p">)</span>
+                <span class="k">case</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">2</span> <span class="o">|</span> <span class="mi">3</span> <span class="o">|</span> <span class="mi">4</span> <span class="o">|</span> <span class="mi">7</span> <span class="o">|</span> <span class="mi">8</span> <span class="o">|</span> <span class="mi">9</span> <span class="o">|</span> <span class="mi">10</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">next_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="k">pass</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">value_passing_fingers_call</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">penalty</span><span class="p">,</span> <span class="n">is_second_symbol_next</span><span class="p">)</span>
+                <span class="k">case</span> <span class="mi">11</span><span class="p">:</span>
+                    <span class="n">value_passing_fingers_call</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">penalty</span><span class="p">,</span> <span class="n">is_second_symbol_next</span><span class="p">)</span>
+                <span class="k">case</span> <span class="mi">12</span><span class="p">:</span>
+                    <span class="n">value_passing_fingers_call</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">penalty</span><span class="p">,</span> <span class="n">is_second_symbol_next</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">current_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">next_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">match</span> <span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">case</span> <span class="mi">5</span> <span class="o">|</span> <span class="mi">6</span> <span class="o">|</span> <span class="mi">11</span><span class="p">:</span>
+                    <span class="n">value_passing_fingers_call</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">abs</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">is_second_symbol_next</span><span class="p">)</span>
+                <span class="k">case</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">2</span> <span class="o">|</span> <span class="mi">3</span> <span class="o">|</span> <span class="mi">4</span> <span class="o">|</span> <span class="mi">7</span> <span class="o">|</span> <span class="mi">8</span> <span class="o">|</span> <span class="mi">9</span> <span class="o">|</span> <span class="mi">10</span><span class="p">:</span>
+                    <span class="n">value_passing_fingers_call</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">abs</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span><span class="p">),</span> <span class="n">is_second_symbol_next</span><span class="p">)</span>
+                <span class="k">case</span> <span class="mi">12</span><span class="p">:</span>
+                    <span class="n">value_passing_fingers_call</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">abs</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">is_second_symbol_next</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">penalty</span> <span class="o">+</span> <span class="p">(</span><span class="mi">4</span> <span class="k">if</span> <span class="n">is_second_symbol_next</span> <span class="k">else</span> <span class="mi">0</span><span class="p">),</span> <span class="n">get_finger_by_column</span><span class="p">(</span><span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="get_finger_by_column">
+<a class="viewcode-back" href="../ver_2.html#ver_2.get_finger_by_column">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_finger_by_column</span><span class="p">(</span><span class="n">column</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Определяет палец по колонке</span>
+
+<span class="sd">    ВХОД:</span>
+<span class="sd">        column (int): номер колонки (0-12)</span>
+
+<span class="sd">    ВЫХОД:</span>
+<span class="sd">        str: идентификатор пальца</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">match</span> <span class="n">column</span><span class="p">:</span>
+        <span class="k">case</span> <span class="mi">0</span> <span class="o">|</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;f5l&#39;</span>
+        <span class="k">case</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;f4l&#39;</span>
+        <span class="k">case</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;f3l&#39;</span>
+        <span class="k">case</span> <span class="mi">4</span> <span class="o">|</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;f2l&#39;</span>
+        <span class="k">case</span> <span class="mi">6</span> <span class="o">|</span> <span class="mi">7</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;f2r&#39;</span>
+        <span class="k">case</span> <span class="mi">8</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;f3r&#39;</span>
+        <span class="k">case</span> <span class="mi">9</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;f4r&#39;</span>
+        <span class="k">case</span> <span class="mi">10</span> <span class="o">|</span> <span class="mi">11</span> <span class="o">|</span> <span class="mi">12</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;f5r&#39;</span>
+        <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;f1l&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="count_spaces">
+<a class="viewcode-back" href="../ver_2.html#ver_2.count_spaces">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">count_spaces</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Подсчет пробелов</span>
+
+<span class="sd">    ВХОД:</span>
+<span class="sd">        text (str): текст для анализа</span>
+
+<span class="sd">    ВЫХОД:</span>
+<span class="sd">        None: обновляет глобальные переменные counter_fingers, counter_fingers_qwer и counter_fingers_call</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">spaces</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+    <span class="n">counter_fingers_qwer</span><span class="p">[</span><span class="s1">&#39;f1l&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">spaces</span> <span class="o">*</span> <span class="mf">0.6</span><span class="p">)</span>
+    <span class="n">counter_fingers_qwer</span><span class="p">[</span><span class="s1">&#39;f1r&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">spaces</span> <span class="o">*</span> <span class="mf">0.4</span><span class="p">)</span>
+    <span class="n">counter_fingers</span><span class="p">[</span><span class="s1">&#39;f1l&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">spaces</span> <span class="o">*</span> <span class="mf">0.55</span><span class="p">)</span>
+    <span class="n">counter_fingers</span><span class="p">[</span><span class="s1">&#39;f1r&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">spaces</span> <span class="o">*</span> <span class="mf">0.45</span><span class="p">)</span>
+    <span class="n">counter_fingers_call</span><span class="p">[</span><span class="s1">&#39;f1l&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">spaces</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">counter_fingers_call</span><span class="p">[</span><span class="s1">&#39;f1r&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">spaces</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="analyze_movement_details">
+<a class="viewcode-back" href="../ver_2.html#ver_2.analyze_movement_details">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">analyze_movement_details</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Детальный анализ перемещений для отладки</span>
+
+<span class="sd">    ВХОД:</span>
+<span class="sd">        text (str): текст для анализа</span>
+
+<span class="sd">    ВЫХОД:</span>
+<span class="sd">        list: список словарей с информацией о перемещениях</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">movements_info</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">text_chars</span> <span class="o">=</span> <span class="p">[</span><span class="n">char</span> <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">if</span> <span class="n">char</span><span class="o">.</span><span class="n">isalpha</span><span class="p">()</span> <span class="ow">or</span> <span class="n">char</span> <span class="ow">in</span> <span class="s1">&#39; ,.&#39;</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">text_chars</span><span class="p">))):</span>  <span class="c1"># Анализируем первые 50 перемещений</span>
+        <span class="n">current_char</span> <span class="o">=</span> <span class="n">text_chars</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">next_char</span> <span class="o">=</span> <span class="n">text_chars</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="c1"># Для раскладки Диктор</span>
+        <span class="n">current_pos_d</span> <span class="o">=</span> <span class="n">get_cords</span><span class="p">(</span><span class="n">current_char</span><span class="p">)</span>
+        <span class="n">next_pos_d</span> <span class="o">=</span> <span class="n">get_cords</span><span class="p">(</span><span class="n">next_char</span><span class="p">)</span>
+        <span class="n">penalty_d</span><span class="p">,</span> <span class="n">finger_d</span> <span class="o">=</span> <span class="n">count_steps</span><span class="p">(</span><span class="n">current_char</span><span class="p">,</span> <span class="n">next_char</span><span class="p">)</span>
+
+        <span class="c1"># Для раскладки ЙЦУКЕН (используем копию счетчиков чтобы не дублировать)</span>
+        <span class="n">current_pos_q</span> <span class="o">=</span> <span class="n">get_cords_qwer</span><span class="p">(</span><span class="n">current_char</span><span class="p">)</span>
+        <span class="n">next_pos_q</span> <span class="o">=</span> <span class="n">get_cords_qwer</span><span class="p">(</span><span class="n">next_char</span><span class="p">)</span>
+        <span class="n">penalty_q</span><span class="p">,</span> <span class="n">finger_q</span> <span class="o">=</span> <span class="n">count_steps_qwer</span><span class="p">(</span><span class="n">current_char</span><span class="p">,</span> <span class="n">next_char</span><span class="p">)</span>
+
+        <span class="c1"># Для раскладки Вызов</span>
+        <span class="n">current_pos_info_c</span> <span class="o">=</span> <span class="n">get_cords_vyzov</span><span class="p">(</span><span class="n">current_char</span><span class="p">)</span>
+        <span class="n">next_pos_info_c</span> <span class="o">=</span> <span class="n">get_cords_vyzov</span><span class="p">(</span><span class="n">next_char</span><span class="p">)</span>
+        <span class="n">penalty_c</span><span class="p">,</span> <span class="n">finger_c</span> <span class="o">=</span> <span class="n">count_steps_call</span><span class="p">(</span><span class="n">current_char</span><span class="p">,</span> <span class="n">next_char</span><span class="p">)</span>
+
+        <span class="c1"># Определяем тип перемещения и информацию о втором символе</span>
+        <span class="n">move_type_d</span> <span class="o">=</span> <span class="n">get_movement_type</span><span class="p">(</span><span class="n">current_pos_d</span><span class="p">,</span> <span class="n">next_pos_d</span><span class="p">)</span> <span class="k">if</span> <span class="n">current_pos_d</span> <span class="ow">and</span> <span class="n">next_pos_d</span> <span class="k">else</span> <span class="s2">&quot;N/A&quot;</span>
+        <span class="n">move_type_q</span> <span class="o">=</span> <span class="n">get_movement_type</span><span class="p">(</span><span class="n">current_pos_q</span><span class="p">,</span> <span class="n">next_pos_q</span><span class="p">)</span> <span class="k">if</span> <span class="n">current_pos_q</span> <span class="ow">and</span> <span class="n">next_pos_q</span> <span class="k">else</span> <span class="s2">&quot;N/A&quot;</span>
+        <span class="n">move_type_c</span> <span class="o">=</span> <span class="n">get_movement_type</span><span class="p">(</span><span class="n">current_pos_info_c</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="k">if</span> <span class="n">current_pos_info_c</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                                        <span class="n">next_pos_info_c</span><span class="p">[</span>
+                                        <span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="k">if</span> <span class="n">next_pos_info_c</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">current_pos_info_c</span> <span class="ow">and</span> <span class="n">next_pos_info_c</span> <span class="k">else</span> <span class="s2">&quot;N/A&quot;</span>
+
+        <span class="c1"># Информация о втором символе для раскладки Вызов</span>
+        <span class="n">is_second_current</span> <span class="o">=</span> <span class="n">current_pos_info_c</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">if</span> <span class="n">current_pos_info_c</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_pos_info_c</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="k">else</span> <span class="kc">False</span>
+        <span class="n">is_second_next</span> <span class="o">=</span> <span class="n">next_pos_info_c</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">if</span> <span class="n">next_pos_info_c</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">next_pos_info_c</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="k">else</span> <span class="kc">False</span>
+
+        <span class="n">movements_info</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s1">&#39;from&#39;</span><span class="p">:</span> <span class="n">current_char</span><span class="p">,</span>
+            <span class="s1">&#39;to&#39;</span><span class="p">:</span> <span class="n">next_char</span><span class="p">,</span>
+            <span class="s1">&#39;penalty_diktor&#39;</span><span class="p">:</span> <span class="n">penalty_d</span><span class="p">,</span>
+            <span class="s1">&#39;penalty_qwer&#39;</span><span class="p">:</span> <span class="n">penalty_q</span><span class="p">,</span>
+            <span class="s1">&#39;penalty_call&#39;</span><span class="p">:</span> <span class="n">penalty_c</span><span class="p">,</span>
+            <span class="s1">&#39;finger_diktor&#39;</span><span class="p">:</span> <span class="n">finger_d</span><span class="p">,</span>
+            <span class="s1">&#39;finger_qwer&#39;</span><span class="p">:</span> <span class="n">finger_q</span><span class="p">,</span>
+            <span class="s1">&#39;finger_call&#39;</span><span class="p">:</span> <span class="n">finger_c</span><span class="p">,</span>
+            <span class="s1">&#39;move_type_diktor&#39;</span><span class="p">:</span> <span class="n">move_type_d</span><span class="p">,</span>
+            <span class="s1">&#39;move_type_qwer&#39;</span><span class="p">:</span> <span class="n">move_type_q</span><span class="p">,</span>
+            <span class="s1">&#39;move_type_call&#39;</span><span class="p">:</span> <span class="n">move_type_c</span><span class="p">,</span>
+            <span class="s1">&#39;pos_diktor&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">current_pos_d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">current_pos_d</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">)→(</span><span class="si">{</span><span class="n">next_pos_d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">next_pos_d</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">if</span> <span class="n">current_pos_d</span> <span class="ow">and</span> <span class="n">next_pos_d</span> <span class="k">else</span> <span class="s2">&quot;N/A&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;pos_qwer&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">current_pos_q</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">current_pos_q</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">)→(</span><span class="si">{</span><span class="n">next_pos_q</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">next_pos_q</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">if</span> <span class="n">current_pos_q</span> <span class="ow">and</span> <span class="n">next_pos_q</span> <span class="k">else</span> <span class="s2">&quot;N/A&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;pos_call&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">current_pos_info_c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">current_pos_info_c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">)→(</span><span class="si">{</span><span class="n">next_pos_info_c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">next_pos_info_c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">if</span> <span class="n">current_pos_info_c</span> <span class="ow">and</span> <span class="n">next_pos_info_c</span> <span class="k">else</span> <span class="s2">&quot;N/A&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;second_symbol_call_current&#39;</span><span class="p">:</span> <span class="s2">&quot;Да&quot;</span> <span class="k">if</span> <span class="n">is_second_current</span> <span class="k">else</span> <span class="s2">&quot;Нет&quot;</span><span class="p">,</span>
+            <span class="s1">&#39;second_symbol_call_next&#39;</span><span class="p">:</span> <span class="s2">&quot;Да&quot;</span> <span class="k">if</span> <span class="n">is_second_next</span> <span class="k">else</span> <span class="s2">&quot;Нет&quot;</span>
+        <span class="p">})</span>
+
+    <span class="k">return</span> <span class="n">movements_info</span></div>
+
+
+
+<div class="viewcode-block" id="get_movement_type">
+<a class="viewcode-back" href="../ver_2.html#ver_2.get_movement_type">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_movement_type</span><span class="p">(</span><span class="n">current_pos</span><span class="p">,</span> <span class="n">next_pos</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Определяет тип перемещения</span>
+
+<span class="sd">    ВХОД:</span>
+<span class="sd">        current_pos (list): текущие координаты [ряд, колонка]</span>
+<span class="sd">        next_pos (list): следующие координаты [ряд, колонка]</span>
+
+<span class="sd">    ВЫХОД:</span>
+<span class="sd">        str: описание типа перемещения</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">current_pos</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">next_pos</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;N/A&quot;</span>
+
+    <span class="n">row_diff</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">current_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">next_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">col_diff</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">current_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">next_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">row_diff</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col_diff</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;Та же клавиша&quot;</span>
+    <span class="k">elif</span> <span class="n">row_diff</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">col_diff</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;Вертикаль (1)&quot;</span>
+    <span class="k">elif</span> <span class="n">row_diff</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">col_diff</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;Горизонталь (1)&quot;</span>
+    <span class="k">elif</span> <span class="n">row_diff</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">col_diff</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;Диагональ (2)&quot;</span>
+    <span class="k">elif</span> <span class="n">row_diff</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">col_diff</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Сложное (</span><span class="si">{</span><span class="nb">min</span><span class="p">(</span><span class="n">row_diff</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">col_diff</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;Простое (1)&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="print_detailed_analysis">
+<a class="viewcode-back" href="../ver_2.html#ver_2.print_detailed_analysis">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">print_detailed_analysis</span><span class="p">(</span><span class="n">movements_info</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Печать детального анализа перемещений</span>
+
+<span class="sd">    ВХОД:</span>
+<span class="sd">        movements_info (list): список словарей с информацией о перемещениях</span>
+
+<span class="sd">    ВЫХОД:</span>
+<span class="sd">        None: выводит таблицу в консоль</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">180</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ДЕТАЛЬНЫЙ АНАЛИЗ ПЕРЕМЕЩЕНИЙ (первые 20 перемещений)&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">180</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Переход&#39;</span><span class="si">:</span><span class="s2">^10</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;Координаты (Д)&#39;</span><span class="si">:</span><span class="s2">^20</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;Тип (Д)&#39;</span><span class="si">:</span><span class="s2">^12</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;Штраф (Д)&#39;</span><span class="si">:</span><span class="s2">^9</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;Палец (Д)&#39;</span><span class="si">:</span><span class="s2">^9</span><span class="si">}</span><span class="s2"> | &quot;</span>
+          <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Координаты (Й)&#39;</span><span class="si">:</span><span class="s2">^20</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;Тип (Й)&#39;</span><span class="si">:</span><span class="s2">^12</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;Штраф (Й)&#39;</span><span class="si">:</span><span class="s2">^9</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;Палец (Й)&#39;</span><span class="si">:</span><span class="s2">^9</span><span class="si">}</span><span class="s2"> | &quot;</span>
+          <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Координаты (В)&#39;</span><span class="si">:</span><span class="s2">^20</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;Тип (В)&#39;</span><span class="si">:</span><span class="s2">^12</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;Штраф (В)&#39;</span><span class="si">:</span><span class="s2">^9</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;Палец (В)&#39;</span><span class="si">:</span><span class="s2">^9</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;2-й символ (В)&#39;</span><span class="si">:</span><span class="s2">^12</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">180</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">move</span> <span class="ow">in</span> <span class="n">movements_info</span><span class="p">[:</span><span class="mi">20</span><span class="p">]:</span>
+        <span class="n">second_symbol_info</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">move</span><span class="p">[</span><span class="s1">&#39;second_symbol_call_current&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">→</span><span class="si">{</span><span class="n">move</span><span class="p">[</span><span class="s1">&#39;second_symbol_call_next&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">move</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">→</span><span class="si">{</span><span class="n">move</span><span class="p">[</span><span class="s1">&#39;to&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">^7</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">move</span><span class="p">[</span><span class="s1">&#39;pos_diktor&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">^20</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">move</span><span class="p">[</span><span class="s1">&#39;move_type_diktor&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">^12</span><span class="si">}</span><span class="s2"> | &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">move</span><span class="p">[</span><span class="s1">&#39;penalty_diktor&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">^9</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">move</span><span class="p">[</span><span class="s1">&#39;finger_diktor&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">^9</span><span class="si">}</span><span class="s2"> | &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">move</span><span class="p">[</span><span class="s1">&#39;pos_qwer&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">^20</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">move</span><span class="p">[</span><span class="s1">&#39;move_type_qwer&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">^12</span><span class="si">}</span><span class="s2"> | &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">move</span><span class="p">[</span><span class="s1">&#39;penalty_qwer&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">^9</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">move</span><span class="p">[</span><span class="s1">&#39;finger_qwer&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">^9</span><span class="si">}</span><span class="s2"> | &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">move</span><span class="p">[</span><span class="s1">&#39;pos_call&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">^20</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">move</span><span class="p">[</span><span class="s1">&#39;move_type_call&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">^12</span><span class="si">}</span><span class="s2"> | &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">move</span><span class="p">[</span><span class="s1">&#39;penalty_call&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">^9</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">move</span><span class="p">[</span><span class="s1">&#39;finger_call&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">^9</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">second_symbol_info</span><span class="si">:</span><span class="s2">^12</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="print_movement_statistics">
+<a class="viewcode-back" href="../ver_2.html#ver_2.print_movement_statistics">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">print_movement_statistics</span><span class="p">(</span><span class="n">movements_info</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Статистика по типам перемещений</span>
+
+<span class="sd">    ВХОД:</span>
+<span class="sd">        movements_info (list): список словарей с информацией о перемещениях</span>
+
+<span class="sd">    ВЫХОД:</span>
+<span class="sd">        None: выводит статистику в консоль</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;СТАТИСТИКА ТИПОВ ПЕРЕМЕЩЕНИЙ&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+
+    <span class="n">stats_diktor</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">stats_qwer</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">stats_call</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">move</span> <span class="ow">in</span> <span class="n">movements_info</span><span class="p">:</span>
+        <span class="n">type_d</span> <span class="o">=</span> <span class="n">move</span><span class="p">[</span><span class="s1">&#39;move_type_diktor&#39;</span><span class="p">]</span>
+        <span class="n">type_q</span> <span class="o">=</span> <span class="n">move</span><span class="p">[</span><span class="s1">&#39;move_type_qwer&#39;</span><span class="p">]</span>
+        <span class="n">type_c</span> <span class="o">=</span> <span class="n">move</span><span class="p">[</span><span class="s1">&#39;move_type_call&#39;</span><span class="p">]</span>
+
+        <span class="n">stats_diktor</span><span class="p">[</span><span class="n">type_d</span><span class="p">]</span> <span class="o">=</span> <span class="n">stats_diktor</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">type_d</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">stats_qwer</span><span class="p">[</span><span class="n">type_q</span><span class="p">]</span> <span class="o">=</span> <span class="n">stats_qwer</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">type_q</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">stats_call</span><span class="p">[</span><span class="n">type_c</span><span class="p">]</span> <span class="o">=</span> <span class="n">stats_call</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">type_c</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Тип перемещения&#39;</span><span class="si">:</span><span class="s2">&lt;20</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;Диктор&#39;</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;ЙЦУКЕН&#39;</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;Вызов&#39;</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+    <span class="n">all_types</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">stats_diktor</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">stats_qwer</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">stats_call</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+    <span class="k">for</span> <span class="n">move_type</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">all_types</span><span class="p">):</span>
+        <span class="n">count_d</span> <span class="o">=</span> <span class="n">stats_diktor</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">move_type</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">count_q</span> <span class="o">=</span> <span class="n">stats_qwer</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">move_type</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">count_c</span> <span class="o">=</span> <span class="n">stats_call</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">move_type</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">move_type</span><span class="si">:</span><span class="s2">&lt;20</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">count_d</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">count_q</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">count_c</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="print_final_results">
+<a class="viewcode-back" href="../ver_2.html#ver_2.print_final_results">[документация]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">print_final_results</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Печать финальных результатов</span>
+
+<span class="sd">    ВХОД:</span>
+<span class="sd">        None: использует глобальные переменные counter_fingers и counter_fingers_qwer</span>
+
+<span class="sd">    ВЫХОД:</span>
+<span class="sd">        None: выводит итоговые результаты в консоль</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ФИНАЛЬНЫЕ РЕЗУЛЬТАТЫ НАГРУЗКИ НА ПАЛЬЦЫ&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="si">{</span><span class="s2">&quot;&quot;</span><span class="si">:</span><span class="s1">&lt;15</span><span class="si">}</span><span class="s1"> | </span><span class="si">{</span><span class="s2">&quot;ДИКТОР&quot;</span><span class="si">:</span><span class="s1">&lt;15</span><span class="si">}</span><span class="s1"> | </span><span class="si">{</span><span class="s2">&quot;ЙЦУКЕН&quot;</span><span class="si">:</span><span class="s1">&lt;15</span><span class="si">}</span><span class="s1"> | </span><span class="si">{</span><span class="s2">&quot;ВЫЗОВ&quot;</span><span class="si">:</span><span class="s1">&lt;15</span><span class="si">}</span><span class="s1"> | </span><span class="si">{</span><span class="s2">&quot;Лучшая&quot;</span><span class="si">:</span><span class="s1">&lt;10</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
+
+    <span class="n">fingers</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;f1l&#39;</span><span class="p">,</span> <span class="s1">&#39;f1r&#39;</span><span class="p">,</span> <span class="s1">&#39;f2l&#39;</span><span class="p">,</span> <span class="s1">&#39;f2r&#39;</span><span class="p">,</span> <span class="s1">&#39;f3l&#39;</span><span class="p">,</span> <span class="s1">&#39;f3r&#39;</span><span class="p">,</span> <span class="s1">&#39;f4l&#39;</span><span class="p">,</span> <span class="s1">&#39;f4r&#39;</span><span class="p">,</span> <span class="s1">&#39;f5l&#39;</span><span class="p">,</span> <span class="s1">&#39;f5r&#39;</span><span class="p">]</span>
+    <span class="n">finger_names</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;f1l&#39;</span><span class="p">:</span> <span class="s1">&#39;Большой лев&#39;</span><span class="p">,</span> <span class="s1">&#39;f1r&#39;</span><span class="p">:</span> <span class="s1">&#39;Большой прав&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;f2l&#39;</span><span class="p">:</span> <span class="s1">&#39;Указ. лев&#39;</span><span class="p">,</span> <span class="s1">&#39;f2r&#39;</span><span class="p">:</span> <span class="s1">&#39;Указ. прав&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;f3l&#39;</span><span class="p">:</span> <span class="s1">&#39;Средний лев&#39;</span><span class="p">,</span> <span class="s1">&#39;f3r&#39;</span><span class="p">:</span> <span class="s1">&#39;Средний прав&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;f4l&#39;</span><span class="p">:</span> <span class="s1">&#39;Безым. лев&#39;</span><span class="p">,</span> <span class="s1">&#39;f4r&#39;</span><span class="p">:</span> <span class="s1">&#39;Безым. прав&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;f5l&#39;</span><span class="p">:</span> <span class="s1">&#39;Мизинец лев&#39;</span><span class="p">,</span> <span class="s1">&#39;f5r&#39;</span><span class="p">:</span> <span class="s1">&#39;Мизинец прав&#39;</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">finger</span> <span class="ow">in</span> <span class="n">fingers</span><span class="p">:</span>
+        <span class="n">diktor_val</span> <span class="o">=</span> <span class="n">counter_fingers</span><span class="p">[</span><span class="n">finger</span><span class="p">]</span>
+        <span class="n">qwer_val</span> <span class="o">=</span> <span class="n">counter_fingers_qwer</span><span class="p">[</span><span class="n">finger</span><span class="p">]</span>
+        <span class="n">call_val</span> <span class="o">=</span> <span class="n">counter_fingers_call</span><span class="p">[</span><span class="n">finger</span><span class="p">]</span>
+
+        <span class="c1"># Определяем лучшую раскладку для этого пальца</span>
+        <span class="n">best_val</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">diktor_val</span><span class="p">,</span> <span class="n">qwer_val</span><span class="p">,</span> <span class="n">call_val</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">best_val</span> <span class="o">==</span> <span class="n">diktor_val</span><span class="p">:</span>
+            <span class="n">best</span> <span class="o">=</span> <span class="s2">&quot;Диктор&quot;</span>
+        <span class="k">elif</span> <span class="n">best_val</span> <span class="o">==</span> <span class="n">qwer_val</span><span class="p">:</span>
+            <span class="n">best</span> <span class="o">=</span> <span class="s2">&quot;ЙЦУКЕН&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">best</span> <span class="o">=</span> <span class="s2">&quot;Вызов&quot;</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">finger_names</span><span class="p">[</span><span class="n">finger</span><span class="p">]</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">diktor_val</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">qwer_val</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">call_val</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">best</span><span class="si">:</span><span class="s2">&lt;10</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">total_diktor</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">counter_fingers</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="n">total_qwer</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">counter_fingers_qwer</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="n">total_call</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">counter_fingers_call</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+    <span class="c1"># Определяем общую лучшую раскладку</span>
+    <span class="n">best_total</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">total_diktor</span><span class="p">,</span> <span class="n">total_qwer</span><span class="p">,</span> <span class="n">total_call</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">best_total</span> <span class="o">==</span> <span class="n">total_diktor</span><span class="p">:</span>
+        <span class="n">best_total_name</span> <span class="o">=</span> <span class="s2">&quot;Диктор&quot;</span>
+    <span class="k">elif</span> <span class="n">best_total</span> <span class="o">==</span> <span class="n">total_qwer</span><span class="p">:</span>
+        <span class="n">best_total_name</span> <span class="o">=</span> <span class="s2">&quot;ЙЦУКЕН&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">best_total_name</span> <span class="o">=</span> <span class="s2">&quot;Вызов&quot;</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;ОБЩАЯ НАГРУЗКА&#39;</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">total_diktor</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">total_qwer</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">total_call</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">best_total_name</span><span class="si">:</span><span class="s2">&lt;10</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Эффективность&#39;</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">&#39;Лучшая&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">total_diktor</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">best_total</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;Хуже&#39;</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> | &quot;</span>
+          <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Лучшая&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">total_qwer</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">best_total</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;Хуже&#39;</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> | &quot;</span>
+          <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Лучшая&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">total_call</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">best_total</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;Хуже&#39;</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> | &quot;</span>
+          <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">best_total_name</span><span class="si">:</span><span class="s2">&lt;10</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;voina-i-mir.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="c1"># Обработка текста</span>
+    <span class="n">count_spaces</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^А-Яа-яёЁ1-9,0\s]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="n">text_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+    <span class="c1"># Учет заглавных букв</span>
+    <span class="n">list_upper_case</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">text_list</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">isupper</span><span class="p">()]</span>
+    <span class="n">value_passing_fingers</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_upper_case</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">value_passing_fingers_qwer</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_upper_case</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">value_passing_fingers_call</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_upper_case</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">text_clean</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text_list</span><span class="p">)</span>
+    <span class="n">text_lower</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">text_clean</span><span class="p">]</span>
+
+    <span class="c1"># Детальный анализ (до основного подсчета)</span>
+    <span class="n">movements_info</span> <span class="o">=</span> <span class="n">analyze_movement_details</span><span class="p">(</span><span class="n">text_clean</span><span class="p">)</span>
+
+    <span class="c1"># Основной анализ</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">text_lower</span><span class="p">)):</span>
+        <span class="n">count_steps</span><span class="p">(</span><span class="n">text_lower</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">text_lower</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">count_steps_qwer</span><span class="p">(</span><span class="n">text_lower</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">text_lower</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">count_steps_call</span><span class="p">(</span><span class="n">text_lower</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">text_lower</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="c1"># Вывод результатов</span>
+    <span class="n">print_detailed_analysis</span><span class="p">(</span><span class="n">movements_info</span><span class="p">)</span>
+    <span class="n">print_movement_statistics</span><span class="p">(</span><span class="n">movements_info</span><span class="p">)</span>
+    <span class="n">print_final_results</span><span class="p">()</span>
+    
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Авторские права 2025, Daniil Sudin, Smetanin Tim. </p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

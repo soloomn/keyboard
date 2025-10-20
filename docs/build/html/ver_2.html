@@ -1,0 +1,418 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ver_2 module &mdash; документация keyboard 0.4</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=11064190"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=cd1d70c9"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="prev" title="dictr module" href="dictr.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            keyboard
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <p class="caption" role="heading"><span class="caption-text">Содержание:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">keyboard</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="dictr.html">dictr module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ver_2 module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">МОДУЛЬ АНАЛИЗА ЭРГОНОМИКИ КЛАВИАТУРНЫХ РАСКЛАДОК</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">ОПИСАНИЕ:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">ОСНОВНЫЕ ВОЗМОЖНОСТИ:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">ПРИНЦИП РАБОТЫ:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">ВХОДНЫЕ ДАННЫЕ:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">ВЫХОДНЫЕ ДАННЫЕ:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">СИСТЕМА ШТРАФНЫХ БАЛЛОВ:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">РАСПРЕДЕЛЕНИЕ ПАЛЬЦЕВ:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ver_2.get_cords"><code class="docutils literal notranslate"><span class="pre">get_cords()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ver_2.get_cords_qwer"><code class="docutils literal notranslate"><span class="pre">get_cords_qwer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ver_2.get_cords_vyzov"><code class="docutils literal notranslate"><span class="pre">get_cords_vyzov()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ver_2.calculate_penalty"><code class="docutils literal notranslate"><span class="pre">calculate_penalty()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ver_2.value_passing_fingers"><code class="docutils literal notranslate"><span class="pre">value_passing_fingers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ver_2.value_passing_fingers_qwer"><code class="docutils literal notranslate"><span class="pre">value_passing_fingers_qwer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ver_2.value_passing_fingers_call"><code class="docutils literal notranslate"><span class="pre">value_passing_fingers_call()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ver_2.count_steps"><code class="docutils literal notranslate"><span class="pre">count_steps()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ver_2.count_steps_qwer"><code class="docutils literal notranslate"><span class="pre">count_steps_qwer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ver_2.count_steps_call"><code class="docutils literal notranslate"><span class="pre">count_steps_call()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ver_2.get_finger_by_column"><code class="docutils literal notranslate"><span class="pre">get_finger_by_column()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ver_2.count_spaces"><code class="docutils literal notranslate"><span class="pre">count_spaces()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ver_2.analyze_movement_details"><code class="docutils literal notranslate"><span class="pre">analyze_movement_details()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ver_2.get_movement_type"><code class="docutils literal notranslate"><span class="pre">get_movement_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ver_2.print_detailed_analysis"><code class="docutils literal notranslate"><span class="pre">print_detailed_analysis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ver_2.print_movement_statistics"><code class="docutils literal notranslate"><span class="pre">print_movement_statistics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ver_2.print_final_results"><code class="docutils literal notranslate"><span class="pre">print_final_results()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">keyboard</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">keyboard</a></li>
+      <li class="breadcrumb-item active">ver_2 module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/ver_2.rst.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ver_2">
+<span id="ver-2-module"></span><h1>ver_2 module<a class="headerlink" href="#module-ver_2" title="Ссылка на этот заголовок"></a></h1>
+<section id="id1">
+<h2>МОДУЛЬ АНАЛИЗА ЭРГОНОМИКИ КЛАВИАТУРНЫХ РАСКЛАДОК<a class="headerlink" href="#id1" title="Ссылка на этот заголовок"></a></h2>
+</section>
+<section id="id2">
+<h2>ОПИСАНИЕ:<a class="headerlink" href="#id2" title="Ссылка на этот заголовок"></a></h2>
+<p>Данный модуль предназначен для сравнительного анализа эргономичности трёх русских раскладок клавиатуры:
+«Диктор» и «Вызов» (альтернативные раскладки) и «ЙЦУКЕН» (стандартная раскладка).</p>
+</section>
+<section id="id3">
+<h2>ОСНОВНЫЕ ВОЗМОЖНОСТИ:<a class="headerlink" href="#id3" title="Ссылка на этот заголовок"></a></h2>
+<ol class="arabic simple">
+<li><p>Расчет штрафных баллов за перемещения между клавишами</p></li>
+<li><p>Распределение нагрузки на пальцы обеих рук</p></li>
+<li><p>Сравнительный анализ эффективности раскладок</p></li>
+<li><p>Детальная статистика по типам перемещений</p></li>
+<li><p>Визуализация результатов в табличном формате</p></li>
+</ol>
+</section>
+<section id="id4">
+<h2>ПРИНЦИП РАБОТЫ:<a class="headerlink" href="#id4" title="Ссылка на этот заголовок"></a></h2>
+<ul class="simple">
+<li><p>Текст разбивается на последовательности символов</p></li>
+<li><p>Для каждой пары символов вычисляются координаты в обеих раскладках</p></li>
+<li><p>На основе расстояния между координатами начисляются штрафные баллы</p></li>
+<li><p>Нагрузка распределяется по 10 пальцам согласно зонам ответственности</p></li>
+<li><p>Сравнивается общая нагрузка и эффективность раскладок</p></li>
+</ul>
+</section>
+<section id="id5">
+<h2>ВХОДНЫЕ ДАННЫЕ:<a class="headerlink" href="#id5" title="Ссылка на этот заголовок"></a></h2>
+<ul class="simple">
+<li><p>Файл „text.txt“ с русским текстом для анализа</p></li>
+<li><p>Модуль dictr.py с конфигурацией клавиатурных раскладок (data_dict)</p></li>
+</ul>
+</section>
+<section id="id6">
+<h2>ВЫХОДНЫЕ ДАННЫЕ:<a class="headerlink" href="#id6" title="Ссылка на этот заголовок"></a></h2>
+<ul class="simple">
+<li><p>Детальный анализ первых 20 перемещений между символами</p></li>
+<li><p>Статистика по типам перемещений (вертикальные, горизонтальные, диагональные, сложные)</p></li>
+<li><p>Сравнительная таблица нагрузки на каждый палец для обеих раскладок</p></li>
+<li><p>Общий вердикт по эффективности раскладок с итоговыми баллами</p></li>
+</ul>
+</section>
+<section id="id7">
+<h2>СИСТЕМА ШТРАФНЫХ БАЛЛОВ:<a class="headerlink" href="#id7" title="Ссылка на этот заголовок"></a></h2>
+<ul class="simple">
+<li><p>0 баллов: та же клавиша</p></li>
+<li><p>1 балл: вертикальные/горизонтальные перемещения на 1 позицию</p></li>
+<li><p>2 балла: диагональные перемещения</p></li>
+<li><p>3-4 балла: сложные перемещения (2+ позиции)</p></li>
+</ul>
+</section>
+<section id="id8">
+<h2>РАСПРЕДЕЛЕНИЕ ПАЛЬЦЕВ:<a class="headerlink" href="#id8" title="Ссылка на этот заголовок"></a></h2>
+<ul class="simple">
+<li><p>f1l/f1r: большие пальцы (пробелы и спец. клавиши)</p></li>
+<li><p>f2l/f2r: указательные пальцы</p></li>
+<li><p>f3l/f3r: средние пальцы</p></li>
+<li><p>f4l/f4r: безымянные пальцы</p></li>
+<li><p>f5l/f5r: мизинцы</p></li>
+</ul>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="ver_2.get_cords">
+<span class="sig-prename descclassname"><span class="pre">ver_2.</span></span><span class="sig-name descname"><span class="pre">get_cords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ver_2.html#get_cords"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ver_2.get_cords" title="Ссылка на это определение"></a></dt>
+<dd><p>Получаем координаты символа для раскладки Диктор</p>
+<dl class="simple">
+<dt>ВХОД:</dt><dd><p>symbol (str): символ для поиска координат</p>
+</dd>
+<dt>ВЫХОД:</dt><dd><p>list | None: [номер_ряда, номер_колонки] или None если символ не найден</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ver_2.get_cords_qwer">
+<span class="sig-prename descclassname"><span class="pre">ver_2.</span></span><span class="sig-name descname"><span class="pre">get_cords_qwer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ver_2.html#get_cords_qwer"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ver_2.get_cords_qwer" title="Ссылка на это определение"></a></dt>
+<dd><p>Получаем координаты символа для раскладки ЙЦУКЕН</p>
+<dl class="simple">
+<dt>ВХОД:</dt><dd><p>symbol (str): символ для поиска координат</p>
+</dd>
+<dt>ВЫХОД:</dt><dd><p>list | None: [номер_ряда, номер_колонки] или None если символ не найден</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ver_2.get_cords_vyzov">
+<span class="sig-prename descclassname"><span class="pre">ver_2.</span></span><span class="sig-name descname"><span class="pre">get_cords_vyzov</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symbol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ver_2.html#get_cords_vyzov"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ver_2.get_cords_vyzov" title="Ссылка на это определение"></a></dt>
+<dd><p>Получаем координаты символа для раскладки Вызов и определяем, является ли символ вторым на клавише</p>
+<dl class="simple">
+<dt>ВХОД:</dt><dd><p>symbol (str): символ для поиска координат</p>
+</dd>
+<dt>ВЫХОД:</dt><dd><p>list | None: [номер_ряда, номер_колонки] или None если символ не найден</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ver_2.calculate_penalty">
+<span class="sig-prename descclassname"><span class="pre">ver_2.</span></span><span class="sig-name descname"><span class="pre">calculate_penalty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">next_pos</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ver_2.html#calculate_penalty"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ver_2.calculate_penalty" title="Ссылка на это определение"></a></dt>
+<dd><p>Усовершенствованная система штрафных баллов согласно требованиям:
+- Вверх/вниз/влево/вправо = 1 балл
+- Диагональ = 2 балла
+- Сложные перемещения = 3-4 балла</p>
+<dl class="simple">
+<dt>ВХОД:</dt><dd><p>current_pos (list): текущие координаты [ряд, колонка]
+next_pos (list): следующие координаты [ряд, колонка]</p>
+</dd>
+<dt>ВЫХОД:</dt><dd><p>int: штрафные баллы (0-4)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ver_2.value_passing_fingers">
+<span class="sig-prename descclassname"><span class="pre">ver_2.</span></span><span class="sig-name descname"><span class="pre">value_passing_fingers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ver_2.html#value_passing_fingers"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ver_2.value_passing_fingers" title="Ссылка на это определение"></a></dt>
+<dd><p>Распределение нагрузки по пальцам для Диктор</p>
+<dl class="simple">
+<dt>ВХОД:</dt><dd><p>column (int): номер колонки (0-12)
+value (int): значение нагрузки для добавления</p>
+</dd>
+<dt>ВЫХОД:</dt><dd><p>None: обновляет глобальную переменную counter_fingers</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ver_2.value_passing_fingers_qwer">
+<span class="sig-prename descclassname"><span class="pre">ver_2.</span></span><span class="sig-name descname"><span class="pre">value_passing_fingers_qwer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ver_2.html#value_passing_fingers_qwer"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ver_2.value_passing_fingers_qwer" title="Ссылка на это определение"></a></dt>
+<dd><p>Распределение нагрузки по пальцам для ЙЦУКЕН</p>
+<dl class="simple">
+<dt>ВХОД:</dt><dd><p>column (int): номер колонки (0-12)
+value (int): значение нагрузки для добавления</p>
+</dd>
+<dt>ВЫХОД:</dt><dd><p>None: обновляет глобальную переменную counter_fingers_qwer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ver_2.value_passing_fingers_call">
+<span class="sig-prename descclassname"><span class="pre">ver_2.</span></span><span class="sig-name descname"><span class="pre">value_passing_fingers_call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_second_symbol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ver_2.html#value_passing_fingers_call"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ver_2.value_passing_fingers_call" title="Ссылка на это определение"></a></dt>
+<dd><p>Распределение нагрузки по пальцам для Вызов</p>
+<dl class="simple">
+<dt>ВХОД:</dt><dd><p>column (int): номер колонки (0-12)
+value (int): значение нагрузки для добавления</p>
+</dd>
+<dt>ВЫХОД:</dt><dd><p>None: обновляет глобальную переменную counter_fingers_qwer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ver_2.count_steps">
+<span class="sig-prename descclassname"><span class="pre">ver_2.</span></span><span class="sig-name descname"><span class="pre">count_steps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">first_sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">second_sim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ver_2.html#count_steps"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ver_2.count_steps" title="Ссылка на это определение"></a></dt>
+<dd><p>Подсчет шагов для раскладки Диктор с улучшенной системой штрафов</p>
+<dl class="simple">
+<dt>ВХОД:</dt><dd><p>first_sim (str): первый символ
+second_sim (str): второй символ</p>
+</dd>
+<dt>ВЫХОД:</dt><dd><p>tuple: (штрафные_баллы, используемый_палец)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ver_2.count_steps_qwer">
+<span class="sig-prename descclassname"><span class="pre">ver_2.</span></span><span class="sig-name descname"><span class="pre">count_steps_qwer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">first_sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">second_sim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ver_2.html#count_steps_qwer"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ver_2.count_steps_qwer" title="Ссылка на это определение"></a></dt>
+<dd><p>Подсчет шагов для раскладки ЙЦУКЕН с улучшенной системой штрафов</p>
+<dl class="simple">
+<dt>ВХОД:</dt><dd><p>first_sim (str): первый символ
+second_sim (str): второй символ</p>
+</dd>
+<dt>ВЫХОД:</dt><dd><p>tuple: (штрафные_баллы, используемый_палец)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ver_2.count_steps_call">
+<span class="sig-prename descclassname"><span class="pre">ver_2.</span></span><span class="sig-name descname"><span class="pre">count_steps_call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">first_sim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">second_sim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ver_2.html#count_steps_call"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ver_2.count_steps_call" title="Ссылка на это определение"></a></dt>
+<dd><p>Подсчет шагов для раскладки Вызов с улучшенной системой штрафов</p>
+<dl class="simple">
+<dt>ВХОД:</dt><dd><p>first_sim (str): первый символ
+second_sim (str): второй символ</p>
+</dd>
+<dt>ВЫХОД:</dt><dd><p>tuple: (штрафные_баллы, используемый_палец)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ver_2.get_finger_by_column">
+<span class="sig-prename descclassname"><span class="pre">ver_2.</span></span><span class="sig-name descname"><span class="pre">get_finger_by_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ver_2.html#get_finger_by_column"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ver_2.get_finger_by_column" title="Ссылка на это определение"></a></dt>
+<dd><p>Определяет палец по колонке</p>
+<dl class="simple">
+<dt>ВХОД:</dt><dd><p>column (int): номер колонки (0-12)</p>
+</dd>
+<dt>ВЫХОД:</dt><dd><p>str: идентификатор пальца</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ver_2.count_spaces">
+<span class="sig-prename descclassname"><span class="pre">ver_2.</span></span><span class="sig-name descname"><span class="pre">count_spaces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ver_2.html#count_spaces"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ver_2.count_spaces" title="Ссылка на это определение"></a></dt>
+<dd><p>Подсчет пробелов</p>
+<dl class="simple">
+<dt>ВХОД:</dt><dd><p>text (str): текст для анализа</p>
+</dd>
+<dt>ВЫХОД:</dt><dd><p>None: обновляет глобальные переменные counter_fingers, counter_fingers_qwer и counter_fingers_call</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ver_2.analyze_movement_details">
+<span class="sig-prename descclassname"><span class="pre">ver_2.</span></span><span class="sig-name descname"><span class="pre">analyze_movement_details</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ver_2.html#analyze_movement_details"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ver_2.analyze_movement_details" title="Ссылка на это определение"></a></dt>
+<dd><p>Детальный анализ перемещений для отладки</p>
+<dl class="simple">
+<dt>ВХОД:</dt><dd><p>text (str): текст для анализа</p>
+</dd>
+<dt>ВЫХОД:</dt><dd><p>list: список словарей с информацией о перемещениях</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ver_2.get_movement_type">
+<span class="sig-prename descclassname"><span class="pre">ver_2.</span></span><span class="sig-name descname"><span class="pre">get_movement_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">next_pos</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ver_2.html#get_movement_type"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ver_2.get_movement_type" title="Ссылка на это определение"></a></dt>
+<dd><p>Определяет тип перемещения</p>
+<dl class="simple">
+<dt>ВХОД:</dt><dd><p>current_pos (list): текущие координаты [ряд, колонка]
+next_pos (list): следующие координаты [ряд, колонка]</p>
+</dd>
+<dt>ВЫХОД:</dt><dd><p>str: описание типа перемещения</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ver_2.print_detailed_analysis">
+<span class="sig-prename descclassname"><span class="pre">ver_2.</span></span><span class="sig-name descname"><span class="pre">print_detailed_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">movements_info</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ver_2.html#print_detailed_analysis"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ver_2.print_detailed_analysis" title="Ссылка на это определение"></a></dt>
+<dd><p>Печать детального анализа перемещений</p>
+<dl class="simple">
+<dt>ВХОД:</dt><dd><p>movements_info (list): список словарей с информацией о перемещениях</p>
+</dd>
+<dt>ВЫХОД:</dt><dd><p>None: выводит таблицу в консоль</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ver_2.print_movement_statistics">
+<span class="sig-prename descclassname"><span class="pre">ver_2.</span></span><span class="sig-name descname"><span class="pre">print_movement_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">movements_info</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ver_2.html#print_movement_statistics"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ver_2.print_movement_statistics" title="Ссылка на это определение"></a></dt>
+<dd><p>Статистика по типам перемещений</p>
+<dl class="simple">
+<dt>ВХОД:</dt><dd><p>movements_info (list): список словарей с информацией о перемещениях</p>
+</dd>
+<dt>ВЫХОД:</dt><dd><p>None: выводит статистику в консоль</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ver_2.print_final_results">
+<span class="sig-prename descclassname"><span class="pre">ver_2.</span></span><span class="sig-name descname"><span class="pre">print_final_results</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ver_2.html#print_final_results"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#ver_2.print_final_results" title="Ссылка на это определение"></a></dt>
+<dd><p>Печать финальных результатов</p>
+<dl class="simple">
+<dt>ВХОД:</dt><dd><p>None: использует глобальные переменные counter_fingers и counter_fingers_qwer</p>
+</dd>
+<dt>ВЫХОД:</dt><dd><p>None: выводит итоговые результаты в консоль</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="dictr.html" class="btn btn-neutral float-left" title="dictr module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Авторские права 2025, Daniil Sudin, Smetanin Tim. </p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
