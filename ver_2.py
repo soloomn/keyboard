@@ -1,3 +1,54 @@
+"""
+МОДУЛЬ АНАЛИЗА ЭРГОНОМИКИ КЛАВИАТУРНЫХ РАСКЛАДОК
+------------------------------------------------
+ОПИСАНИЕ:
+---------
+Данный модуль предназначен для сравнительного анализа эргономичности трёх русских раскладок клавиатуры:
+"Диктор" и "Вызов" (альтернативные раскладки) и "ЙЦУКЕН" (стандартная раскладка).
+
+ОСНОВНЫЕ ВОЗМОЖНОСТИ:
+---------------------
+1. Расчет штрафных баллов за перемещения между клавишами
+2. Распределение нагрузки на пальцы обеих рук
+3. Сравнительный анализ эффективности раскладок
+4. Детальная статистика по типам перемещений
+5. Визуализация результатов в табличном формате
+
+ПРИНЦИП РАБОТЫ:
+---------------
+- Текст разбивается на последовательности символов
+- Для каждой пары символов вычисляются координаты в обеих раскладках
+- На основе расстояния между координатами начисляются штрафные баллы
+- Нагрузка распределяется по 10 пальцам согласно зонам ответственности
+- Сравнивается общая нагрузка и эффективность раскладок
+
+ВХОДНЫЕ ДАННЫЕ:
+---------------
+- Файл 'text.txt' с русским текстом для анализа
+- Модуль dictr.py с конфигурацией клавиатурных раскладок (data_dict)
+
+ВЫХОДНЫЕ ДАННЫЕ:
+----------------
+- Детальный анализ первых 20 перемещений между символами
+- Статистика по типам перемещений (вертикальные, горизонтальные, диагональные, сложные)
+- Сравнительная таблица нагрузки на каждый палец для обеих раскладок
+- Общий вердикт по эффективности раскладок с итоговыми баллами
+
+СИСТЕМА ШТРАФНЫХ БАЛЛОВ:
+------------------------
+- 0 баллов: та же клавиша
+- 1 балл: вертикальные/горизонтальные перемещения на 1 позицию
+- 2 балла: диагональные перемещения
+- 3-4 балла: сложные перемещения (2+ позиции)
+
+РАСПРЕДЕЛЕНИЕ ПАЛЬЦЕВ:
+----------------------
+- f1l/f1r: большие пальцы (пробелы и спец. клавиши)
+- f2l/f2r: указательные пальцы
+- f3l/f3r: средние пальцы
+- f4l/f4r: безымянные пальцы
+- f5l/f5r: мизинцы
+"""
 import re
 from dictr import *
 
@@ -7,7 +58,15 @@ counter_fingers_call = {'f5l': 0, 'f4l': 0, 'f3l': 0, 'f2l': 0, 'f1l': 0, 'f1r':
 
 
 def get_cords(symbol):
-    """Получаем координаты символа для раскладки Диктор"""
+    """
+    Получаем координаты символа для раскладки Диктор
+
+    ВХОД:
+        symbol (str): символ для поиска координат
+
+    ВЫХОД:
+        list | None: [номер_ряда, номер_колонки] или None если символ не найден
+    """
     for key in data_dict:
         for value in data_dict[key]['key']:
             if value == symbol:
@@ -16,7 +75,15 @@ def get_cords(symbol):
 
 
 def get_cords_qwer(symbol):
-    """Получаем координаты символа для раскладки ЙЦУКЕН"""
+    """
+    Получаем координаты символа для раскладки ЙЦУКЕН
+
+    ВХОД:
+        symbol (str): символ для поиска координат
+
+    ВЫХОД:
+        list | None: [номер_ряда, номер_колонки] или None если символ не найден
+    """
     for key in data_dict:
         for value in data_dict[key]['qwer']:
             if value == symbol:
@@ -25,7 +92,15 @@ def get_cords_qwer(symbol):
 
 
 def get_cords_vyzov(symbol):
-    """Получаем координаты символа для раскладки Вызов и определяем, является ли символ вторым на клавише"""
+    """
+    Получаем координаты символа для раскладки Вызов и определяем, является ли символ вторым на клавише
+
+    ВХОД:
+        symbol (str): символ для поиска координат
+
+    ВЫХОД:
+        list | None: [номер_ряда, номер_колонки] или None если символ не найден
+    """
     for key in data_dict:
         vyzov_chars = data_dict[key]['vyzov'].strip()
         if len(vyzov_chars) == 2:
@@ -47,6 +122,13 @@ def calculate_penalty(current_pos, next_pos):
     - Вверх/вниз/влево/вправо = 1 балл
     - Диагональ = 2 балла
     - Сложные перемещения = 3-4 балла
+
+    ВХОД:
+        current_pos (list): текущие координаты [ряд, колонка]
+        next_pos (list): следующие координаты [ряд, колонка]
+
+    ВЫХОД:
+        int: штрафные баллы (0-4)
     """
     if not current_pos or not next_pos:
         return 0
@@ -81,7 +163,16 @@ def calculate_penalty(current_pos, next_pos):
 
 
 def value_passing_fingers(column, value):
-    """Распределение нагрузки по пальцам для Диктор"""
+    """
+    Распределение нагрузки по пальцам для Диктор
+
+    ВХОД:
+        column (int): номер колонки (0-12)
+        value (int): значение нагрузки для добавления
+
+    ВЫХОД:
+        None: обновляет глобальную переменную counter_fingers
+    """
     match column:
         case 0 | 1:
             counter_fingers['f5l'] += value
@@ -102,7 +193,16 @@ def value_passing_fingers(column, value):
 
 
 def value_passing_fingers_qwer(column, value):
-    """Распределение нагрузки по пальцам для ЙЦУКЕН"""
+    """
+    Распределение нагрузки по пальцам для ЙЦУКЕН
+
+    ВХОД:
+        column (int): номер колонки (0-12)
+        value (int): значение нагрузки для добавления
+
+    ВЫХОД:
+        None: обновляет глобальную переменную counter_fingers_qwer
+    """
     match column:
         case 0 | 1:
             counter_fingers_qwer['f5l'] += value
@@ -123,7 +223,16 @@ def value_passing_fingers_qwer(column, value):
 
 
 def value_passing_fingers_call(column, value, is_second_symbol=False):
-    """Распределение нагрузки по пальцам для Вызов"""
+    """
+    Распределение нагрузки по пальцам для Вызов
+
+    ВХОД:
+        column (int): номер колонки (0-12)
+        value (int): значение нагрузки для добавления
+
+    ВЫХОД:
+        None: обновляет глобальную переменную counter_fingers_qwer
+    """
     # Добавляем штраф за использование второго символа
     total_value = value + (4 if is_second_symbol else 0)
 
@@ -147,7 +256,16 @@ def value_passing_fingers_call(column, value, is_second_symbol=False):
 
 
 def count_steps(first_sim, second_sim):
-    """Подсчет шагов для раскладки Диктор с улучшенной системой штрафов"""
+    """
+    Подсчет шагов для раскладки Диктор с улучшенной системой штрафов
+
+    ВХОД:
+        first_sim (str): первый символ
+        second_sim (str): второй символ
+
+    ВЫХОД:
+        tuple: (штрафные_баллы, используемый_палец)
+    """
     current_pos = get_cords(first_sim)
     next_pos = get_cords(second_sim)
 
@@ -188,7 +306,16 @@ def count_steps(first_sim, second_sim):
 
 
 def count_steps_qwer(first_sim, second_sim):
-    """Подсчет шагов для раскладки ЙЦУКЕН с улучшенной системой штрафов"""
+    """
+    Подсчет шагов для раскладки ЙЦУКЕН с улучшенной системой штрафов
+
+    ВХОД:
+        first_sim (str): первый символ
+        second_sim (str): второй символ
+
+    ВЫХОД:
+        tuple: (штрафные_баллы, используемый_палец)
+    """
     current_pos = get_cords_qwer(first_sim)
     next_pos = get_cords_qwer(second_sim)
 
@@ -229,7 +356,16 @@ def count_steps_qwer(first_sim, second_sim):
 
 
 def count_steps_call(first_sim, second_sim):
-    """Подсчет шагов для раскладки Вызов с улучшенной системой штрафов"""
+    """
+    Подсчет шагов для раскладки Вызов с улучшенной системой штрафов
+
+    ВХОД:
+        first_sim (str): первый символ
+        second_sim (str): второй символ
+
+    ВЫХОД:
+        tuple: (штрафные_баллы, используемый_палец)
+    """
     current_pos_info = get_cords_vyzov(first_sim)
     next_pos_info = get_cords_vyzov(second_sim)
 
@@ -277,7 +413,15 @@ def count_steps_call(first_sim, second_sim):
 
 
 def get_finger_by_column(column):
-    """Определяет палец по колонке"""
+    """
+    Определяет палец по колонке
+
+    ВХОД:
+        column (int): номер колонки (0-12)
+
+    ВЫХОД:
+        str: идентификатор пальца
+    """
     match column:
         case 0 | 1:
             return 'f5l'
@@ -300,7 +444,15 @@ def get_finger_by_column(column):
 
 
 def count_spaces(text):
-    """Подсчет пробелов"""
+    """
+    Подсчет пробелов
+
+    ВХОД:
+        text (str): текст для анализа
+
+    ВЫХОД:
+        None: обновляет глобальные переменные counter_fingers, counter_fingers_qwer и counter_fingers_call
+    """
     spaces = text.count(' ')
     counter_fingers_qwer['f1l'] += int(spaces * 0.6)
     counter_fingers_qwer['f1r'] += int(spaces * 0.4)
@@ -311,7 +463,15 @@ def count_spaces(text):
 
 
 def analyze_movement_details(text):
-    """Детальный анализ перемещений для отладки"""
+    """
+    Детальный анализ перемещений для отладки
+
+    ВХОД:
+        text (str): текст для анализа
+
+    ВЫХОД:
+        list: список словарей с информацией о перемещениях
+    """
     movements_info = []
     text_chars = [char for char in text.lower() if char.isalpha() or char in ' ,.']
 
@@ -319,15 +479,17 @@ def analyze_movement_details(text):
         current_char = text_chars[i - 1]
         next_char = text_chars[i]
 
-        # Для всех трех раскладок
+        # Для раскладки Диктор
         current_pos_d = get_cords(current_char)
         next_pos_d = get_cords(next_char)
         penalty_d, finger_d = count_steps(current_char, next_char)
 
+        # Для раскладки ЙЦУКЕН (используем копию счетчиков чтобы не дублировать)
         current_pos_q = get_cords_qwer(current_char)
         next_pos_q = get_cords_qwer(next_char)
         penalty_q, finger_q = count_steps_qwer(current_char, next_char)
 
+        # Для раскладки Вызов
         current_pos_info_c = get_cords_vyzov(current_char)
         next_pos_info_c = get_cords_vyzov(next_char)
         penalty_c, finger_c = count_steps_call(current_char, next_char)
@@ -366,7 +528,16 @@ def analyze_movement_details(text):
 
 
 def get_movement_type(current_pos, next_pos):
-    """Определяет тип перемещения"""
+    """
+    Определяет тип перемещения
+
+    ВХОД:
+        current_pos (list): текущие координаты [ряд, колонка]
+        next_pos (list): следующие координаты [ряд, колонка]
+
+    ВЫХОД:
+        str: описание типа перемещения
+    """
     if not current_pos or not next_pos:
         return "N/A"
 
@@ -388,7 +559,15 @@ def get_movement_type(current_pos, next_pos):
 
 
 def print_detailed_analysis(movements_info):
-    """Печать детального анализа перемещений"""
+    """
+    Печать детального анализа перемещений
+
+    ВХОД:
+        movements_info (list): список словарей с информацией о перемещениях
+
+    ВЫХОД:
+        None: выводит таблицу в консоль
+    """
     print("\n" + "=" * 180)
     print("ДЕТАЛЬНЫЙ АНАЛИЗ ПЕРЕМЕЩЕНИЙ (первые 20 перемещений)")
     print("=" * 180)
@@ -408,7 +587,15 @@ def print_detailed_analysis(movements_info):
 
 
 def print_movement_statistics(movements_info):
-    """Статистика по типам перемещений"""
+    """
+    Статистика по типам перемещений
+
+    ВХОД:
+        movements_info (list): список словарей с информацией о перемещениях
+
+    ВЫХОД:
+        None: выводит статистику в консоль
+    """
     print("\n" + "=" * 100)
     print("СТАТИСТИКА ТИПОВ ПЕРЕМЕЩЕНИЙ")
     print("=" * 100)
@@ -437,7 +624,15 @@ def print_movement_statistics(movements_info):
 
 
 def print_final_results():
-    """Печать финальных результатов"""
+    """
+    Печать финальных результатов
+
+    ВХОД:
+        None: использует глобальные переменные counter_fingers и counter_fingers_qwer
+
+    ВЫХОД:
+        None: выводит итоговые результаты в консоль
+    """
     print("\n" + "=" * 100)
     print("ФИНАЛЬНЫЕ РЕЗУЛЬТАТЫ НАГРУЗКИ НА ПАЛЬЦЫ")
     print("=" * 100)
@@ -522,3 +717,4 @@ if __name__ == "__main__":
     print_detailed_analysis(movements_info)
     print_movement_statistics(movements_info)
     print_final_results()
+    
