@@ -49,7 +49,11 @@ class LayoutAnalyzer:
         self.layouts = {
             'diktor': KeyboardLayout("Диктор", 'diktor'),
             'qwer': KeyboardLayout("ЙЦУКЕН", 'qwer'),
-            'vyzov': KeyboardLayout("Вызов", 'vyzov')
+            'vyzov': KeyboardLayout("Вызов", 'vyzov'),
+            'ant': KeyboardLayout("ант", 'ant'),
+            'skoropis': KeyboardLayout("скоропись", 'skoropis'),
+            'rusphone': KeyboardLayout("русфон", 'rusphone'),
+            'zubachew': KeyboardLayout("зубачев", 'zubachew')
         }
 
     @property

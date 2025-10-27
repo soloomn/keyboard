@@ -60,6 +60,14 @@ class KeyboardLayout:
             return 'qwer'
         elif self.layout_type == 'vyzov':
             return 'vyzov'
+        elif self.layout_type == 'ant':
+            return 'ant'
+        elif self.layout_type == 'skoropis':
+            return 'skoropis'
+        elif self.layout_type == 'rusphone':
+            return 'rusphone'
+        elif self.layout_type == 'zubachew':
+            return 'zubachew'
         return 'key'
 
     def get_coords(self, symbol: str) -> list[str | int | bool] | None:
