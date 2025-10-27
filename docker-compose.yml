@@ -1,0 +1,26 @@
+services:
+  analyzer:
+    build:
+      context: .
+      dockerfile: Dockerfile.analyzer
+    container_name: keyboard-analyzer
+    volumes:
+      # монтируем локальную папку ./data_output к /app/data_output
+      - ./data_output:/app/data_output
+    environment:
+      - PYTHONPATH=/app
+
+  visualizer:
+    build:
+      context: .
+      dockerfile: Dockerfile.visualizer
+    container_name: keyboard-visualizer
+    volumes:
+      # та же папка, общая между контейнерами
+      - ./data_output:/app/data_output
+    environment:
+      - PYTHONPATH=/app
+    depends_on:
+      analyzer:
+        condition: service_completed_successfully
+    restart: unless-stopped
