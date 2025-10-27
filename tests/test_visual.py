@@ -1,9 +1,16 @@
-import matplotlib
-matplotlib.use("Agg")  # Без GUI
+import json
+from unittest.mock import mock_open, patch
 
-from visual import show_all
+def test_show_all_with_mock():
+    """Проверка функции show_all без реального файла"""
+    fake_data = {
+        "diktor": {"left": [1,2], "right": [3,4]},
+        "qwer": {"left": [5,6], "right": [7,8]},
+        "vyzov": {"left": [9,10], "right": [11,12]}
+    }
 
-def test_show_all_smoke(monkeypatch):
-    data = {"left": [1, 2, 3, 4, 5], "right": [5, 4, 3, 2, 1]}
-    monkeypatch.setattr("matplotlib.pyplot.show", lambda: None)
-    show_all(data, data, data)
+    m = mock_open(read_data=json.dumps(fake_data))
+    with patch("builtins.open", m):
+        from visual.visualmain import show_all
+        # Запускаем функцию с фейковыми данными
+        show_all(fake_data["diktor"], fake_data["qwer"], fake_data["vyzov"])
