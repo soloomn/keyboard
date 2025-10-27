@@ -1,7 +1,17 @@
-keyboard
-========
+project_klava
+=============
 
 .. toctree::
    :maxdepth: 4
 
-   keyboard
+   charts_bar
+   charts_multi
+   charts_pie
+   charts_summary
+   dictr
+   keyboard_analyzer
+   keyboard_layout
+   large
+   main
+   stats
+   visualmain

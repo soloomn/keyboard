@@ -1,3 +1,26 @@
+"""
+Модуль анализа и сравнения эргономики клавиатурных раскладок.
+
+Предоставляет функционал для анализа текста с точки зрения нагрузки на пальцы
+при использовании различных русскоязычных клавиатурных раскладок.
+
+Основные возможности:
+- Анализ нагрузки на каждый палец для разных раскладок
+- Детальный анализ перемещений между клавишами
+- Сравнительная оценка эргономичности раскладок
+- Визуализация результатов анализа
+
+Поддерживаемые раскладки:
+- Диктор (diktor)
+- ЙЦУКЕН (qwer)
+- Вызов (vyzov)
+
+Использование:
+    analyzer = LayoutAnalyzer()
+    analyzer.analyze_text("Пример текста для анализа")
+    analyzer.print_final_results()
+"""
+
 import re
 from typing import Any
 
@@ -5,11 +28,22 @@ from models import KeyboardLayout
 
 
 class LayoutAnalyzer:
-    """Класс для анализа и сравнения раскладок"""
+    """
+    Анализатор для сравнения эргономики различных клавиатурных раскладок.
+
+    Класс выполняет статистический анализ нагрузки на пальцы и оценки
+    эффективности перемещений между клавишами для разных раскладок.
+
+    Attributes:
+        layouts (dict): Словарь с экземплярами раскладок для анализа
+    """
 
     def __init__(self):
         """
+        Инициализация анализатора с набором раскладок для сравнения.
 
+        ВХОД: Нет
+        ВЫХОД: Экземпляр LayoutAnalyzer с инициализированными раскладками
         """
         # Создаем экземпляры для всех раскладок
         self.layouts = {
@@ -21,9 +55,18 @@ class LayoutAnalyzer:
     @property
     def reverser(self) -> dict[Any, Any]:
         """
+        Свойство для получения данных о распределении пальцев по раскладкам.
 
-        :rtype: dict[Any, Any]
-        :return:
+        ВХОД: Нет
+
+        ВЫХОД:
+            dict: Словарь с данными о пальцах для каждой раскладки в формате:
+                {
+                    'layout_name': {
+                        'left': [нагрузка_пальцев_левой_руки],
+                        'right': [нагрузка_пальцев_правой_руки]
+                    }
+                }
         """
         all_data = {}
 
@@ -36,9 +79,13 @@ class LayoutAnalyzer:
         return all_data
 
     def analyze_text(self, text: str) -> None:
-        """Анализ текста для всех раскладок
-        :rtype: None
-        :param text:
+        """
+        Основной анализ текста для всех загруженных раскладок.
+
+        ВХОД:
+            text (str): Текст для анализа эргономики ввода
+
+        ВЫХОД: Нет (результаты сохраняются во внутреннем состоянии раскладок)
         """
         # Обработка пробелов
         spaces_count = text.count(' ')
@@ -60,11 +107,26 @@ class LayoutAnalyzer:
                 layout.count_steps(text_lower[i - 1], text_lower[i])
 
     def analyze_movement_details(self, text: str, max_movements: int = 50) -> list[Any]:
-        """Детальный анализ перемещений
-        :rtype: list[Any]
-        :param text: 
-        :param max_movements: 
-        :return: 
+        """
+        Детальный анализ перемещений между символами текста.
+
+        ВХОД:
+            text (str): Текст для детального анализа перемещений
+            max_movements (int): Максимальное количество анализируемых перемещений
+
+        ВЫХОД:
+            list[dict]: Список словарей с детальной информацией о каждом перемещении:
+                [
+                    {
+                        'from': текущий_символ,
+                        'to': следующий_символ,
+                        'penalty_layout': штраф_перемещения,
+                        'finger_layout': используемый_палец,
+                        'pos_layout': координаты_перемещения,
+                        'move_type_layout': тип_перемещения,
+                        ...
+                    }
+                ]
         """
         movements_info = []
         text_chars = [char for char in text.lower() if char.isalpha() or char in ' ,.']
@@ -97,21 +159,30 @@ class LayoutAnalyzer:
 
     @staticmethod
     def format_coords(current_pos: list[str | int | bool], next_pos: list[str | int | bool]) -> str:
-        """Форматирование координат для вывода
-        :rtype: str
-        :param current_pos: 
-        :param next_pos: 
-        :return: 
+        """
+        Форматирование координат для читаемого вывода.
+
+        ВХОД:
+            current_pos (list): Координаты текущей позиции [row, col, ...]
+            next_pos (list): Координаты следующей позиции [row, col, ...]
+
+        ВЫХОД:
+            str: Отформатированная строка координат в формате "(row1,col1)→(row2,col2)"
+                 или "N/A" если координаты не определены
         """
         if not current_pos or not next_pos:
             return "N/A"
         return f"({current_pos[0]},{current_pos[1]})→({next_pos[0]},{next_pos[1]})"
 
     def print_detailed_analysis(self, movements_info: list[Any], num_to_show: int = 20) -> None:
-        """Печать детального анализа
-        :rtype: None
-        :param movements_info: 
-        :param num_to_show: 
+        """
+        Вывод детального анализа перемещений в табличном формате.
+
+        ВХОД:
+            movements_info (list): Список данных о перемещениях от analyze_movement_details()
+            num_to_show (int): Количество перемещений для отображения
+
+        ВЫХОД: Нет (результаты выводятся в консоль)
         """
         print("\n" + "=" * 180)
         print(f"ДЕТАЛЬНЫЙ АНАЛИЗ ПЕРЕМЕЩЕНИЙ (первые {num_to_show} перемещений)")
@@ -149,8 +220,12 @@ class LayoutAnalyzer:
             print(" | ".join(row))
 
     def print_final_results(self) -> None:
-        """Печать финальных результатов
-        :rtype: None
+        """
+        Вывод финальных результатов анализа в табличном формате.
+
+        ВХОД: Нет
+
+        ВЫХОД: Нет (результаты выводятся в консоль)
         """
         print("\n" + "=" * 100)
         print("ФИНАЛЬНЫЕ РЕЗУЛЬТАТЫ НАГРУЗКИ НА ПАЛЬЦЫ")

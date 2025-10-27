@@ -1,3 +1,10 @@
+"""
+Модуль для визуализации нагрузок на пальцы в виде гистограмм.
+
+Содержит функцию plot_finger_usage_with_values для построения горизонтальных гистограмм,
+сравнивающих распределение нагрузок на пальцы между различными клавиатурными раскладками.
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.container import BarContainer
@@ -7,14 +14,14 @@ def plot_finger_usage_with_values(data_diktor: dict,
                                   data_qwer: dict,
                                   data_vyzov: dict) -> None:
     """
-    Строит горизонтальную гистограмму нагрузок по пальцам
-    для трёх раскладок: Йцукен, Диктор и Вызов.
+    Строит горизонтальную гистограмму нагрузок по пальцам для трёх раскладок.
 
-    Args:
-        data_diktor (dict): Данные для раскладки "Диктор".
-        data_qwer (dict): Данные для раскладки "Йцукен".
-        data_vyzov (dict): Данные для раскладки "Вызов".
-        :rtype: None
+    ВХОД:
+        data_diktor (dict): Данные для раскладки "Диктор" в формате {'left': list, 'right': list}
+        data_qwer (dict): Данные для раскладки "Йцукен" в формате {'left': list, 'right': list}
+        data_vyzov (dict): Данные для раскладки "Вызов" в формате {'left': list, 'right': list}
+
+    ВЫХОД: Нет (отображает интерактивную гистограмму с помощью matplotlib)
     """
     fingers = [
         'Л_Большой', 'П_Большой',
@@ -55,11 +62,15 @@ def plot_finger_usage_with_values(data_diktor: dict,
     # Функция для добавления текста к столбцам.
     # Это более удобный способ, чем повторять код для каждого набора столбцов.
     def add_labels(rects: BarContainer, ax, x_offset: object = 80) -> None:
-        """Добавляет текстовые метки значений справа от столбцов.
-        :rtype: None
-        :param rects:
-        :param ax:
-        :param x_offset:
+        """
+        Добавляет текстовые метки значений справа от столбцов.
+
+        ВХОД:
+            rects (BarContainer): Контейнер с объектами столбцов гистограммы
+            ax: Объект оси matplotlib для отрисовки
+            x_offset (int): Смещение текста от столбца в пикселях (по умолчанию 80)
+
+        ВЫХОД: Нет
         """
         for rect in rects:
             # Получаем ширину столбца (т.е. его значение)

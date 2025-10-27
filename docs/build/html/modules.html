@@ -6,21 +6,21 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>keyboard &mdash; документация keyboard 1.0</title>
+  <title>project_klava &mdash; документация keyboard 2.0</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=9ca2116e"></script>
+      <script src="_static/documentation_options.js?v=0eddcf85"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/translations.js?v=cd1d70c9"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Алфавитный указатель" href="genindex.html" />
     <link rel="search" title="Поиск" href="search.html" />
-    <link rel="next" title="keyboard package" href="keyboard.html" />
+    <link rel="next" title="charts_bar module" href="charts_bar.html" />
     <link rel="prev" title="keyboard documentation" href="index.html" /> 
 </head>
 
@@ -45,8 +45,18 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
               <p class="caption" role="heading"><span class="caption-text">Содержание:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">keyboard</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="keyboard.html">keyboard package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">project_klava</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="charts_bar.html">charts_bar module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="charts_multi.html">charts_multi module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="charts_pie.html">charts_pie module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="charts_summary.html">charts_summary module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dictr.html">dictr module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keyboard_analyzer.html">keyboard_analyzer module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keyboard_layout.html">keyboard_layout module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="large.html">large module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main.html">main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stats.html">stats module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualmain.html">visualmain module</a></li>
 </ul>
 </li>
 </ul>
@@ -65,7 +75,7 @@
           <div role="navigation" aria-label="Навигация по страницам">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">keyboard</li>
+      <li class="breadcrumb-item active">project_klava</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/modules.rst.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
       </li>
@@ -75,47 +85,78 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="keyboard">
-<h1>keyboard<a class="headerlink" href="#keyboard" title="Ссылка на этот заголовок"></a></h1>
+  <section id="project-klava">
+<h1>project_klava<a class="headerlink" href="#project-klava" title="Ссылка на этот заголовок"></a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="keyboard.html">keyboard package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="keyboard.html#subpackages">Subpackages</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="keyboard.data.html">keyboard.data package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="keyboard.data.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="keyboard.data.html#keyboard-data-dictr-module">keyboard.data.dictr module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="keyboard.data.html#module-contents">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="charts_bar.html">charts_bar module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="charts_bar.html#charts_bar.plot_finger_usage_with_values"><code class="docutils literal notranslate"><span class="pre">plot_finger_usage_with_values()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="keyboard.models.html">keyboard.models package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="keyboard.models.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="keyboard.models.html#keyboard-models-keyboard-analyzer-module">keyboard.models.keyboard_analyzer module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="keyboard.models.html#keyboard-models-keyboard-layout-module">keyboard.models.keyboard_layout module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="keyboard.models.html#module-contents">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="charts_multi.html">charts_multi module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="charts_multi.html#charts_multi.plot_finger_loads_by_layout"><code class="docutils literal notranslate"><span class="pre">plot_finger_loads_by_layout()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="keyboard.utils.html">keyboard.utils package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="keyboard.utils.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="keyboard.utils.html#keyboard-utils-large-module">keyboard.utils.large module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="keyboard.utils.html#keyboard-utils-stats-module">keyboard.utils.stats module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="keyboard.utils.html#module-contents">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="charts_pie.html">charts_pie module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="charts_pie.html#charts_pie.create_and_plot_pie_charts_group"><code class="docutils literal notranslate"><span class="pre">create_and_plot_pie_charts_group()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="keyboard.visual.html">keyboard.visual package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="keyboard.visual.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="keyboard.visual.html#keyboard-visual-charts-bar-module">keyboard.visual.charts_bar module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="keyboard.visual.html#keyboard-visual-charts-multi-module">keyboard.visual.charts_multi module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="keyboard.visual.html#keyboard-visual-charts-pie-module">keyboard.visual.charts_pie module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="keyboard.visual.html#keyboard-visual-charts-summary-module">keyboard.visual.charts_summary module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="keyboard.visual.html#keyboard-visual-visualmain-module">keyboard.visual.visualmain module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="keyboard.visual.html#module-contents">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="charts_summary.html">charts_summary module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="charts_summary.html#charts_summary.create_total_load_pie_chart"><code class="docutils literal notranslate"><span class="pre">create_total_load_pie_chart()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dictr.html">dictr module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dictr.html#id1">СЛОВАРЬ КОНФИГУРАЦИИ КЛАВИАТУРНЫХ РАСКЛАДОК</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dictr.html#id2">СТРУКТУРА ДАННЫХ:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dictr.html#id3">ПАРАМЕТРЫ КЛАВИШИ:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dictr.html#id4">ОСОБЕННОСТИ:</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="keyboard_analyzer.html">keyboard_analyzer module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="keyboard_analyzer.html#keyboard_analyzer.LayoutAnalyzer"><code class="docutils literal notranslate"><span class="pre">LayoutAnalyzer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="keyboard_analyzer.html#keyboard_analyzer.LayoutAnalyzer.layouts"><code class="docutils literal notranslate"><span class="pre">LayoutAnalyzer.layouts</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keyboard_analyzer.html#keyboard_analyzer.LayoutAnalyzer.reverser"><code class="docutils literal notranslate"><span class="pre">LayoutAnalyzer.reverser</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keyboard_analyzer.html#keyboard_analyzer.LayoutAnalyzer.analyze_text"><code class="docutils literal notranslate"><span class="pre">LayoutAnalyzer.analyze_text()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keyboard_analyzer.html#keyboard_analyzer.LayoutAnalyzer.analyze_movement_details"><code class="docutils literal notranslate"><span class="pre">LayoutAnalyzer.analyze_movement_details()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keyboard_analyzer.html#keyboard_analyzer.LayoutAnalyzer.format_coords"><code class="docutils literal notranslate"><span class="pre">LayoutAnalyzer.format_coords()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keyboard_analyzer.html#keyboard_analyzer.LayoutAnalyzer.print_detailed_analysis"><code class="docutils literal notranslate"><span class="pre">LayoutAnalyzer.print_detailed_analysis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keyboard_analyzer.html#keyboard_analyzer.LayoutAnalyzer.print_final_results"><code class="docutils literal notranslate"><span class="pre">LayoutAnalyzer.print_final_results()</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="keyboard.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="keyboard.html#keyboard-main-module">keyboard.main module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="keyboard.html#module-contents">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="keyboard_layout.html">keyboard_layout module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="keyboard_layout.html#keyboard_layout.KeyboardLayout"><code class="docutils literal notranslate"><span class="pre">KeyboardLayout</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="keyboard_layout.html#keyboard_layout.KeyboardLayout.name"><code class="docutils literal notranslate"><span class="pre">KeyboardLayout.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keyboard_layout.html#keyboard_layout.KeyboardLayout.layout_type"><code class="docutils literal notranslate"><span class="pre">KeyboardLayout.layout_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keyboard_layout.html#keyboard_layout.KeyboardLayout.counter_fingers"><code class="docutils literal notranslate"><span class="pre">KeyboardLayout.counter_fingers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keyboard_layout.html#keyboard_layout.KeyboardLayout.get_symbol_field"><code class="docutils literal notranslate"><span class="pre">KeyboardLayout.get_symbol_field</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keyboard_layout.html#keyboard_layout.KeyboardLayout.get_coords"><code class="docutils literal notranslate"><span class="pre">KeyboardLayout.get_coords()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keyboard_layout.html#keyboard_layout.KeyboardLayout.calculate_penalty"><code class="docutils literal notranslate"><span class="pre">KeyboardLayout.calculate_penalty()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keyboard_layout.html#keyboard_layout.KeyboardLayout.get_finger_by_column"><code class="docutils literal notranslate"><span class="pre">KeyboardLayout.get_finger_by_column()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keyboard_layout.html#keyboard_layout.KeyboardLayout.apply_finger_load"><code class="docutils literal notranslate"><span class="pre">KeyboardLayout.apply_finger_load()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keyboard_layout.html#keyboard_layout.KeyboardLayout.count_steps"><code class="docutils literal notranslate"><span class="pre">KeyboardLayout.count_steps()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keyboard_layout.html#keyboard_layout.KeyboardLayout.apply_movement_penalty"><code class="docutils literal notranslate"><span class="pre">KeyboardLayout.apply_movement_penalty()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keyboard_layout.html#keyboard_layout.KeyboardLayout.get_movement_type"><code class="docutils literal notranslate"><span class="pre">KeyboardLayout.get_movement_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keyboard_layout.html#keyboard_layout.KeyboardLayout.count_spaces"><code class="docutils literal notranslate"><span class="pre">KeyboardLayout.count_spaces()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keyboard_layout.html#keyboard_layout.KeyboardLayout.add_uppercase_penalty"><code class="docutils literal notranslate"><span class="pre">KeyboardLayout.add_uppercase_penalty()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keyboard_layout.html#keyboard_layout.KeyboardLayout.get_total_load"><code class="docutils literal notranslate"><span class="pre">KeyboardLayout.get_total_load</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="keyboard_layout.html#keyboard_layout.KeyboardLayout.get_finger_load"><code class="docutils literal notranslate"><span class="pre">KeyboardLayout.get_finger_load()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="large.html">large module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="large.html#large.analyze_large_file"><code class="docutils literal notranslate"><span class="pre">analyze_large_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="main.html">main module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stats.html">stats module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="stats.html#stats.show_finger_stats"><code class="docutils literal notranslate"><span class="pre">show_finger_stats()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="visualmain.html">visualmain module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="visualmain.html#visualmain.show_all"><code class="docutils literal notranslate"><span class="pre">show_all()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -127,13 +168,13 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
         <a href="index.html" class="btn btn-neutral float-left" title="keyboard documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
-        <a href="keyboard.html" class="btn btn-neutral float-right" title="keyboard package" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="charts_bar.html" class="btn btn-neutral float-right" title="charts_bar module" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Авторские права 2025, Tim, Daniil. </p>
+    <p>&#169; Авторские права 2025, Daniil Sudin, Tim Smetanin. </p>
   </div>
 
   Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
