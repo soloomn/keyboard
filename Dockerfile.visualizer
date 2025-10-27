@@ -8,7 +8,7 @@ COPY . /app
 
 # Устанавливаем зависимости
 RUN pip install --no-cache-dir -U pip \
-    && pip install --no-cache-dir matplotlib numpy pandas rich
+    && pip install --no-cache-dir matplotlib numpy pandas rich pytest
 
 # Устанавливаем PYTHONPATH, чтобы Python видел пакеты
 ENV PYTHONPATH=/app
