@@ -1,3 +1,11 @@
+"""
+Модуль для построения множественных графиков сравнения нагрузок на пальцы.
+
+Содержит функцию plot_finger_loads_by_layout для визуализации распределения нагрузок
+по типам пальцев (большой, указательный, средний, безымянный, мизинец)
+сравнивая три различные клавиатурные раскладки.
+"""
+
 import matplotlib.pyplot as plt
 import pandas as pd
 from pandas import DataFrame
@@ -7,26 +15,28 @@ def plot_finger_loads_by_layout(data_diktor: dict,
                                 data_qwer: dict,
                                 data_vyzov: dict) -> None:
     """
-    Строит 5 отдельных графиков — нагрузку на каждый тип пальца
-    (большой, указательный, средний, безымянный, мизинец)
-    по трем раскладкам.
+       Строит 5 отдельных графиков — нагрузку на каждый тип пальца по трем раскладкам.
 
-    Args:
-        data_diktor (dict): Данные для раскладки "Диктор".
-        data_qwer (dict): Данные для раскладки "Йцукен".
-        data_vyzov (dict): Данные для раскладки "Вызов".
-        :rtype: None
-    """
+       ВХОД:
+           data_diktor (dict): Данные для раскладки "Диктор" в формате {'left': list, 'right': list}
+           data_qwer (dict): Данные для раскладки "Йцукен" в формате {'left': list, 'right': list}
+           data_vyzov (dict): Данные для раскладки "Вызов" в формате {'left': list, 'right': list}
+
+       ВЫХОД: Нет (отображает 5 графиков с помощью matplotlib)
+       """
     finger_types = ['Большой', 'Указательный', 'Средний', 'Безымянный', 'Мизинец']
 
     # Функция для преобразования данных в DataFrame
     def prepare_data(data: dict, layout_name: str) -> DataFrame:
         """
-        Преобразует данные раскладки в DataFrame, где каждая строка - это нагрузка
-        для конкретного пальца (Левый/Правый) в данной раскладке.
-        :rtype: DataFrame
-        :param data:
-        :param layout_name:
+        Преобразует данные раскладки в DataFrame для построения графиков.
+
+        ВХОД:
+            data (dict): Данные раскладки в формате {'left': list, 'right': list}
+            layout_name (str): Название раскладки
+
+        ВЫХОД:
+            DataFrame: Таблица с колонками ['Палец', 'Нагрузка', 'Раскладка']
         """
         rows = []
         for i, ftype in enumerate(finger_types):

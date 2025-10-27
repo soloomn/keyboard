@@ -1,14 +1,41 @@
+"""
+Модуль представления клавиатурной раскладки и расчета эргономических показателей.
+
+Содержит класс KeyboardLayout для работы с различными типами раскладок клавиатуры,
+расчета нагрузки на пальцы и оценки эффективности перемещений между клавишами.
+
+Основные функции:
+- Определение координат символов для разных раскладок
+- Расчет штрафов за перемещения между клавишами
+- Распределение нагрузки по пальцам
+- Анализ типов перемещений
+"""
+
 from data import data_dict
 
 
 class KeyboardLayout:
-    """Универсальный класс для представления раскладки клавиатуры"""
+    """
+    Класс для представления клавиатурной раскладки и расчета эргономических показателей.
+
+    Обеспечивает функционал для работы с различными типами раскладок (ЙЦУКЕН, Диктор, Вызов),
+    включая расчет координат символов, штрафов за перемещения и распределения нагрузки по пальцам.
+
+    Attributes:
+        name (str): Название раскладки
+        layout_type (str): Тип раскладки ('diktor', 'qwer', 'vyzov')
+        counter_fingers (dict): Счетчик нагрузки на каждый палец
+    """
 
     def __init__(self, name: str, layout_type: str) -> None:
         """
+        Инициализация раскладки клавиатуры.
 
-        :param name:
-        :param layout_type:
+        ВХОД:
+            name (str): Человеко-читаемое название раскладки
+            layout_type (str): Тип раскладки ('diktor', 'qwer', 'vyzov')
+
+        ВЫХОД: Нет
         """
         self.name = name
         self.layout_type = layout_type  # 'diktor', 'qwer', 'vyzov'
@@ -19,8 +46,13 @@ class KeyboardLayout:
 
     @property
     def get_symbol_field(self) -> str:
-        """Получение названия поля с символами для данной раскладки
-        :rtype: str
+        """
+        Получение названия поля с символами для данной раскладки.
+
+        ВХОД: Нет
+
+        ВЫХОД:
+            str: Название поля в data_dict для данной раскладки
         """
         if self.layout_type == 'diktor':
             return 'key'
@@ -31,10 +63,15 @@ class KeyboardLayout:
         return 'key'
 
     def get_coords(self, symbol: str) -> list[str | int | bool] | None:
-        """Универсальное получение координат символа
-        :rtype: list[str | int | bool] | None
-        :param symbol:
-        :return:
+        """
+        Получение координат символа в текущей раскладке.
+
+        ВХОД:
+            symbol (str): Символ для поиска координат
+
+        ВЫХОД:
+            list | None: Список с координатами [row, column, is_second_symbol, additional_penalty]
+                       или None если символ не найден
         """
         field_name = self.get_symbol_field
 
@@ -63,10 +100,15 @@ class KeyboardLayout:
 
     @staticmethod
     def calculate_penalty(current_pos: list[int], next_pos: list[int]) -> int:
-        """Универсальный расчет штрафа за перемещение
-        :rtype: int
-        :param current_pos: 
-        :param next_pos: 
+        """
+        Расчет штрафа за перемещение между двумя позициями.
+
+        ВХОД:
+            current_pos (list): Текущая позиция [row, column]
+            next_pos (list): Следующая позиция [row, column]
+
+        ВЫХОД:
+            int: Штраф за перемещение (0-4 балла)
         """
         if not current_pos or not next_pos:
             return 0
@@ -102,10 +144,14 @@ class KeyboardLayout:
 
     @staticmethod
     def get_finger_by_column(column: int) -> str:
-        """Универсальное определение пальца по колонке
-        :rtype: str
-        :param column: 
-        :return: 
+        """
+        Определение пальца, отвечающего за колонку клавиатуры.
+
+        ВХОД:
+            column (int): Номер колонки клавиатуры (0-12)
+
+        ВЫХОД:
+            str: Идентификатор пальца ('f1l', 'f2r', и т.д.)
         """
         match column:
             case 0 | 1:
@@ -128,11 +174,15 @@ class KeyboardLayout:
                 return 'f1l'
 
     def apply_finger_load(self, column: int, penalty_value: int, additional_penalty: int = 0) -> None:
-        """Универсальное распределение нагрузки по пальцам
-        :rtype: None
-        :param column: 
-        :param penalty_value: 
-        :param additional_penalty: 
+        """
+        Применение нагрузки к соответствующему пальцу.
+
+        ВХОД:
+            column (int): Колонка клавиатуры
+            penalty_value (int): Основной штраф за перемещение
+            additional_penalty (int): Дополнительный штраф
+
+        ВЫХОД: Нет
         """
         total_value = penalty_value + additional_penalty
 
@@ -155,11 +205,15 @@ class KeyboardLayout:
                 self.counter_fingers['f5r'] += total_value
 
     def count_steps(self, first_sim: str, second_sim: str) -> tuple[int, str]:
-        """Универсальный подсчет шагов между двумя символами
-        :rtype: tuple[int, str]
-        :param first_sim: 
-        :param second_sim: 
-        :return: 
+        """
+        Подсчет шагов и штрафов между двумя символами.
+
+        ВХОД:
+            first_sim (str): Первый символ
+            second_sim (str): Второй символ
+
+        ВЫХОД:
+            tuple: (total_penalty, finger) - общий штраф и используемый палец
         """
         current_pos_info = self.get_coords(first_sim)
         next_pos_info = self.get_coords(second_sim)
@@ -191,12 +245,16 @@ class KeyboardLayout:
     def apply_movement_penalty(self, current_pos: list[str | int | bool], next_pos: list[str | int | bool],
                                penalty: int,
                                additional_penalty: int) -> None:
-        """Универсальное применение штрафа за перемещение
-        :rtype: None
-        :param current_pos: 
-        :param next_pos: 
-        :param penalty: 
-        :param additional_penalty: 
+        """
+        Применение штрафа за перемещение с учетом типа движения.
+
+        ВХОД:
+            current_pos (list): Текущая позиция [row, column]
+            next_pos (list): Следующая позиция [row, column]
+            penalty (int): Основной штраф за перемещение
+            additional_penalty (int): Дополнительный штраф
+
+        ВЫХОД: Нет
         """
         current_row, current_col = current_pos
         next_row, next_col = next_pos
@@ -237,11 +295,15 @@ class KeyboardLayout:
 
     @staticmethod
     def get_movement_type(current_pos: list[str | int | bool], next_pos: list[str | int | bool]) -> str:
-        """Универсальное определение типа перемещения
-        :rtype: str
-        :param current_pos:
-        :param next_pos:
-        :return:
+        """
+        Определение типа перемещения между позициями.
+
+        ВХОД:
+            current_pos (list): Текущая позиция [row, column, ...]
+            next_pos (list): Следующая позиция [row, column, ...]
+
+        ВЫХОД:
+            str: Описание типа перемещения
         """
         if not current_pos or not next_pos:
             return "N/A"
@@ -267,9 +329,13 @@ class KeyboardLayout:
             return "Простое (1)"
 
     def count_spaces(self, spaces_count: int) -> None:
-        """Универсальный подсчет пробелов
-        :rtype: None
-        :param spaces_count:
+        """
+        Распределение нагрузки от пробелов по большим пальцам.
+
+        ВХОД:
+            spaces_count (int): Количество пробелов в тексте
+
+        ВЫХОД: Нет
         """
         if self.layout_type == 'qwer':
             self.counter_fingers['f1l'] += int(spaces_count * 0.6)
@@ -282,25 +348,37 @@ class KeyboardLayout:
             self.counter_fingers['f1r'] += int(spaces_count * 0.5)
 
     def add_uppercase_penalty(self, uppercase_count: int) -> None:
-        """Универсальный учет штрафа за заглавные буквы
-        :rtype: None
-        :param uppercase_count:
+        """
+        Добавление штрафа за использование заглавных букв.
+
+        ВХОД:
+            uppercase_count (int): Количество заглавных букв
+
+        ВЫХОД: Нет
         """
         penalty = uppercase_count * 2
         self.apply_finger_load(0, penalty)
 
     @property
     def get_total_load(self) -> int:
-        """Получение общей нагрузки
-        :rtype: int
-        :return:
+        """
+        Получение общей нагрузки на все пальцы.
+
+        ВХОД: Нет
+
+        ВЫХОД:
+            int: Суммарная нагрузка на все пальцы
         """
         return sum(self.counter_fingers.values())
 
     def get_finger_load(self, finger: str) -> int:
-        """Получение нагрузки на конкретный палец
-        :rtype: int
-        :param finger:
-        :return:
+        """
+        Получение нагрузки на конкретный палец.
+
+        ВХОД:
+            finger (str): Идентификатор пальца ('f1l', 'f2r', и т.д.)
+
+        ВЫХОД:
+            int: Нагрузка на указанный палец
         """
         return self.counter_fingers.get(finger, 0)

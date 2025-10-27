@@ -1,3 +1,11 @@
+"""
+Модуль для построения сводной круговой диаграммы общей нагрузки.
+
+Содержит функцию create_total_load_pie_chart для визуализации общего распределения
+нагрузки между тремя клавиатурными раскладками в виде одной круговой диаграммы
+с процентным соотношением и выделением сегментов.
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -7,11 +15,13 @@ def create_total_load_pie_chart(data_diktor: dict,
                                 data_vyzov: dict) -> None:
     """
     Строит одну круговую диаграмму общей нагрузки по трём раскладкам.
-    Args:
-        data_diktor (dict): Данные для раскладки "Диктор".
-        data_qwer (dict): Данные для раскладки "Йцукен".
-        data_vyzov (dict): Данные для раскладки "Вызов".
-        :rtype: None
+
+    ВХОД:
+        data_diktor (dict): Данные для раскладки "Диктор" в формате {'left': list, 'right': list}
+        data_qwer (dict): Данные для раскладки "Йцукен" в формате {'left': list, 'right': list}
+        data_vyzov (dict): Данные для раскладки "Вызов" в формате {'left': list, 'right': list}
+
+    ВЫХОД: Нет (отображает круговую диаграмму с помощью matplotlib)
     """
     values = [
         sum(data_qwer['left']) + sum(data_qwer['right']),
