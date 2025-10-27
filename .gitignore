@@ -1,0 +1,9 @@
+docs/
+__pycache__/
+.pytest_cache/
+data_output/
+.DS_Store
+*.pyc
+*.png
+*.json
+.idea
