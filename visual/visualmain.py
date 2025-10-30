@@ -6,14 +6,14 @@
 по клавиатурным раскладкам.
 """
 
-import json
+#import json
 from visual import plot_finger_usage_with_values
 from visual import create_and_plot_pie_charts_group
 from visual import plot_finger_loads_by_layout
 from visual import create_total_load_pie_chart
 
 
-def show_all(data_diktor: dict, data_qwer: dict, data_vyzov: dict) -> None:
+def show_all(data_diktor: dict, data_qwer: dict, data_vyzov: dict, data_ant: dict, data_skoropis: dict, data_rusphone: dict, data_zubachew: dict) -> None:
     """
     Последовательно отображает все доступные визуализации для анализа раскладок.
 
@@ -24,13 +24,14 @@ def show_all(data_diktor: dict, data_qwer: dict, data_vyzov: dict) -> None:
 
     ВЫХОД: Нет (последовательно отображает 4 типа графиков с помощью matplotlib)
     """
-    plot_finger_usage_with_values(data_diktor, data_qwer, data_vyzov)
-    create_and_plot_pie_charts_group(data_diktor, data_qwer, data_vyzov)
-    plot_finger_loads_by_layout(data_diktor, data_qwer, data_vyzov)
-    create_total_load_pie_chart(data_diktor, data_qwer, data_vyzov)
+    plot_finger_usage_with_values(data_diktor, data_qwer, data_vyzov, data_ant, data_skoropis, data_rusphone, data_zubachew)
+    create_and_plot_pie_charts_group(data_diktor, data_qwer, data_vyzov, data_ant, data_skoropis, data_rusphone, data_zubachew)
+    plot_finger_loads_by_layout(data_diktor, data_qwer, data_vyzov, data_ant, data_skoropis, data_rusphone, data_zubachew)
+    create_total_load_pie_chart(data_diktor, data_qwer, data_vyzov, data_ant, data_skoropis, data_rusphone, data_zubachew)
+    create_total_load_pie_chart(data_diktor, data_qwer, data_vyzov, data_ant, data_skoropis, data_rusphone, data_zubachew)
 
 # загружаем данные из JSON
-with open("/app/data_output/layouts.json", "r", encoding="utf-8") as f:
-    data = json.load(f)
+#with open("/app/data_output/layouts.json", "r", encoding="utf-8") as f:
+    # data = json.load(f)
 
-show_all(data['diktor'], data['qwer'], data['vyzov'])
+#show_all(data['diktor'], data['qwer'], data['vyzov'])
