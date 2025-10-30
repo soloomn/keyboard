@@ -1,3 +1,4 @@
+
 """
 Модуль анализа и сравнения эргономики клавиатурных раскладок.
 
@@ -46,7 +47,7 @@ class LayoutAnalyzer:
         ВЫХОД: Экземпляр LayoutAnalyzer с инициализированными раскладками
         """
         # Создаем экземпляры для всех раскладок
-        self.layouts = {
+    self.layouts = {
             'diktor': KeyboardLayout("Диктор", 'diktor'),
             'qwer': KeyboardLayout("ЙЦУКЕН", 'qwer'),
             'vyzov': KeyboardLayout("Вызов", 'vyzov'),
@@ -286,3 +287,131 @@ class LayoutAnalyzer:
             eff_row += f" | {'Лучшая' if total == best_total else 'Хуже':<15}"
         eff_row += f" | {best_total_name:<10}"
         print(eff_row)
+
+    def print_press_statistics(self) -> None:
+        """
+        Вывод статистики нажатий и переходов между руками.
+
+        ВХОД: Нет
+
+        ВЫХОД: Нет (результаты выводятся в консоль)
+        """
+        print("\n" + "=" * 100)
+        print("СТАТИСТИКА НАЖАТИЙ И ПЕРЕХОДОВ МЕЖДУ РУКАМИ")
+        print("=" * 100)
+
+        # Статистика нажатий по пальцам
+        print("\nКОЛИЧЕСТВО НАЖАТИЙ НА КАЖДЫЙ ПАЛЕЦ:")
+        print("-" * 80)
+
+        fingers = ['f1l', 'f1r', 'f2l', 'f2r', 'f3l', 'f3r', 'f4l', 'f4r', 'f5l', 'f5r']
+        finger_names = {
+            'f1l': 'Большой лев', 'f1r': 'Большой прав',
+            'f2l': 'Указ. лев', 'f2r': 'Указ. прав',
+            'f3l': 'Средний лев', 'f3r': 'Средний прав',
+            'f4l': 'Безым. лев', 'f4r': 'Безым. прав',
+            'f5l': 'Мизинец лев', 'f5r': 'Мизинец прав'
+        }
+
+        # Заголовок таблицы нажатий
+        header = f'{"Палец":<15}'
+        for layout in self.layouts.values():
+            header += f" | {layout.name.upper():<15}"
+        header += " | {Лучшая:<10}"
+        print(header)
+        print("-" * 80)
+
+        for finger in fingers:
+            row = f"{finger_names[finger]:<15}"
+            values = []
+            for layout in self.layouts.values():
+                value = layout.get_finger_presses(finger)
+                values.append(value)
+                row += f" | {value:<15}"
+
+            best_val = min(values)
+            best_layouts = [layout.name for layout, val in zip(self.layouts.values(), values) if val == best_val]
+            best = best_layouts[0] if best_layouts else "Нет"
+            row += f" | {best:<10}"
+            print(row)
+
+        # Общее количество нажатий
+        print("-" * 80)
+        total_presses = [layout.get_total_presses for layout in self.layouts.values()]  # Убрал скобки здесь
+        best_presses = min(total_presses)
+        best_presses_name = \
+        [layout.name for layout, total in zip(self.layouts.values(), total_presses) if total == best_presses][0]
+
+        total_row = f"{'ВСЕГО НАЖАТИЙ':<15}"
+        for i, layout in enumerate(self.layouts.values()):
+            total_row += f" | {total_presses[i]:<15}"
+        total_row += f" | {best_presses_name:<10}"
+        print(total_row)
+
+        # Статистика переходов между руками
+        print("\nПЕРЕХОДЫ МЕЖДУ РУКАМИ:")
+        print("-" * 80)
+
+        header = f'{"Раскладка":<15} | {"Переходы":<15} | {"% от нажатий":<15}'
+        print(header)
+        print("-" * 80)
+
+        for layout_name, layout in self.layouts.items():
+            hand_changes = layout.get_hand_changes()
+            total_presses = layout.get_total_presses  # Убрал скобки здесь
+            percentage = (hand_changes / total_presses * 100) if total_presses > 0 else 0
+
+            print(f"{layout.name:<15} | {hand_changes:<15} | {percentage:<15.1f}%")
+
+        # Определение лучшей раскладки по переходам
+        best_transitions = min(self.layouts.values(), key=lambda x: x.get_hand_changes())
+        print(f"\nЛучшая раскладка по минимуму переходов: {best_transitions.name} "
+              f"({best_transitions.get_hand_changes()} переходов)")
+
+    def print_comparative_analysis(self) -> None:
+        """
+        Вывод сравнительного анализа всех раскладок.
+
+        ВХОД: Нет
+
+        ВЫХОД: Нет (результаты выводятся в консоль)
+        """
+        print("\n" + "=" * 100)
+        print("СРАВНИТЕЛЬНЫЙ АНАЛИЗ РАСКЛАДОК")
+        print("=" * 100)
+
+        metrics = []
+        for layout_name, layout in self.layouts.items():
+            metrics.append({
+                'name': layout.name,
+                'total_load': layout.get_total_load,
+                'total_presses': layout.get_total_presses,
+                'hand_changes': layout.get_hand_changes(),
+                'load_per_press': layout.get_total_load / layout.get_total_presses if layout.get_total_presses > 0 else 0
+            })
+
+        # Сортировка по общей нагрузке
+        metrics.sort(key=lambda x: x['total_load'])
+
+        print(f"\n{'Рейтинг':<10} | {'Раскладка':<15} | {'Общая нагрузка':<15} | {'Нажатия':<10} | "
+              f"{'Переходы':<10} | {'Нагрузка/нажатие':<15}")
+        print("-" * 90)
+
+        for i, metric in enumerate(metrics, 1):
+            print(f"{i:<10} | {metric['name']:<15} | {metric['total_load']:<15} | "
+                  f"{metric['total_presses']:<10} | {metric['hand_changes']:<10} | "
+                  f"{metric['load_per_press']:<15.2f}")
+
+        # Также покажем лучшую раскладку по каждому показателю
+        print("\nЛУЧШИЕ РАСКЛАДКИ ПО КАТЕГОРИЯМ:")
+        print("-" * 50)
+
+        best_by_load = min(metrics, key=lambda x: x['total_load'])
+        best_by_presses = min(metrics, key=lambda x: x['total_presses'])
+        best_by_changes = min(metrics, key=lambda x: x['hand_changes'])
+        best_by_efficiency = min(metrics, key=lambda x: x['load_per_press'])
+
+        print(f"По минимальной нагрузке: {best_by_load['name']} ({best_by_load['total_load']})")
+        print(f"По минимальным нажатиям: {best_by_presses['name']} ({best_by_presses['total_presses']})")
+        print(f"По минимальным переходам: {best_by_changes['name']} ({best_by_changes['hand_changes']})")
+        print(f"По эффективности: {best_by_efficiency['name']} ({best_by_efficiency['load_per_press']:.2f})")
