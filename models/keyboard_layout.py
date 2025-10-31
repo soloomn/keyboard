@@ -471,6 +471,7 @@ class KeyboardLayout:
         """
         return self.key_presses.get(finger, 0)
 
+    @property
     def get_hand_changes(self) -> int:
         """
         Получение количества переходов между руками.

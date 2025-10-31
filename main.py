@@ -15,7 +15,7 @@
 
 from models import LayoutAnalyzer
 from utils import show_finger_stats, analyze_large_file
-from visual import show_all
+#from visual import show_all
 import json
 
 if __name__ == "__main__":
@@ -55,8 +55,8 @@ if __name__ == "__main__":
     df = show_finger_stats(analyzer, layout_name)
 
     data = analyzer.reverser
-    #with open("/app/data_output/layouts.json", "w", encoding="utf-8") as f:
-        #json.dump(data, f, ensure_ascii=False, indent=2)
+    with open("/app/data_output/layouts.json", "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
 
     print("Анализ завершен, данные сохранены в /app/data_output/layouts.json")
 

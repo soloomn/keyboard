@@ -1,4 +1,3 @@
-
 """
 Модуль анализа и сравнения эргономики клавиатурных раскладок.
 
@@ -47,7 +46,7 @@ class LayoutAnalyzer:
         ВЫХОД: Экземпляр LayoutAnalyzer с инициализированными раскладками
         """
         # Создаем экземпляры для всех раскладок
-    self.layouts = {
+        self.layouts = {
             'diktor': KeyboardLayout("Диктор", 'diktor'),
             'qwer': KeyboardLayout("ЙЦУКЕН", 'qwer'),
             'vyzov': KeyboardLayout("Вызов", 'vyzov'),
@@ -357,16 +356,16 @@ class LayoutAnalyzer:
         print("-" * 80)
 
         for layout_name, layout in self.layouts.items():
-            hand_changes = layout.get_hand_changes()
+            hand_changes = layout.get_hand_changes
             total_presses = layout.get_total_presses  # Убрал скобки здесь
             percentage = (hand_changes / total_presses * 100) if total_presses > 0 else 0
 
             print(f"{layout.name:<15} | {hand_changes:<15} | {percentage:<15.1f}%")
 
         # Определение лучшей раскладки по переходам
-        best_transitions = min(self.layouts.values(), key=lambda x: x.get_hand_changes())
+        best_transitions = min(self.layouts.values(), key=lambda x: x.get_hand_changes)
         print(f"\nЛучшая раскладка по минимуму переходов: {best_transitions.name} "
-              f"({best_transitions.get_hand_changes()} переходов)")
+              f"({best_transitions.get_hand_changes} переходов)")
 
     def print_comparative_analysis(self) -> None:
         """
@@ -386,7 +385,7 @@ class LayoutAnalyzer:
                 'name': layout.name,
                 'total_load': layout.get_total_load,
                 'total_presses': layout.get_total_presses,
-                'hand_changes': layout.get_hand_changes(),
+                'hand_changes': layout.get_hand_changes,
                 'load_per_press': layout.get_total_load / layout.get_total_presses if layout.get_total_presses > 0 else 0
             })
 
