@@ -45,6 +45,10 @@ if __name__ == "__main__":
     #analyzer.print_detailed_analysis(movements_info)
     analyzer.print_final_results()
 
+    analyzer.print_press_statistics()
+
+    analyzer.print_comparative_analysis()
+
     layout_name = "qwer"
 
     print(f"\nСтатистика по выбранной раскладке {layout_name}:")
@@ -56,4 +60,4 @@ if __name__ == "__main__":
 
     print("Анализ завершен, данные сохранены в /app/data_output/layouts.json")
 
-    #show_all(data['diktor'], data['qwer'], data['vyzov'])
+    #show_all(data['diktor'], data['qwer'], data['vyzov'], data["ant"], data["skoropis"], data["rusphone"], data["zubachew"])

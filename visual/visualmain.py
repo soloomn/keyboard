@@ -28,9 +28,10 @@ def show_all(data_diktor: dict, data_qwer: dict, data_vyzov: dict) -> None:
     create_and_plot_pie_charts_group(data_diktor, data_qwer, data_vyzov)
     plot_finger_loads_by_layout(data_diktor, data_qwer, data_vyzov)
     create_total_load_pie_chart(data_diktor, data_qwer, data_vyzov)
+    create_total_load_pie_chart(data_diktor, data_qwer, data_vyzov)
 
 # загружаем данные из JSON
 with open("/app/data_output/layouts.json", "r", encoding="utf-8") as f:
-    data = json.load(f)
+     data = json.load(f)
 
 show_all(data['diktor'], data['qwer'], data['vyzov'])
