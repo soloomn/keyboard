@@ -77,7 +77,8 @@ class LayoutAnalyzer:
         for key, layout in self.layouts.items():
             all_data[key] = {
                 'left': [layout.counter_fingers[f'f{i}l'] for i in range(1, 6)],
-                'right': [layout.counter_fingers[f'f{i}r'] for i in range(1, 6)]
+                'right': [layout.counter_fingers[f'f{i}r'] for i in range(1, 6)],
+                'two_handed': layout.hand_changes
             }
 
         return all_data
