@@ -7,12 +7,15 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.container import BarContainer
 
 
 def plot_finger_usage_with_values(data_diktor: dict,
                                   data_qwer: dict,
-                                  data_vyzov: dict) -> None:
+                                  data_vyzov: dict,
+                                  data_ant: dict,
+                                  data_skoropis: dict,
+                                  data_zubachew: dict,
+                                  data_rusphone: dict) -> None:
     """
     Строит горизонтальную гистограмму нагрузок по пальцам для трёх раскладок.
 
@@ -35,79 +38,82 @@ def plot_finger_usage_with_values(data_diktor: dict,
     layout_qwer = [val for pair in zip(data_qwer['left'], data_qwer['right']) for val in pair]
     layout_diktor = [val for pair in zip(data_diktor['left'], data_diktor['right']) for val in pair]
     layout_vyzov = [val for pair in zip(data_vyzov['left'], data_vyzov['right']) for val in pair]
+    layout_ant = [val for pair in zip(data_ant['left'], data_ant['right']) for val in pair]
+    layout_skoropis = [val for pair in zip(data_skoropis['left'], data_skoropis['right']) for val in pair]
+    layout_zubachew = [val for pair in zip(data_zubachew['left'], data_zubachew['right']) for val in pair]
+    layout_rusphone = [val for pair in zip(data_rusphone['left'], data_rusphone['right']) for val in pair]
 
     # Цвета для раскладок
-    colors = {
-        "Йцукен": "#FF0000",  # Красный для Йцукен
-        "Диктор": "#FBFF00",  # Жёлтый для Диктор
-        "Вызов": "#000000"  # Чёрный для Вызов
-    }
+    colors = ["#FBFF00",  # Жёлтый для Диктор
+              "#000000",  # Чёрный для Вызов
+              "#0000FF",  # Голубой
+              "#008000",  # Зеленый
+              "#9467bd",  # Фиолетовый
+              "#FFC0CB",  # Розовый
+              "#FF0000"  # Красный для Йцукен
+    ]
+
+    all_layouts= [
+        layout_diktor,
+        layout_vyzov,
+        layout_ant,
+        layout_skoropis,
+        layout_zubachew,
+        layout_rusphone,
+        layout_qwer  # ЙЦУКЕН последний
+    ]
+
+    layout_names = ['Диктор', 'Вызов', 'Ант', 'Скоропись', 'Зубачев', 'РусФон', 'Йцукен']
 
     # Позиции столбцов на оси Y
     index = np.arange(len(fingers))
 
     # Ширина столбцов. Сделаем ее немного меньше, чтобы было место для текста.
-    bar_width = 0.2
+    bar_width = 0.12
+
+    total_width = len(all_layouts) * bar_width
+    start_pos = -total_width / 2 + bar_width / 2
 
     # Построение горизонтальной гистограммы
     # plt.barh возвращает список объектов `Rectangle` (прямоугольники, т.е. столбцы)
-    fig, ax = plt.subplots(figsize=(12, 8))
-    rects1 = ax.barh(index - bar_width, layout_qwer, bar_width, label='Йцукен', color=colors['Йцукен'])
-    rects2 = ax.barh(index, layout_diktor, bar_width, label='Диктор', color=colors['Диктор'])
-    rects3 = ax.barh(index + bar_width, layout_vyzov, bar_width, label='Вызов', color=colors['Вызов'])
+    fig, ax = plt.subplots(figsize=(14, 10))
 
-    # Добавление значений (текста) справа от столбцов
-    # Проходимся по каждому объекту столбика и добавляем текст
+    max_total_load = 0
 
-    # Функция для добавления текста к столбцам.
-    # Это более удобный способ, чем повторять код для каждого набора столбцов.
-    def add_labels(rects: BarContainer, ax, x_offset: object = 80) -> None:
-        """
-        Добавляет текстовые метки значений справа от столбцов.
+    for i in range(len(all_layouts)):
+        current_layout = all_layouts[i]
+        current_color = colors[i]
+        current_name = layout_names[i]
 
-        ВХОД:
-            rects (BarContainer): Контейнер с объектами столбцов гистограммы
-            ax: Объект оси matplotlib для отрисовки
-            x_offset (int): Смещение текста от столбца в пикселях (по умолчанию 80)
+        current_offset = start_pos + i * bar_width
 
-        ВЫХОД: Нет
-        """
+        rects = ax.barh(index + current_offset, current_layout, bar_width,
+                        label=current_name, color=current_color, alpha=1.0)
+
+        # --- Добавляем текст нагрузки и штрафов справа от каждого столбика ---
         for rect in rects:
-            # Получаем ширину столбца (т.е. его значение)
             width = rect.get_width()
-            # Получаем Y-координату центра столбца
             y_pos = rect.get_y() + rect.get_height() / 2
 
-            # Добавляем текстовую метку.
-            # x_pos = width + x_offset: Позиция X - это конец столбца плюс небольшой отступ.
-            # y_pos: Центр столбца по оси Y.
-            # text='{}'.format(width): Сам текст метки - это значение столбца.
-            # va='center': Вертикальное выравнивание по центру.
-            # ha='left': Горизонтальное выравнивание - начало текста слева от x_pos.
-            ax.text(width + x_offset, y_pos, f'{width:.0f}', va='center', ha='left', fontsize=9)
+            text_to_display = f"Ш:{width:.0f};"
 
-    # Добавляем метки для каждого набора столбцов
-    add_labels(rects1, ax, x_offset=80)  # Смещение 80 пикселей
-    add_labels(rects2, ax, x_offset=80)
-    add_labels(rects3, ax, x_offset=80)
+            ax.text(width, y_pos, f" {text_to_display}",
+                    va='center', ha='left', fontsize=5, color='black')
+
+        current_max_load = max(current_layout)
+        if current_max_load > max_total_load:
+            max_total_load = current_max_load
+
 
     # Добавление подписей и заголовков
     ax.set_ylabel('Пальцы')
     ax.set_xlabel('Нагрузки (количество нажатий)')
-    ax.set_title('Сравнение нагрузок на пальцы в раскладках йцукен, диктор и вызов')
+    ax.set_title('Сравнение нагрузок и штрафов на пальцы по раскладкам', fontsize=14, fontweight='bold')
     ax.set_yticks(index, fingers)  # Устанавливаем метки для оси Y
 
-    # Добавляем небольшой отступ справа, чтобы значения не обрезались
-    # ax.margins(x=0.1) # Этот метод может сработать, но лучше установить лимит оси вручную
+    ax.set_xlim(0, max_total_load * 1.25)
 
-    # Устанавливаем лимит правой оси X, чтобы текст значений помещался
-    # Находим максимальное значение среди всех раскладок
-    max_value = max(max(layout_vyzov), max(layout_diktor), max(layout_qwer))
-    # Устанавливаем правый лимит оси X чуть больше максимального значения + отступ
-    ax.set_xlim(0, max_value * 1.2)  # 1.15 - это 15% от максимального значения как запас
-
-    # Легенда
-    ax.legend()
+    ax.legend(loc='upper right')
 
     # Показ гистограммы
     plt.tight_layout()  # Автоматически корректирует параметры графика для плотного расположения

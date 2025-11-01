@@ -13,7 +13,11 @@ from pandas import DataFrame
 
 def plot_finger_loads_by_layout(data_diktor: dict,
                                 data_qwer: dict,
-                                data_vyzov: dict) -> None:
+                                data_vyzov: dict,
+                                data_ant: dict,
+                                data_skoropis: dict,
+                                data_zubachew: dict,
+                                data_rusphone: dict) -> None:
     """
        Строит 5 отдельных графиков — нагрузку на каждый тип пальца по трем раскладкам.
 
@@ -47,13 +51,18 @@ def plot_finger_loads_by_layout(data_diktor: dict,
     df_all = pd.concat([
         prepare_data(data_diktor, 'Диктор'),
         prepare_data(data_qwer, 'Йцукен'),
-        prepare_data(data_vyzov, 'Вызов')
+        prepare_data(data_vyzov, 'Вызов'),
+        prepare_data(data_ant, 'Ант'),
+        prepare_data(data_skoropis, 'Скоропись'),
+        prepare_data(data_zubachew, 'Зубачёв'),
+        prepare_data(data_rusphone, 'РусФон')
     ])
 
     fig, axes = plt.subplots(2, 3, figsize=(15, 10))
     axes = axes.flatten()
 
-    colors = {"Йцукен": "#FF0000", "Диктор": "#FBFF00", "Вызов": "#000000"}
+    colors = {"Йцукен": "#FF0000", "Диктор": "#FBFF00", "Вызов": "#000000",
+              "Ант": "#0000FF", "Скоропись": "#008000", "Зубачев": "#9467bd", "РусФон": "#FFC0CB"}
 
     for i, ftype in enumerate(finger_types):
         ax = axes[i]
