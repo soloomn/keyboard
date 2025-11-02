@@ -11,6 +11,7 @@ from visual import plot_finger_usage_with_values
 from visual import plot_only_pie_charts
 from visual import plot_finger_loads_by_layout
 from visual import create_total_load_pie_chart
+from models import RedisStorage
 
 
 def show_all(data_diktor: dict, data_qwer: dict, data_vyzov: dict,
@@ -31,7 +32,10 @@ def show_all(data_diktor: dict, data_qwer: dict, data_vyzov: dict,
     create_total_load_pie_chart(data_diktor, data_qwer, data_vyzov)
 
 # загружаем данные из JSON
-with open("/app/data_output/layouts.json", "r", encoding="utf-8") as f:
-     data = json.load(f)
+#with open("/app/data_output/layouts.json", "r", encoding="utf-8") as f:
+     #data = json.load(f)
+
+storage = RedisStorage()
+data = storage.load("layouts")
 
 show_all(data['diktor'], data['qwer'], data['vyzov'], data['ant'], data['skoropis'], data['zubachew'], data['rusphone'])
