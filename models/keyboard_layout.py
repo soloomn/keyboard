@@ -399,11 +399,31 @@ class KeyboardLayout:
             self.counter_fingers['f1r'] += int(spaces_count * 0.45)
             self.key_presses['f1l'] += int(spaces_count * 0.55)
             self.key_presses['f1r'] += int(spaces_count * 0.45)
-        else:  # vyzov
+        elif self.layout_type == 'vyzov':
             self.counter_fingers['f1l'] += int(spaces_count * 0.5)
             self.counter_fingers['f1r'] += int(spaces_count * 0.5)
             self.key_presses['f1l'] += int(spaces_count * 0.5)
             self.key_presses['f1r'] += int(spaces_count * 0.5)
+        elif self.layout_type == 'ant':
+            self.counter_fingers['f1l'] += int(spaces_count * 0.45)
+            self.counter_fingers['f1r'] += int(spaces_count * 0.55)
+            self.key_presses['f1l'] += int(spaces_count * 0.45)
+            self.key_presses['f1r'] += int(spaces_count * 0.55)
+        elif self.layout_type == 'skoropis':
+            self.counter_fingers['f1l'] += int(spaces_count * 0.57)
+            self.counter_fingers['f1r'] += int(spaces_count * 0.43)
+            self.key_presses['f1l'] += int(spaces_count * 0.57)
+            self.key_presses['f1r'] += int(spaces_count * 0.43)
+        elif self.layout_type == 'rusphone':
+            self.counter_fingers['f1l'] += int(spaces_count * 0.25)
+            self.counter_fingers['f1r'] += int(spaces_count * 0.75)
+            self.key_presses['f1l'] += int(spaces_count * 0.25)
+            self.key_presses['f1r'] += int(spaces_count * 0.75)
+        elif self.layout_type == 'zubachew':
+            self.counter_fingers['f1l'] += int(spaces_count * 0.43)
+            self.counter_fingers['f1r'] += int(spaces_count * 0.57)
+            self.key_presses['f1l'] += int(spaces_count * 0.43)
+            self.key_presses['f1r'] += int(spaces_count * 0.57)
 
         # Для пробелов также учитываем переходы рук
         # (предполагаем, что пробелы чередуются между руками)
