@@ -16,7 +16,8 @@
 from models import LayoutAnalyzer
 from utils import show_finger_stats, analyze_large_file
 from models import RedisStorage
-import json
+from utils import analyze_large_file_parallel_merge
+#import json
 
 if __name__ == "__main__":
     """
@@ -27,10 +28,12 @@ if __name__ == "__main__":
     ВЫХОД: Нет (выводит результаты анализа в консоль и графики)
     """
     # Основной анализ
-    analyzer = LayoutAnalyzer()
+    #analyzer = LayoutAnalyzer()
 
     print("Анализируем 'Войну и мир' по частям...")
-    analyze_large_file("voina-i-mir.txt", analyzer, chunk_size=50000)
+    #analyze_large_file("voina-i-mir.txt", analyzer, chunk_size=50000)
+
+    analyzer = analyze_large_file_parallel_merge("voina-i-mir.txt", chunk_size=50000, n_processes=8)
 
     # Детальный анализ перемещений
     print("Детальный анализ перемещений...")
