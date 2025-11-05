@@ -1,4 +1,18 @@
 services:
+  base:
+    build:
+      context: .
+      dockerfile: Dockerfile.base
+    image: keyboard-base
+    container_name: keyboard-base
+
+  redis:
+    image: redis:7.0.1
+    container_name: keyboard-redis
+    ports:
+      - "6379:6379"
+    restart: no
+
   analyzer:
     build:
       context: .
@@ -9,6 +23,11 @@ services:
       - ./data_output:/app/data_output
     environment:
       - PYTHONPATH=/app
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+      - base
 
   visualizer:
     build:
@@ -20,7 +39,8 @@ services:
       - ./data_output:/app/data_output
     environment:
       - PYTHONPATH=/app
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     depends_on:
       analyzer:
         condition: service_completed_successfully
-    restart: unless-stopped

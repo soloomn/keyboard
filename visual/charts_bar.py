@@ -44,26 +44,26 @@ def plot_finger_usage_with_values(data_diktor: dict,
     layout_rusphone = [val for pair in zip(data_rusphone['left'], data_rusphone['right']) for val in pair]
 
     # Цвета для раскладок
-    colors = ["#FBFF00",  # Жёлтый для Диктор
-              "#000000",  # Чёрный для Вызов
-              "#0000FF",  # Голубой
-              "#008000",  # Зеленый
-              "#9467bd",  # Фиолетовый
+    colors = ["#FF0000",  # Красный для Йцукен
               "#FFC0CB",  # Розовый
-              "#FF0000"  # Красный для Йцукен
+              "#9467bd",  # Фиолетовый
+              "#008000",  # Зеленый
+              "#0000FF",  # Голубой
+              "#000000",  # Чёрный для Вызов
+              "#FBFF00"  # Жёлтый для Диктор
     ]
 
-    all_layouts= [
-        layout_diktor,
-        layout_vyzov,
-        layout_ant,
-        layout_skoropis,
-        layout_zubachew,
+    all_layouts = [
+        layout_qwer,
         layout_rusphone,
-        layout_qwer  # ЙЦУКЕН последний
+        layout_zubachew,
+        layout_skoropis,
+        layout_ant,
+        layout_vyzov,
+        layout_diktor
     ]
 
-    layout_names = ['Диктор', 'Вызов', 'Ант', 'Скоропись', 'Зубачев', 'РусФон', 'Йцукен']
+    layout_names = ['Йцукен', 'РусФон', 'Зубачев', 'Скоропись', 'Ант', 'Вызов', 'Диктор']
 
     # Позиции столбцов на оси Y
     index = np.arange(len(fingers))

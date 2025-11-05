@@ -1,17 +1,9 @@
 # visualizer Dockerfile
-FROM python:3.12-slim
+FROM keyboard-base:latest
 
 WORKDIR /app
-
-# Копируем весь проект
 COPY . /app
 
-# Устанавливаем зависимости
-RUN pip install --no-cache-dir -U pip \
-    && pip install --no-cache-dir matplotlib numpy pandas rich pytest
-
-# Устанавливаем PYTHONPATH, чтобы Python видел пакеты
 ENV PYTHONPATH=/app
 
-# Запуск визуализации
 CMD ["python", "visual/visualmain.py"]
