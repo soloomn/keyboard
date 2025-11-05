@@ -9,6 +9,15 @@
 - Расчет штрафов за перемещения между клавишами
 - Распределение нагрузки по пальцам
 - Анализ типов перемещений
+
+Поддерживаемые раскладки:
+- Диктор (diktor)
+- ЙЦУКЕН (qwer)
+- Вызов (vyzov)
+- Ант (ant)
+- Скоропись (skoropis)
+- РусФон (rusphone)
+- Зубачев (zubachew)
 """
 
 from data import data_dict
@@ -25,6 +34,9 @@ class KeyboardLayout:
         name (str): Название раскладки
         layout_type (str): Тип раскладки ('diktor', 'qwer', 'vyzov')
         counter_fingers (dict): Счетчик нагрузки на каждый палец
+        key_presses (dict): Счетчик нажатий на каждый палец
+        hand_changes (int): Счетчик переходов между руками
+        last_hand (str): Последняя использованная рука ('left', 'right', None)
     """
 
     def __init__(self, name: str, layout_type: str) -> None:
@@ -33,9 +45,10 @@ class KeyboardLayout:
 
         ВХОД:
             name (str): Человеко-читаемое название раскладки
-            layout_type (str): Тип раскладки ('diktor', 'qwer', 'vyzov')
+            layout_type (str): Тип раскладки ('diktor', 'qwer', 'vyzov', 'ant', 'skoropis', 'rusphone', 'zubachew')
 
-        ВЫХОД: Нет
+        ВЫХОД:
+            None
         """
         self.name = name
         self.layout_type = layout_type  # 'diktor', 'qwer', 'vyzov'
@@ -43,6 +56,13 @@ class KeyboardLayout:
             'f5l': 0, 'f4l': 0, 'f3l': 0, 'f2l': 0, 'f1l': 0,
             'f1r': 0, 'f2r': 0, 'f3r': 0, 'f4r': 0, 'f5r': 0
         }
+        # Новые счетчики для нажатий и переходов
+        self.key_presses = {
+            'f5l': 0, 'f4l': 0, 'f3l': 0, 'f2l': 0, 'f1l': 0,
+            'f1r': 0, 'f2r': 0, 'f3r': 0, 'f4r': 0, 'f5r': 0
+        }
+        self.hand_changes = 0
+        self.last_hand = None  # 'left', 'right', или None
 
     @property
     def get_symbol_field(self) -> str:
@@ -60,6 +80,14 @@ class KeyboardLayout:
             return 'qwer'
         elif self.layout_type == 'vyzov':
             return 'vyzov'
+        elif self.layout_type == 'ant':
+            return 'ant'
+        elif self.layout_type == 'skoropis':
+            return 'skoropis'
+        elif self.layout_type == 'rusphone':
+            return 'rusphone'
+        elif self.layout_type == 'zubachew':
+            return 'zubachew'
         return 'key'
 
     def get_coords(self, symbol: str) -> list[str | int | bool] | None:
@@ -173,6 +201,19 @@ class KeyboardLayout:
             case _:
                 return 'f1l'
 
+    @staticmethod
+    def get_hand_by_finger(finger: str) -> str:
+        """
+        Определение руки по идентификатору пальца.
+
+        ВХОД:
+            finger (str): Идентификатор пальца ('f1l', 'f2r', и т.д.)
+
+        ВЫХОД:
+            str: 'left' для левой руки, 'right' для правой руки
+        """
+        return 'left' if finger.endswith('l') else 'right'
+
     def apply_finger_load(self, column: int, penalty_value: int, additional_penalty: int = 0) -> None:
         """
         Применение нагрузки к соответствующему пальцу.
@@ -182,7 +223,8 @@ class KeyboardLayout:
             penalty_value (int): Основной штраф за перемещение
             additional_penalty (int): Дополнительный штраф
 
-        ВЫХОД: Нет
+        ВЫХОД:
+            None
         """
         total_value = penalty_value + additional_penalty
 
@@ -203,6 +245,25 @@ class KeyboardLayout:
                 self.counter_fingers['f4r'] += total_value
             case 10 | 11 | 12:
                 self.counter_fingers['f5r'] += total_value
+
+    def count_key_press(self, column: int) -> None:
+        """
+        Подсчет нажатия на клавишу (без учета штрафов).
+
+        ВХОД:
+            column (int): Колонка клавиатуры
+
+        ВЫХОД:
+            None
+        """
+        finger = self.get_finger_by_column(column)
+        self.key_presses[finger] += 1
+
+        # Проверяем смену руки
+        current_hand = self.get_hand_by_finger(finger)
+        if self.last_hand is not None and self.last_hand != current_hand:
+            self.hand_changes += 1
+        self.last_hand = current_hand
 
     def count_steps(self, first_sim: str, second_sim: str) -> tuple[int, str]:
         """
@@ -240,6 +301,9 @@ class KeyboardLayout:
         # Применяем нагрузку к пальцам
         self.apply_movement_penalty(current_pos, next_pos, penalty, additional_penalty_next)
 
+        # Подсчитываем нажатие для второго символа
+        self.count_key_press(next_pos[1])
+
         return total_penalty, self.get_finger_by_column(next_pos[1])
 
     def apply_movement_penalty(self, current_pos: list[str | int | bool], next_pos: list[str | int | bool],
@@ -254,7 +318,8 @@ class KeyboardLayout:
             penalty (int): Основной штраф за перемещение
             additional_penalty (int): Дополнительный штраф
 
-        ВЫХОД: Нет
+        ВЫХОД:
+            None
         """
         current_row, current_col = current_pos
         next_row, next_col = next_pos
@@ -335,17 +400,48 @@ class KeyboardLayout:
         ВХОД:
             spaces_count (int): Количество пробелов в тексте
 
-        ВЫХОД: Нет
+        ВЫХОД:
+            None
         """
         if self.layout_type == 'qwer':
             self.counter_fingers['f1l'] += int(spaces_count * 0.6)
             self.counter_fingers['f1r'] += int(spaces_count * 0.4)
+            self.key_presses['f1l'] += int(spaces_count * 0.6)
+            self.key_presses['f1r'] += int(spaces_count * 0.4)
         elif self.layout_type == 'diktor':
             self.counter_fingers['f1l'] += int(spaces_count * 0.55)
             self.counter_fingers['f1r'] += int(spaces_count * 0.45)
-        else:  # vyzov
+            self.key_presses['f1l'] += int(spaces_count * 0.55)
+            self.key_presses['f1r'] += int(spaces_count * 0.45)
+        elif self.layout_type == 'vyzov':
             self.counter_fingers['f1l'] += int(spaces_count * 0.5)
             self.counter_fingers['f1r'] += int(spaces_count * 0.5)
+            self.key_presses['f1l'] += int(spaces_count * 0.5)
+            self.key_presses['f1r'] += int(spaces_count * 0.5)
+        elif self.layout_type == 'ant':
+            self.counter_fingers['f1l'] += int(spaces_count * 0.45)
+            self.counter_fingers['f1r'] += int(spaces_count * 0.55)
+            self.key_presses['f1l'] += int(spaces_count * 0.45)
+            self.key_presses['f1r'] += int(spaces_count * 0.55)
+        elif self.layout_type == 'skoropis':
+            self.counter_fingers['f1l'] += int(spaces_count * 0.57)
+            self.counter_fingers['f1r'] += int(spaces_count * 0.43)
+            self.key_presses['f1l'] += int(spaces_count * 0.57)
+            self.key_presses['f1r'] += int(spaces_count * 0.43)
+        elif self.layout_type == 'rusphone':
+            self.counter_fingers['f1l'] += int(spaces_count * 0.25)
+            self.counter_fingers['f1r'] += int(spaces_count * 0.75)
+            self.key_presses['f1l'] += int(spaces_count * 0.25)
+            self.key_presses['f1r'] += int(spaces_count * 0.75)
+        elif self.layout_type == 'zubachew':
+            self.counter_fingers['f1l'] += int(spaces_count * 0.43)
+            self.counter_fingers['f1r'] += int(spaces_count * 0.57)
+            self.key_presses['f1l'] += int(spaces_count * 0.43)
+            self.key_presses['f1r'] += int(spaces_count * 0.57)
+
+        # Для пробелов также учитываем переходы рук
+        # (предполагаем, что пробелы чередуются между руками)
+        self.hand_changes += spaces_count
 
     def add_uppercase_penalty(self, uppercase_count: int) -> None:
         """
@@ -354,10 +450,13 @@ class KeyboardLayout:
         ВХОД:
             uppercase_count (int): Количество заглавных букв
 
-        ВЫХОД: Нет
+        ВЫХОД:
+            None
         """
         penalty = uppercase_count * 2
         self.apply_finger_load(0, penalty)
+        # Для заглавных букв также считаем нажатия на мизинец левой руки
+        self.key_presses['f5l'] += uppercase_count
 
     @property
     def get_total_load(self) -> int:
@@ -371,6 +470,18 @@ class KeyboardLayout:
         """
         return sum(self.counter_fingers.values())
 
+    @property
+    def get_total_presses(self) -> int:
+        """
+        Получение общего количества нажатий.
+
+        ВХОД: Нет
+
+        ВЫХОД:
+            int: Суммарное количество нажатий
+        """
+        return sum(self.key_presses.values())
+
     def get_finger_load(self, finger: str) -> int:
         """
         Получение нагрузки на конкретный палец.
@@ -382,3 +493,27 @@ class KeyboardLayout:
             int: Нагрузка на указанный палец
         """
         return self.counter_fingers.get(finger, 0)
+
+    def get_finger_presses(self, finger: str) -> int:
+        """
+        Получение количества нажатий на конкретный палец.
+
+        ВХОД:
+            finger (str): Идентификатор пальца ('f1l', 'f2r', и т.д.)
+
+        ВЫХОД:
+            int: Количество нажатий на указанный палец
+        """
+        return self.key_presses.get(finger, 0)
+
+    @property
+    def get_hand_changes(self) -> int:
+        """
+        Получение количества переходов между руками.
+
+        ВХОД: Нет
+
+        ВЫХОД:
+            int: Количество переходов между руками
+        """
+        return self.hand_changes

@@ -1,4 +1,33 @@
 services:
+  base:
+    build:
+      context: .
+      dockerfile: Dockerfile.base
+    image: keyboard-base
+    container_name: keyboard-base
+
+  redis:
+    image: redis:7.0.1
+    container_name: keyboard-redis
+    ports:
+      - "6379:6379"
+    restart: no
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: keyboard-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "check_port_connectivity" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   analyzer:
     build:
       context: .
@@ -9,6 +38,28 @@ services:
       - ./data_output:/app/data_output
     environment:
       - PYTHONPATH=/app
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    deploy:
+      replicas: 8
+    environment:
+      - PYTHONPATH=/app
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - RABBIT_HOST=rabbitmq
+      - RABBIT_USER=user
+      - RABBIT_PASSWORD=password
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
 
   visualizer:
     build:
@@ -20,7 +71,8 @@ services:
       - ./data_output:/app/data_output
     environment:
       - PYTHONPATH=/app
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     depends_on:
       analyzer:
         condition: service_completed_successfully
-    restart: unless-stopped

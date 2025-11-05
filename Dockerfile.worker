@@ -1,0 +1,11 @@
+# Dockerfile.worker
+FROM keyboard-base
+
+# Копируем весь код в контейнер
+WORKDIR /app
+COPY . /app
+
+ENV PYTHONPATH=/app
+
+# Запуск скрипта воркера
+CMD ["python", "models/worker_rabbit.py"]

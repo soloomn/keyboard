@@ -7,3 +7,4 @@ data_output/
 *.png
 *.json
 .idea
+test_workflow.sh

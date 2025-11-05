@@ -1,0 +1,15 @@
+FROM python:3.12.3-slim
+
+# Устанавливаем Poetry
+RUN pip install --no-cache-dir -U pip setuptools wheel && pip install --no-cache-dir poetry
+
+WORKDIR /app
+
+# Копируем только файлы зависимостей
+COPY pyproject.toml poetry.lock* ./
+
+# Настраиваем Poetry и ставим зависимости
+RUN poetry config virtualenvs.create false \
+    && poetry install --no-root --no-interaction --no-ansi
+
+# Оставляем базовый слой с зависимостями

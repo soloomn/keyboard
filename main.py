@@ -8,42 +8,61 @@
 - Вывод статистики
 
 Использует модули:
-- models: для анализа раскладок
+- models: для анализа раскладок и работы с Redis
 - utils: для работы с большими файлами и статистикой
 - visual: для графического представления результатов
+
+Основной функционал:
+- Анализ больших текстовых файлов (например, "Война и мир")
+- Сравнение 7 русскоязычных клавиатурных раскладок
+- Сохранение результатов в Redis и вывод статистики
 """
 
-from models import LayoutAnalyzer
-from utils import show_finger_stats, analyze_large_file
-#from visual import show_all
-import json
+from utils import show_finger_stats, analyze_large_file_rabbit, analyze_large_file_parallel_merge
+from models import RedisStorage
 
 if __name__ == "__main__":
     """
     Главная функция программы для анализа эргономики клавиатурных раскладок.
 
-    ВХОД: Нет (использует файл 'voina-i-mir.txt' для анализа)
+    ВХОД: 
+        Нет (использует файл 'voina-i-mir.txt' для анализа)
 
-    ВЫХОД: Нет (выводит результаты анализа в консоль и графики)
+    ВЫХОД: 
+        None
+
+    Действия функции:
+        - Загружает и анализирует текст "Война и мир" по частям
+        - Сравнивает эргономику 7 клавиатурных раскладок
+        - Выводит финальные результаты, статистику нажатий и сравнительный анализ
+        - Сохраняет данные в Redis для дальнейшего использования
+        - Отображает статистику по выбранной раскладке
+
+    Используемые файлы:
+        - 'voina-i-mir.txt' - исходный текст для анализа
+
+    Используемые модули:
+        - utils: для анализа больших файлов и отображения статистики
+        - models: для работы с хранилищем Redis
     """
     # Основной анализ
-    analyzer = LayoutAnalyzer()
 
     print("Анализируем 'Войну и мир' по частям...")
-    analyze_large_file("voina-i-mir.txt", analyzer, chunk_size=50000)
 
-    #with open('voina-i-mir.txt', 'r', encoding='utf-8') as f:
-    #text = f.read()
+    use_rabbit = True
+    if use_rabbit:
+        analyzer = analyze_large_file_rabbit("voina-i-mir.txt")
+    else:
+        analyzer = analyze_large_file_parallel_merge("voina-i-mir.txt", chunk_size=50000)
 
-    # Анализ текста
-    #print("Запуск анализа...")
-    #analyzer.analyze_text(text)
 
     # Детальный анализ перемещений
     print("Детальный анализ перемещений...")
-    #movements_info = analyzer.analyze_movement_details(text)
-    #analyzer.print_detailed_analysis(movements_info)
     analyzer.print_final_results()
+
+    analyzer.print_press_statistics()
+
+    analyzer.print_comparative_analysis()
 
     layout_name = "qwer"
 
@@ -51,9 +70,11 @@ if __name__ == "__main__":
     df = show_finger_stats(analyzer, layout_name)
 
     data = analyzer.reverser
-    with open("/app/data_output/layouts.json", "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+    storage = RedisStorage()
 
-    print("Анализ завершен, данные сохранены в /app/data_output/layouts.json")
+    storage.save("layouts", data)
+    #with open("/app/data_output/layouts.json", "w", encoding="utf-8") as f:
+        #json.dump(data, f, ensure_ascii=False, indent=2)
 
-    #show_all(data['diktor'], data['qwer'], data['vyzov'])
+    #print("Анализ завершен, данные сохранены в /app/data_output/layouts.json")
+
