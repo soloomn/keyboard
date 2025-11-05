@@ -9,6 +9,15 @@
 - Расчет штрафов за перемещения между клавишами
 - Распределение нагрузки по пальцам
 - Анализ типов перемещений
+
+Поддерживаемые раскладки:
+- Диктор (diktor)
+- ЙЦУКЕН (qwer)
+- Вызов (vyzov)
+- Ант (ant)
+- Скоропись (skoropis)
+- РусФон (rusphone)
+- Зубачев (zubachew)
 """
 
 from data import data_dict
@@ -36,9 +45,10 @@ class KeyboardLayout:
 
         ВХОД:
             name (str): Человеко-читаемое название раскладки
-            layout_type (str): Тип раскладки ('diktor', 'qwer', 'vyzov')
+            layout_type (str): Тип раскладки ('diktor', 'qwer', 'vyzov', 'ant', 'skoropis', 'rusphone', 'zubachew')
 
-        ВЫХОД: Нет
+        ВЫХОД:
+            None
         """
         self.name = name
         self.layout_type = layout_type  # 'diktor', 'qwer', 'vyzov'
@@ -213,7 +223,8 @@ class KeyboardLayout:
             penalty_value (int): Основной штраф за перемещение
             additional_penalty (int): Дополнительный штраф
 
-        ВЫХОД: Нет
+        ВЫХОД:
+            None
         """
         total_value = penalty_value + additional_penalty
 
@@ -242,7 +253,8 @@ class KeyboardLayout:
         ВХОД:
             column (int): Колонка клавиатуры
 
-        ВЫХОД: Нет
+        ВЫХОД:
+            None
         """
         finger = self.get_finger_by_column(column)
         self.key_presses[finger] += 1
@@ -306,7 +318,8 @@ class KeyboardLayout:
             penalty (int): Основной штраф за перемещение
             additional_penalty (int): Дополнительный штраф
 
-        ВЫХОД: Нет
+        ВЫХОД:
+            None
         """
         current_row, current_col = current_pos
         next_row, next_col = next_pos
@@ -387,7 +400,8 @@ class KeyboardLayout:
         ВХОД:
             spaces_count (int): Количество пробелов в тексте
 
-        ВЫХОД: Нет
+        ВЫХОД:
+            None
         """
         if self.layout_type == 'qwer':
             self.counter_fingers['f1l'] += int(spaces_count * 0.6)
@@ -436,7 +450,8 @@ class KeyboardLayout:
         ВХОД:
             uppercase_count (int): Количество заглавных букв
 
-        ВЫХОД: Нет
+        ВЫХОД:
+            None
         """
         penalty = uppercase_count * 2
         self.apply_finger_load(0, penalty)

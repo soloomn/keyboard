@@ -1,3 +1,21 @@
+"""
+Модуль для параллельного анализа больших текстовых файлов с использованием RabbitMQ.
+
+Обеспечивает распределенную обработку текстовых данных путем разбиения на блоки
+и отправки их в очередь сообщений для параллельной обработки воркерами.
+
+Основные возможности:
+- Разбиение больших файлов на блоки фиксированного размера
+- Отправка блоков в очередь RabbitMQ для обработки
+- Отслеживание завершения обработки всех блоков
+- Сбор и объединение результатов из Redis
+
+Используемые технологии:
+- RabbitMQ для распределенной обработки
+- Redis для хранения промежуточных результатов
+- JSON для сериализации данных
+"""
+
 import json
 import pika
 import time
@@ -7,6 +25,16 @@ from utils import merge_block_data
 storage = RedisStorage()
 
 def send_blocks_to_workers(filename: str, chunk_size: int = 50000):
+    """
+    Разбивает текст на блоки и отправляет их в очередь RabbitMQ для обработки.
+
+    ВХОД:
+        filename (str): Путь к файлу для анализа
+        chunk_size (int): Размер блока в символах (по умолчанию 50000)
+
+    ВЫХОД:
+        connection: Объект соединения с RabbitMQ для отслеживания статуса
+    """
     # Разбиваем текст на блоки
     blocks = []
     buffer = []
@@ -50,7 +78,16 @@ def send_blocks_to_workers(filename: str, chunk_size: int = 50000):
 
 
 def wait_for_completion(connection, timeout=300):
-    """Ждет завершения всех блоков через RabbitMQ results очередь"""
+    """
+    Ожидает завершения обработки всех блоков через RabbitMQ results очередь.
+
+    ВХОД:
+        connection: Объект соединения с RabbitMQ
+        timeout (int): Максимальное время ожидания в секундах (по умолчанию 300)
+
+    ВЫХОД:
+        None
+    """
     total_blocks = storage.load("blocks_len")
     channel = connection.channel()
 
@@ -58,6 +95,15 @@ def wait_for_completion(connection, timeout=300):
     start_time = time.time()
 
     def results_callback(ch, method, properties, body):
+        """
+        Callback-функция для обработки сообщений о завершении блоков.
+
+        ВХОД:
+            ch: Канал RabbitMQ
+            method: Метод доставки
+            properties: Свойства сообщения
+            body: Тело сообщения с данными о завершенном блоке
+        """
         data = json.loads(body)
         block_id = data["block_id"]
         completed_blocks.add(block_id)
@@ -81,6 +127,21 @@ def wait_for_completion(connection, timeout=300):
 
 
 def analyze_large_file_rabbit(filename: str):
+    """
+    Основная функция для анализа больших файлов с использованием RabbitMQ.
+
+    ВХОД:
+        filename (str): Путь к файлу для анализа
+
+    ВЫХОД:
+        LayoutAnalyzer: Объект анализатора с объединенными результатами
+
+    Действия функции:
+        - Разбивает файл на блоки и отправляет в RabbitMQ
+        - Ожидает завершения обработки всех блоков
+        - Собирает результаты из Redis и объединяет их
+        - Выполняет детальный анализ перемещений для последнего блока
+    """
     analyzer = LayoutAnalyzer()
     # Отправляем блоки и получаем соединение для отслеживания
     connection = send_blocks_to_workers(filename, chunk_size=50000)

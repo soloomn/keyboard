@@ -14,6 +14,10 @@
 - Диктор (diktor)
 - ЙЦУКЕН (qwer)
 - Вызов (vyzov)
+- Ант (ant)
+- Скоропись (skoropis)
+- РусФон (rusphone)
+- Зубачев (zubachew)
 
 Использование:
     analyzer = LayoutAnalyzer()
@@ -43,7 +47,9 @@ class LayoutAnalyzer:
         Инициализация анализатора с набором раскладок для сравнения.
 
         ВХОД: Нет
-        ВЫХОД: Экземпляр LayoutAnalyzer с инициализированными раскладками
+
+        ВЫХОД:
+            LayoutAnalyzer: Экземпляр анализатора с инициализированными раскладками
         """
         # Создаем экземпляры для всех раскладок
         self.layouts = {
@@ -68,7 +74,10 @@ class LayoutAnalyzer:
                 {
                     'layout_name': {
                         'left': [нагрузка_пальцев_левой_руки],
-                        'right': [нагрузка_пальцев_правой_руки]
+                        'right': [нагрузка_пальцев_правой_руки],
+                        'two_handed': количество_двуручных_операций,
+                        'left_press': [нажатия_пальцев_левой_руки],
+                        'right_press': [нажатия_пальцев_правой_руки]
                     }
                 }
         """
@@ -92,7 +101,14 @@ class LayoutAnalyzer:
         ВХОД:
             text (str): Текст для анализа эргономики ввода
 
-        ВЫХОД: Нет (результаты сохраняются во внутреннем состоянии раскладок)
+        ВЫХОД:
+            None (результаты сохраняются во внутреннем состоянии раскладок)
+
+        Действия функции:
+            - Подсчитывает количество пробелов и заглавных букв
+            - Очищает текст от нерелевантных символов
+            - Анализирует перемещения между символами для каждой раскладки
+            - Учитывает штрафы за использование заглавных букв
         """
         # Обработка пробелов
         spaces_count = text.count(' ')
@@ -189,7 +205,8 @@ class LayoutAnalyzer:
             movements_info (list): Список данных о перемещениях от analyze_movement_details()
             num_to_show (int): Количество перемещений для отображения
 
-        ВЫХОД: Нет (результаты выводятся в консоль)
+        ВЫХОД:
+            None (результаты выводятся в консоль)
         """
         print("\n" + "=" * 180)
         print(f"ДЕТАЛЬНЫЙ АНАЛИЗ ПЕРЕМЕЩЕНИЙ (первые {num_to_show} перемещений)")
@@ -232,7 +249,8 @@ class LayoutAnalyzer:
 
         ВХОД: Нет
 
-        ВЫХОД: Нет (результаты выводятся в консоль)
+        ВЫХОД:
+            None (результаты выводятся в консоль)
         """
         print("\n" + "=" * 100)
         print("ФИНАЛЬНЫЕ РЕЗУЛЬТАТЫ НАГРУЗКИ НА ПАЛЬЦЫ")
@@ -274,8 +292,7 @@ class LayoutAnalyzer:
         print("-" * 80)
         totals = [layout.get_total_load for layout in self.layouts.values()]
         best_total = min(totals)
-        best_total_name = [layout.name for layout, total in zip(self.layouts.values(), totals) if total == best_total][
-            0]
+        best_total_name = [layout.name for layout, total in zip(self.layouts.values(), totals) if total == best_total][0]
 
         total_row = f"{'ОБЩАЯ НАГРУЗКА':<15}"
         for i, layout in enumerate(self.layouts.values()):
@@ -296,7 +313,8 @@ class LayoutAnalyzer:
 
         ВХОД: Нет
 
-        ВЫХОД: Нет (результаты выводятся в консоль)
+        ВЫХОД:
+            None (результаты выводятся в консоль)
         """
         print("\n" + "=" * 100)
         print("СТАТИСТИКА НАЖАТИЙ И ПЕРЕХОДОВ МЕЖДУ РУКАМИ")
@@ -341,8 +359,7 @@ class LayoutAnalyzer:
         print("-" * 80)
         total_presses = [layout.get_total_presses for layout in self.layouts.values()]  # Убрал скобки здесь
         best_presses = min(total_presses)
-        best_presses_name = \
-        [layout.name for layout, total in zip(self.layouts.values(), total_presses) if total == best_presses][0]
+        best_presses_name = [layout.name for layout, total in zip(self.layouts.values(), total_presses) if total == best_presses][0]
 
         total_row = f"{'ВСЕГО НАЖАТИЙ':<15}"
         for i, layout in enumerate(self.layouts.values()):
@@ -376,7 +393,13 @@ class LayoutAnalyzer:
 
         ВХОД: Нет
 
-        ВЫХОД: Нет (результаты выводятся в консоль)
+        ВЫХОД:
+            None (результаты выводятся в консоль)
+
+        Действия функции:
+            - Сравнивает раскладки по общей нагрузке, количеству нажатий и переходам
+            - Выводит рейтинг раскладок по эффективности
+            - Определяет лучшие раскладки по различным категориям
         """
         print("\n" + "=" * 100)
         print("СРАВНИТЕЛЬНЫЙ АНАЛИЗ РАСКЛАДОК")

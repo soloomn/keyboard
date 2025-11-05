@@ -1,8 +1,21 @@
+"""
+Модуль для обработки текстовых блоков и объединения данных анализа.
+
+Содержит функции для параллельной обработки текстовых блоков
+и последующего объединения результатов анализа раскладок.
+"""
+
 from models import LayoutAnalyzer
 
 def process_block_return(block_text: str) -> dict:
     """
     Обрабатывает блок текста и возвращает промежуточные данные для всех раскладок.
+
+    ВХОД:
+        block_text (str): Текстовый блок для анализа
+
+    ВЫХОД:
+        dict: Словарь с данными нагрузки для всех раскладок в формате reverser
     """
     analyzer = LayoutAnalyzer()
     analyzer.analyze_text(block_text)
@@ -11,6 +24,12 @@ def process_block_return(block_text: str) -> dict:
 def merge_block_data(main_analyzer: LayoutAnalyzer, block_data: dict):
     """
     Добавляет данные из блока в основной LayoutAnalyzer.
+
+    ВХОД:
+        main_analyzer (LayoutAnalyzer): Основной анализатор для накопления данных
+        block_data (dict): Данные из блока для объединения
+
+    ВЫХОД: Нет (данные добавляются в основной анализатор)
     """
     for layout_name, vals in block_data.items():
         layout = main_analyzer.layouts[layout_name]
