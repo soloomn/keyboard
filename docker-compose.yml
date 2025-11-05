@@ -54,7 +54,7 @@ services:
       - PYTHONPATH=/app
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - RABBIT_HOST = rabbitmq
+      - RABBIT_HOST=rabbitmq
       - RABBIT_USER=user
       - RABBIT_PASSWORD=password
     depends_on:
