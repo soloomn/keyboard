@@ -4,6 +4,8 @@ import time
 from models import RedisStorage, LayoutAnalyzer
 from utils import merge_block_data
 
+storage = RedisStorage()
+
 def send_blocks_to_workers(filename: str, chunk_size: int = 50000):
     # Разбиваем текст на блоки
     blocks = []
@@ -20,13 +22,13 @@ def send_blocks_to_workers(filename: str, chunk_size: int = 50000):
         if buffer:
             blocks.append(''.join(buffer))
 
-
     # Подключаемся к RabbitMQ
     connection = pika.BlockingConnection(
         pika.ConnectionParameters('rabbitmq', 5672, credentials=pika.PlainCredentials('user', 'password'))
     )
     channel = connection.channel()
     channel.queue_declare(queue='analysis_tasks', durable=True)
+    channel.queue_declare(queue='results', durable=True)
 
     for i, block in enumerate(blocks):
         message = json.dumps({"id": i, "text": block})
@@ -37,26 +39,57 @@ def send_blocks_to_workers(filename: str, chunk_size: int = 50000):
             properties=pika.BasicProperties(delivery_mode=2)
         )
 
-    connection.close()
+    print(f"✓ Отправлено {len(blocks)} блоков в обработку")
 
     last_block_text = blocks[-1] if blocks else ''.join(buffer)
-    storage = RedisStorage()
-    storage.save("last_block", last_block_text)
 
-    return len(blocks)
+    storage.save("last_block", last_block_text)
+    storage.save("blocks_len", len(blocks))
+
+    return connection
+
+
+def wait_for_completion(connection, timeout=300):
+    """Ждет завершения всех блоков через RabbitMQ results очередь"""
+    total_blocks = storage.load("blocks_len")
+    channel = connection.channel()
+
+    completed_blocks = set()
+    start_time = time.time()
+
+    def results_callback(ch, method, properties, body):
+        data = json.loads(body)
+        block_id = data["block_id"]
+        completed_blocks.add(block_id)
+        ch.basic_ack(delivery_tag=method.delivery_tag)
+        print(f" - Получено подтверждение блока {block_id} ({len(completed_blocks)}/{total_blocks})")
+
+    channel.basic_consume(queue='results', on_message_callback=results_callback)
+
+    print("Ожидаем завершения обработки...")
+
+    # Обрабатываем сообщения о завершении
+    while len(completed_blocks) < total_blocks:
+        if time.time() - start_time > timeout:
+            print(f"Таймаут! Завершено {len(completed_blocks)}/{total_blocks}")
+            break
+
+        connection.process_data_events(time_limit=1)  # Обрабатываем сообщения 1 секунду
+
+    connection.close()
+    print("Все блоки обработаны!")
+
 
 def analyze_large_file_rabbit(filename: str):
     analyzer = LayoutAnalyzer()
-    storage = RedisStorage()
-    total_blocks = send_blocks_to_workers(filename, chunk_size=50000)
+    # Отправляем блоки и получаем соединение для отслеживания
+    connection = send_blocks_to_workers(filename, chunk_size=50000)
 
-    collected = 0
-    while collected < total_blocks:
-        keys = storage.client.keys("block_*")
-        collected = len(keys)
-        print(f"Собрано блоков: {collected}/{total_blocks}")
-        time.sleep(1)
+    # Ждем завершения через RabbitMQ
+    wait_for_completion(connection)
 
+    # Собираем результаты из Redis
+    keys = storage.client.keys("block_*")
     for key in sorted(keys):
         block_data = storage.load(key)
         merge_block_data(analyzer, block_data)
