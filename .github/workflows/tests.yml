@@ -21,7 +21,7 @@ jobs:
 
       - name: Build base image first
         run: |
-          docker compose build -t keyboard-base -f Dockerfile.base .
+          docker compose build base
 
 
       - name: Build Docker images
