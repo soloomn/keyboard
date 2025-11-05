@@ -43,6 +43,14 @@ def plot_finger_usage_with_values(data_diktor: dict,
     layout_zubachew = [val for pair in zip(data_zubachew['left'], data_zubachew['right']) for val in pair]
     layout_rusphone = [val for pair in zip(data_rusphone['left'], data_rusphone['right']) for val in pair]
 
+    press_qwer = [val for pair in zip(data_qwer['left_press'], data_qwer['right_press']) for val in pair]
+    press_diktor = [val for pair in zip(data_diktor['left_press'], data_diktor['right_press']) for val in pair]
+    press_vyzov = [val for pair in zip(data_vyzov['left_press'], data_vyzov['right_press']) for val in pair]
+    press_ant = [val for pair in zip(data_ant['left_press'], data_ant['right_press']) for val in pair]
+    press_skoropis = [val for pair in zip(data_skoropis['left_press'], data_skoropis['right_press']) for val in pair]
+    press_zubachew = [val for pair in zip(data_zubachew['left_press'], data_zubachew['right_press']) for val in pair]
+    press_rusphone = [val for pair in zip(data_rusphone['left_press'], data_rusphone['right_press']) for val in pair]
+
     # Цвета для раскладок
     colors = ["#FF0000",  # Красный для Йцукен
               "#FFC0CB",  # Розовый
@@ -61,6 +69,16 @@ def plot_finger_usage_with_values(data_diktor: dict,
         layout_ant,
         layout_vyzov,
         layout_diktor
+    ]
+
+    all_press = [
+        press_qwer,
+        press_rusphone,
+        press_zubachew,
+        press_skoropis,
+        press_ant,
+        press_vyzov,
+        press_diktor
     ]
 
     layout_names = ['Йцукен', 'РусФон', 'Зубачев', 'Скоропись', 'Ант', 'Вызов', 'Диктор']
@@ -82,6 +100,7 @@ def plot_finger_usage_with_values(data_diktor: dict,
 
     for i in range(len(all_layouts)):
         current_layout = all_layouts[i]
+        current_press = all_press[i]
         current_color = colors[i]
         current_name = layout_names[i]
 
@@ -91,11 +110,11 @@ def plot_finger_usage_with_values(data_diktor: dict,
                         label=current_name, color=current_color, alpha=1.0)
 
         # --- Добавляем текст нагрузки и штрафов справа от каждого столбика ---
-        for rect in rects:
+        for rect, press in zip(rects, current_press):
             width = rect.get_width()
             y_pos = rect.get_y() + rect.get_height() / 2
 
-            text_to_display = f"Ш:{width:.0f};"
+            text_to_display = f"Ш:{width:.0f}; Н:{press:.0f}"
 
             ax.text(width, y_pos, f" {text_to_display}",
                     va='center', ha='left', fontsize=5, color='black')
@@ -107,8 +126,8 @@ def plot_finger_usage_with_values(data_diktor: dict,
 
     # Добавление подписей и заголовков
     ax.set_ylabel('Пальцы')
-    ax.set_xlabel('Нагрузки (количество нажатий)')
-    ax.set_title('Сравнение нагрузок и штрафов на пальцы по раскладкам', fontsize=14, fontweight='bold')
+    ax.set_xlabel('Количество штрафов + количество нажатий')
+    ax.set_title('Сравнение штрафов и нажатий на пальцы по раскладкам', fontsize=14, fontweight='bold')
     ax.set_yticks(index, fingers)  # Устанавливаем метки для оси Y
 
     ax.set_xlim(0, max_total_load * 1.25)
