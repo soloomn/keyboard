@@ -2,7 +2,7 @@ name: Run tests
 
 on:
   push:
-    branches: [ dev, refactoring ]
+    branches: [ dev, "feature_*", "*test*", "fix_*" ]
   pull_request:
     branches: [ dev, main ]
 

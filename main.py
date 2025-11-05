@@ -13,11 +13,8 @@
 - visual: для графического представления результатов
 """
 
-from models import LayoutAnalyzer
-from utils import show_finger_stats, analyze_large_file
+from utils import show_finger_stats, analyze_large_file_rabbit, analyze_large_file_parallel_merge
 from models import RedisStorage
-from utils import analyze_large_file_parallel_merge
-#import json
 
 if __name__ == "__main__":
     """
@@ -28,12 +25,15 @@ if __name__ == "__main__":
     ВЫХОД: Нет (выводит результаты анализа в консоль и графики)
     """
     # Основной анализ
-    #analyzer = LayoutAnalyzer()
 
     print("Анализируем 'Войну и мир' по частям...")
-    #analyze_large_file("voina-i-mir.txt", analyzer, chunk_size=50000)
 
-    analyzer = analyze_large_file_parallel_merge("voina-i-mir.txt", chunk_size=50000, n_processes=8)
+    use_rabbit = True
+    if use_rabbit:
+        analyzer = analyze_large_file_rabbit("voina-i-mir.txt")
+    else:
+        analyzer = analyze_large_file_parallel_merge("voina-i-mir.txt", chunk_size=50000)
+
 
     # Детальный анализ перемещений
     print("Детальный анализ перемещений...")
@@ -49,8 +49,8 @@ if __name__ == "__main__":
     df = show_finger_stats(analyzer, layout_name)
 
     data = analyzer.reverser
-
     storage = RedisStorage()
+
     storage.save("layouts", data)
     #with open("/app/data_output/layouts.json", "w", encoding="utf-8") as f:
         #json.dump(data, f, ensure_ascii=False, indent=2)
