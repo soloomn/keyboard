@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Алфавитный указатель &mdash; документация keyboard 2.0</title>
+  <title>Алфавитный указатель &mdash; документация keyboard 1.1.0</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=0eddcf85"></script>
+      <script src="_static/documentation_options.js?v=92855fae"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/translations.js?v=cd1d70c9"></script>
@@ -40,9 +40,9 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
-              <p class="caption" role="heading"><span class="caption-text">Содержание:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Содержание:cd</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">project_klava</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">lab11</a></li>
 </ul>
 
         </div>
@@ -73,18 +73,23 @@
 
 <div class="genindex-jumpbox">
  <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
  | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
  | <a href="#P"><strong>P</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
  | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
  
 </div>
 <h2 id="A">A</h2>
@@ -92,7 +97,9 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="keyboard_layout.html#keyboard_layout.KeyboardLayout.add_uppercase_penalty">add_uppercase_penalty() (метод keyboard_layout.KeyboardLayout)</a>
 </li>
-      <li><a href="large.html#large.analyze_large_file">analyze_large_file() (в модуле large)</a>
+      <li><a href="parallel_large.html#parallel_large.analyze_large_file_parallel_merge">analyze_large_file_parallel_merge() (в модуле parallel_large)</a>
+</li>
+      <li><a href="parallel_large_rabbit.html#parallel_large_rabbit.analyze_large_file_rabbit">analyze_large_file_rabbit() (в модуле parallel_large_rabbit)</a>
 </li>
       <li><a href="keyboard_analyzer.html#keyboard_analyzer.LayoutAnalyzer.analyze_movement_details">analyze_movement_details() (метод keyboard_analyzer.LayoutAnalyzer)</a>
 </li>
@@ -100,10 +107,29 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="keyboard_analyzer.html#keyboard_analyzer.LayoutAnalyzer.analyze_text">analyze_text() (метод keyboard_analyzer.LayoutAnalyzer)</a>
 </li>
+      <li><a href="test_keyboard_analyzer.html#test_keyboard_analyzer.analyzer">analyzer() (в модуле test_keyboard_analyzer)</a>
+
+      <ul>
+        <li><a href="test_utils_stats.html#test_utils_stats.analyzer">(в модуле test_utils_stats)</a>
+</li>
+      </ul></li>
       <li><a href="keyboard_layout.html#keyboard_layout.KeyboardLayout.apply_finger_load">apply_finger_load() (метод keyboard_layout.KeyboardLayout)</a>
 </li>
       <li><a href="keyboard_layout.html#keyboard_layout.KeyboardLayout.apply_movement_penalty">apply_movement_penalty() (метод keyboard_layout.KeyboardLayout)</a>
 </li>
+  </ul></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    blocks
+
+      <ul>
+        <li><a href="blocks.html#module-blocks">module</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -133,8 +159,6 @@
         <li><a href="charts_pie.html#module-charts_pie">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     charts_summary
 
@@ -142,13 +166,19 @@
         <li><a href="charts_summary.html#module-charts_summary">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="storage.html#storage.RedisStorage.client">client (атрибут storage.RedisStorage)</a>
+</li>
+      <li><a href="keyboard_layout.html#keyboard_layout.KeyboardLayout.count_key_press">count_key_press() (метод keyboard_layout.KeyboardLayout)</a>
+</li>
       <li><a href="keyboard_layout.html#keyboard_layout.KeyboardLayout.count_spaces">count_spaces() (метод keyboard_layout.KeyboardLayout)</a>
 </li>
       <li><a href="keyboard_layout.html#keyboard_layout.KeyboardLayout.count_steps">count_steps() (метод keyboard_layout.KeyboardLayout)</a>
 </li>
       <li><a href="keyboard_layout.html#keyboard_layout.KeyboardLayout.counter_fingers">counter_fingers (атрибут keyboard_layout.KeyboardLayout)</a>
 </li>
-      <li><a href="charts_pie.html#charts_pie.create_and_plot_pie_charts_group">create_and_plot_pie_charts_group() (в модуле charts_pie)</a>
+      <li><a href="charts_pie.html#charts_pie.create_pie_chart">create_pie_chart() (в модуле charts_pie)</a>
 </li>
       <li><a href="charts_summary.html#charts_summary.create_total_load_pie_chart">create_total_load_pie_chart() (в модуле charts_summary)</a>
 </li>
@@ -185,13 +215,29 @@
 </li>
       <li><a href="keyboard_layout.html#keyboard_layout.KeyboardLayout.get_finger_load">get_finger_load() (метод keyboard_layout.KeyboardLayout)</a>
 </li>
+      <li><a href="keyboard_layout.html#keyboard_layout.KeyboardLayout.get_finger_presses">get_finger_presses() (метод keyboard_layout.KeyboardLayout)</a>
+</li>
+      <li><a href="keyboard_layout.html#keyboard_layout.KeyboardLayout.get_hand_by_finger">get_hand_by_finger() (статический метод keyboard_layout.KeyboardLayout)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="keyboard_layout.html#keyboard_layout.KeyboardLayout.get_hand_changes">get_hand_changes (свойство keyboard_layout.KeyboardLayout)</a>
+</li>
       <li><a href="keyboard_layout.html#keyboard_layout.KeyboardLayout.get_movement_type">get_movement_type() (статический метод keyboard_layout.KeyboardLayout)</a>
 </li>
       <li><a href="keyboard_layout.html#keyboard_layout.KeyboardLayout.get_symbol_field">get_symbol_field (свойство keyboard_layout.KeyboardLayout)</a>
 </li>
       <li><a href="keyboard_layout.html#keyboard_layout.KeyboardLayout.get_total_load">get_total_load (свойство keyboard_layout.KeyboardLayout)</a>
+</li>
+      <li><a href="keyboard_layout.html#keyboard_layout.KeyboardLayout.get_total_presses">get_total_presses (свойство keyboard_layout.KeyboardLayout)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="keyboard_layout.html#keyboard_layout.KeyboardLayout.hand_changes">hand_changes (атрибут keyboard_layout.KeyboardLayout)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -199,6 +245,8 @@
 <h2 id="K">K</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="keyboard_layout.html#keyboard_layout.KeyboardLayout.key_presses">key_presses (атрибут keyboard_layout.KeyboardLayout)</a>
+</li>
       <li>
     keyboard_analyzer
 
@@ -223,20 +271,17 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    large
-
-      <ul>
-        <li><a href="large.html#module-large">module</a>
+      <li><a href="keyboard_layout.html#keyboard_layout.KeyboardLayout.last_hand">last_hand (атрибут keyboard_layout.KeyboardLayout)</a>
 </li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="keyboard_layout.html#keyboard_layout.KeyboardLayout.layout_type">layout_type (атрибут keyboard_layout.KeyboardLayout)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="keyboard_analyzer.html#keyboard_analyzer.LayoutAnalyzer">LayoutAnalyzer (класс в keyboard_analyzer)</a>
 </li>
       <li><a href="keyboard_analyzer.html#keyboard_analyzer.LayoutAnalyzer.layouts">layouts (атрибут keyboard_analyzer.LayoutAnalyzer)</a>
+</li>
+      <li><a href="storage.html#storage.RedisStorage.load">load() (метод storage.RedisStorage)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -251,10 +296,16 @@
         <li><a href="main.html#module-main">module</a>
 </li>
       </ul></li>
+      <li><a href="worker_rabbit.html#worker_rabbit.main">main() (в модуле worker_rabbit)</a>
+</li>
+      <li><a href="blocks.html#blocks.merge_block_data">merge_block_data() (в модуле blocks)</a>
+</li>
       <li>
     module
 
       <ul>
+        <li><a href="blocks.html#module-blocks">blocks</a>
+</li>
         <li><a href="charts_bar.html#module-charts_bar">charts_bar</a>
 </li>
         <li><a href="charts_multi.html#module-charts_multi">charts_multi</a>
@@ -269,13 +320,25 @@
 </li>
         <li><a href="keyboard_layout.html#module-keyboard_layout">keyboard_layout</a>
 </li>
-        <li><a href="large.html#module-large">large</a>
-</li>
         <li><a href="main.html#module-main">main</a>
+</li>
+        <li><a href="parallel_large.html#module-parallel_large">parallel_large</a>
+</li>
+        <li><a href="parallel_large_rabbit.html#module-parallel_large_rabbit">parallel_large_rabbit</a>
 </li>
         <li><a href="stats.html#module-stats">stats</a>
 </li>
-        <li><a href="visualmain.html#module-visualmain">visualmain</a>
+        <li><a href="storage.html#module-storage">storage</a>
+</li>
+        <li><a href="test_integration.html#module-test_integration">test_integration</a>
+</li>
+        <li><a href="test_keyboard_analyzer.html#module-test_keyboard_analyzer">test_keyboard_analyzer</a>
+</li>
+        <li><a href="test_keyboard_layout.html#module-test_keyboard_layout">test_keyboard_layout</a>
+</li>
+        <li><a href="test_utils_stats.html#module-test_utils_stats">test_utils_stats</a>
+</li>
+        <li><a href="worker_rabbit.html#module-worker_rabbit">worker_rabbit</a>
 </li>
       </ul></li>
   </ul></td>
@@ -292,21 +355,57 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="charts_multi.html#charts_multi.plot_finger_loads_by_layout">plot_finger_loads_by_layout() (в модуле charts_multi)</a>
+      <li>
+    parallel_large
+
+      <ul>
+        <li><a href="parallel_large.html#module-parallel_large">module</a>
 </li>
-      <li><a href="charts_bar.html#charts_bar.plot_finger_usage_with_values">plot_finger_usage_with_values() (в модуле charts_bar)</a>
+      </ul></li>
+      <li>
+    parallel_large_rabbit
+
+      <ul>
+        <li><a href="parallel_large_rabbit.html#module-parallel_large_rabbit">module</a>
+</li>
+      </ul></li>
+      <li><a href="charts_pie.html#charts_pie.plot_all_pie_charts">plot_all_pie_charts() (в модуле charts_pie)</a>
+</li>
+      <li><a href="charts_multi.html#charts_multi.plot_finger_loads_by_layout">plot_finger_loads_by_layout() (в модуле charts_multi)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="charts_bar.html#charts_bar.plot_finger_usage_with_values">plot_finger_usage_with_values() (в модуле charts_bar)</a>
+</li>
+      <li><a href="charts_pie.html#charts_pie.plot_only_pie_charts">plot_only_pie_charts() (в модуле charts_pie)</a>
+</li>
+      <li><a href="keyboard_analyzer.html#keyboard_analyzer.LayoutAnalyzer.print_comparative_analysis">print_comparative_analysis() (метод keyboard_analyzer.LayoutAnalyzer)</a>
+</li>
       <li><a href="keyboard_analyzer.html#keyboard_analyzer.LayoutAnalyzer.print_detailed_analysis">print_detailed_analysis() (метод keyboard_analyzer.LayoutAnalyzer)</a>
 </li>
       <li><a href="keyboard_analyzer.html#keyboard_analyzer.LayoutAnalyzer.print_final_results">print_final_results() (метод keyboard_analyzer.LayoutAnalyzer)</a>
+</li>
+      <li><a href="keyboard_analyzer.html#keyboard_analyzer.LayoutAnalyzer.print_press_statistics">print_press_statistics() (метод keyboard_analyzer.LayoutAnalyzer)</a>
+</li>
+      <li><a href="blocks.html#blocks.process_block_return">process_block_return() (в модуле blocks)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="test_keyboard_layout.html#test_keyboard_layout.qwer_layout">qwer_layout() (в модуле test_keyboard_layout)</a>
 </li>
   </ul></td>
 </tr></table>
 
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="storage.html#storage.RedisStorage">RedisStorage (класс в storage)</a>
+</li>
+  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="keyboard_analyzer.html#keyboard_analyzer.LayoutAnalyzer.reverser">reverser (свойство keyboard_analyzer.LayoutAnalyzer)</a>
 </li>
@@ -316,12 +415,12 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="visualmain.html#visualmain.show_all">show_all() (в модуле visualmain)</a>
+      <li><a href="storage.html#storage.RedisStorage.save">save() (метод storage.RedisStorage)</a>
+</li>
+      <li><a href="parallel_large_rabbit.html#parallel_large_rabbit.send_blocks_to_workers">send_blocks_to_workers() (в модуле parallel_large_rabbit)</a>
 </li>
       <li><a href="stats.html#stats.show_finger_stats">show_finger_stats() (в модуле stats)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     stats
 
@@ -330,16 +429,115 @@
 </li>
       </ul></li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    storage
+
+      <ul>
+        <li><a href="storage.html#module-storage">module</a>
+</li>
+      </ul></li>
+      <li><a href="test_integration.html#test_integration.storage">storage() (в модуле test_integration)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="test_keyboard_layout.html#test_keyboard_layout.test_add_uppercase_penalty_adds_penalty_to_left_thumb">test_add_uppercase_penalty_adds_penalty_to_left_thumb() (в модуле test_keyboard_layout)</a>
+</li>
+      <li><a href="test_keyboard_analyzer.html#test_keyboard_analyzer.test_analyze_movement_details_returns_list">test_analyze_movement_details_returns_list() (в модуле test_keyboard_analyzer)</a>
+</li>
+      <li><a href="test_keyboard_analyzer.html#test_keyboard_analyzer.test_analyze_text_updates_finger_loads">test_analyze_text_updates_finger_loads() (в модуле test_keyboard_analyzer)</a>
+</li>
+      <li><a href="test_keyboard_layout.html#test_keyboard_layout.test_apply_finger_load_increments_properly">test_apply_finger_load_increments_properly() (в модуле test_keyboard_layout)</a>
+</li>
+      <li><a href="test_keyboard_layout.html#test_keyboard_layout.test_calculate_penalty_variants">test_calculate_penalty_variants() (в модуле test_keyboard_layout)</a>
+</li>
+      <li><a href="test_keyboard_layout.html#test_keyboard_layout.test_count_spaces_distribution">test_count_spaces_distribution() (в модуле test_keyboard_layout)</a>
+</li>
+      <li><a href="test_utils_stats.html#test_utils_stats.test_finger_stats_calculation">test_finger_stats_calculation() (в модуле test_utils_stats)</a>
+</li>
+      <li><a href="test_keyboard_analyzer.html#test_keyboard_analyzer.test_format_coords_formats_correctly">test_format_coords_formats_correctly() (в модуле test_keyboard_analyzer)</a>
+</li>
+      <li><a href="test_keyboard_layout.html#test_keyboard_layout.test_get_finger_by_column_correct_mapping">test_get_finger_by_column_correct_mapping() (в модуле test_keyboard_layout)</a>
+</li>
+      <li><a href="test_keyboard_layout.html#test_keyboard_layout.test_get_movement_type_various_cases">test_get_movement_type_various_cases() (в модуле test_keyboard_layout)</a>
+</li>
+      <li><a href="test_keyboard_layout.html#test_keyboard_layout.test_get_symbol_field_for_different_layouts">test_get_symbol_field_for_different_layouts() (в модуле test_keyboard_layout)</a>
+</li>
+      <li><a href="test_keyboard_layout.html#test_keyboard_layout.test_get_total_and_finger_load">test_get_total_and_finger_load() (в модуле test_keyboard_layout)</a>
+</li>
+      <li>
+    test_integration
+
+      <ul>
+        <li><a href="test_integration.html#module-test_integration">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    test_keyboard_analyzer
+
+      <ul>
+        <li><a href="test_keyboard_analyzer.html#module-test_keyboard_analyzer">module</a>
+</li>
+      </ul></li>
+      <li>
+    test_keyboard_layout
+
+      <ul>
+        <li><a href="test_keyboard_layout.html#module-test_keyboard_layout">module</a>
+</li>
+      </ul></li>
+      <li><a href="test_keyboard_layout.html#test_keyboard_layout.test_keyboard_layout_count_update">test_keyboard_layout_count_update() (в модуле test_keyboard_layout)</a>
+</li>
+      <li><a href="test_keyboard_layout.html#test_keyboard_layout.test_keyboard_layout_initialization">test_keyboard_layout_initialization() (в модуле test_keyboard_layout)</a>
+</li>
+      <li><a href="test_keyboard_layout.html#test_keyboard_layout.test_layout">test_layout() (в модуле test_keyboard_layout)</a>
+</li>
+      <li><a href="test_keyboard_analyzer.html#test_keyboard_analyzer.test_layouts_initialized">test_layouts_initialized() (в модуле test_keyboard_analyzer)</a>
+</li>
+      <li><a href="test_integration.html#test_integration.test_layouts_saved_to_redis">test_layouts_saved_to_redis() (в модуле test_integration)</a>
+</li>
+      <li><a href="test_keyboard_analyzer.html#test_keyboard_analyzer.test_print_final_results_executes_without_errors">test_print_final_results_executes_without_errors() (в модуле test_keyboard_analyzer)</a>
+</li>
+      <li><a href="test_keyboard_analyzer.html#test_keyboard_analyzer.test_reverser_returns_correct_structure">test_reverser_returns_correct_structure() (в модуле test_keyboard_analyzer)</a>
+</li>
+      <li><a href="test_utils_stats.html#test_utils_stats.test_show_finger_stats_runs">test_show_finger_stats_runs() (в модуле test_utils_stats)</a>
+</li>
+      <li>
+    test_utils_stats
+
+      <ul>
+        <li><a href="test_utils_stats.html#module-test_utils_stats">module</a>
+</li>
+      </ul></li>
+  </ul></td>
 </tr></table>
 
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="test_keyboard_layout.html#test_keyboard_layout.vyzov_layout">vyzov_layout() (в модуле test_keyboard_layout)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="parallel_large_rabbit.html#parallel_large_rabbit.wait_for_completion">wait_for_completion() (в модуле parallel_large_rabbit)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
-    visualmain
+    worker_rabbit
 
       <ul>
-        <li><a href="visualmain.html#module-visualmain">module</a>
+        <li><a href="worker_rabbit.html#module-worker_rabbit">module</a>
 </li>
       </ul></li>
   </ul></td>
@@ -354,7 +552,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Авторские права 2025, Daniil Sudin, Tim Smetanin. </p>
+    <p>&#169; Авторские права 2025, Daniil Sudin. </p>
   </div>
 
   Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
