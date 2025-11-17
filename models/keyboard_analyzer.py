@@ -387,6 +387,170 @@ class LayoutAnalyzer:
         print(f"\nЛучшая раскладка по минимуму переходов: {best_transitions.name} "
               f"({best_transitions.get_hand_changes} переходов)")
 
+    def analyze_sequences(self, text: str, max_sequence_length: int = 4) -> dict:
+        """
+        Анализирует все последовательности в тексте на удобство перебора.
+
+        ВХОД:
+            text (str): Текст для анализа
+            max_sequence_length (int): Максимальная длина анализируемых последовательностей
+
+        ВЫХОД:
+            dict: Статистика по всем типам переборов для каждой раскладки
+        """
+        # Очистка текста
+        text_clean = re.sub(r'[^А-Яа-яёЁ\s]', '', text)
+        text_lower = text_clean.lower()
+
+        sequence_stats = {}
+
+        for layout_name, layout in self.layouts.items():
+            layout_stats = {
+                'udp_2gram': 0, 'chudp_2gram': 0, 'nudp_2gram': 0,
+                'udp_3gram': 0, 'chudp_3gram': 0, 'nudp_3gram': 0,
+                'udp_4gram': 0, 'chudp_4gram': 0, 'nudp_4gram': 0,
+                'one_handed_2gram': 0, 'one_handed_3gram': 0, 'one_handed_4gram': 0,
+                'two_handed_2gram': 0, 'two_handed_3gram': 0, 'two_handed_4gram': 0,
+                'total_sequences': 0
+            }
+
+            # Анализируем последовательности разной длины
+            for seq_len in range(2, max_sequence_length + 1):
+                for i in range(len(text_lower) - seq_len + 1):
+                    sequence = text_lower[i:i + seq_len]
+
+                    # Пропускаем последовательности с пробелами
+                    if ' ' in sequence:
+                        continue
+
+                    result = layout.analyze_finger_sequence(sequence)
+                    layout_stats['total_sequences'] += 1
+
+                    # Классифицируем по типу и удобству
+                    if result['type'] == 'two_handed':
+                        layout_stats[f'two_handed_{seq_len}gram'] += 1
+                    else:
+                        layout_stats[f'one_handed_{seq_len}gram'] += 1
+                        if result['comfort'] == 'udp':
+                            layout_stats[f'udp_{seq_len}gram'] += 1
+                        elif result['comfort'] == 'chudp':
+                            layout_stats[f'chudp_{seq_len}gram'] += 1
+                        elif result['comfort'] == 'nudp':
+                            layout_stats[f'nudp_{seq_len}gram'] += 1
+
+            sequence_stats[layout_name] = layout_stats
+
+        return sequence_stats
+
+    def print_sequence_analysis(self, sequence_stats: dict) -> None:
+        """
+        Выводит результаты анализа последовательностей.
+
+        ВХОД:
+            sequence_stats (dict): Статистика последовательностей от analyze_sequences()
+
+        ВЫХОД:
+            None
+        """
+        print("\n" + "=" * 120)
+        print("АНАЛИЗ ПАЛЬЦЕВЫХ ПЕРЕБОРОВ В РАСКЛАДКАХ")
+        print("=" * 120)
+
+        # Заголовок таблицы
+        headers = ["Раскладка", "2-граммы", "3-граммы", "4-граммы", "УдП", "ЧудП", "НудП", "Однорукие", "Двурукие"]
+        print(
+            f"{headers[0]:<12} | {headers[1]:<10} | {headers[2]:<10} | {headers[3]:<10} | {headers[4]:<6} | {headers[5]:<6} | {headers[6]:<6} | {headers[7]:<10} | {headers[8]:<10}")
+        print("-" * 120)
+
+        for layout_name, stats in sequence_stats.items():
+            # Суммируем по длинам последовательностей
+            total_2gram = stats['udp_2gram'] + stats['chudp_2gram'] + stats['nudp_2gram']
+            total_3gram = stats['udp_3gram'] + stats['chudp_3gram'] + stats['nudp_3gram']
+            total_4gram = stats['udp_4gram'] + stats['chudp_4gram'] + stats['nudp_4gram']
+
+            total_udp = stats['udp_2gram'] + stats['udp_3gram'] + stats['udp_4gram']
+            total_chudp = stats['chudp_2gram'] + stats['chudp_3gram'] + stats['chudp_4gram']
+            total_nudp = stats['nudp_2gram'] + stats['nudp_3gram'] + stats['nudp_4gram']
+
+            total_one_handed = stats['one_handed_2gram'] + stats['one_handed_3gram'] + stats['one_handed_4gram']
+            total_two_handed = stats['two_handed_2gram'] + stats['two_handed_3gram'] + stats['two_handed_4gram']
+
+            layout_display = self.layouts[layout_name].name
+
+            print(f"{layout_display:<12} | {total_2gram:<10} | {total_3gram:<10} | {total_4gram:<10} | "
+                  f"{total_udp:<6} | {total_chudp:<6} | {total_nudp:<6} | {total_one_handed:<10} | {total_two_handed:<10}")
+
+    def analyze_sequences_detailed(self, text: str, sample_size: int = 50) -> list:
+        """
+        Детальный анализ конкретных последовательностей с примерами.
+
+        ВХОД:
+            text (str): Текст для анализа
+            sample_size (int): Количество примеров для вывода
+
+        ВЫХОД:
+            list: Примеры последовательностей с анализом
+        """
+        text_clean = re.sub(r'[^А-Яа-яёЁ\s]', '', text)
+        text_lower = text_clean.lower()
+
+        examples = []
+        sequences_analyzed = 0
+
+        for i in range(len(text_lower) - 3):  # Анализируем 4-граммы
+            if sequences_analyzed >= sample_size:
+                break
+
+            sequence = text_lower[i:i + 4]
+            if ' ' in sequence:
+                continue
+
+            sequence_data = {'sequence': sequence, 'analysis': {}}
+
+            for layout_name, layout in self.layouts.items():
+                analysis = layout.analyze_finger_sequence(sequence)
+                sequence_data['analysis'][layout_name] = analysis
+
+            examples.append(sequence_data)
+            sequences_analyzed += 1
+
+        return examples
+
+    def print_detailed_sequences(self, examples: list) -> None:
+        """
+        Выводит детальные примеры анализа последовательностей.
+
+        ВХОД:
+            examples (list): Примеры от analyze_sequences_detailed()
+
+        ВЫХОД:
+            None
+        """
+        print("\n" + "=" * 100)
+        print("ДЕТАЛЬНЫЙ АНАЛИЗ ПОСЛЕДОВАТЕЛЬНОСТЕЙ (примеры)")
+        print("=" * 100)
+
+        headers = ["Последовательность"] + [layout.name for layout in self.layouts.values()]
+        print(" | ".join([f"{h:^15}" for h in headers]))
+        print("-" * 100)
+
+        for example in examples[:20]:  # Первые 20 примеров
+            row = [f"{example['sequence']:^15}"]
+
+            for layout_name in self.layouts.keys():
+                analysis = example['analysis'][layout_name]
+                comfort_symbol = {
+                    'udp': '✓✓',  # Удобный
+                    'chudp': '✓',  # Частично удобный
+                    'nudp': '✗',  # Неудобный
+                    'mixed': '↔',  # Разноручный
+                    'unknown': '?',  # Неизвестно
+                    'short': '-'  # Слишком короткая
+                }.get(analysis['comfort'], '?')
+
+                row.append(f"{comfort_symbol:^15}")
+
+            print(" | ".join(row))
     def print_comparative_analysis(self) -> None:
         """
         Вывод сравнительного анализа всех раскладок.
