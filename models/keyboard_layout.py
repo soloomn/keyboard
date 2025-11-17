@@ -62,7 +62,7 @@ class KeyboardLayout:
             'f1r': 0, 'f2r': 0, 'f3r': 0, 'f4r': 0, 'f5r': 0
         }
         self.hand_changes = 0
-        self.last_hand = None  # 'left', 'right', или None
+        self.last_hand = None  # 'left', 'right', или Nonez
 
     @property
     def get_symbol_field(self) -> str:
@@ -517,3 +517,68 @@ class KeyboardLayout:
             int: Количество переходов между руками
         """
         return self.hand_changes
+
+    def analyze_finger_sequence(self, sequence: str) -> dict:
+        """
+        Анализирует последовательность символов на удобство перебора пальцев.
+
+        ВХОД:
+            sequence (str): Последовательность символов (2-4 символа)
+
+        ВЫХОД:
+            dict: Результат анализа с типом перебора и удобством
+        """
+        if len(sequence) < 2:
+            return {"type": "short", "comfort": "N/A", "score": 0}
+
+        fingers = []
+        columns = []
+
+        # Получаем пальцы и колонки для каждого символа
+        for char in sequence:
+            pos = self.get_coords(char)
+            if not pos:
+                return {"type": "unknown", "comfort": "N/A", "score": 0}
+            finger = self.get_finger_by_column(pos[1])
+            fingers.append(finger)
+            columns.append(pos[1])
+
+        # Определяем руку (все символы должны быть на одной руке)
+        hands = [self.get_hand_by_finger(f) for f in fingers]
+        if len(set(hands)) != 1:
+            return {"type": "two_handed", "comfort": "mixed", "score": 0}
+
+        # Анализируем направление перебора
+        direction_changes = 0
+        comfort_score = 0
+
+        for i in range(1, len(columns)):
+            prev_col = columns[i - 1]
+            curr_col = columns[i]
+
+            # Определяем направление (от мизинца к указательному = удобное)
+            if prev_col < curr_col:  # от внешнего к внутреннему
+                comfort_score += 1
+            elif prev_col > curr_col:  # от внутреннего к внешнему
+                comfort_score -= 1
+            # else - та же колонка
+
+        # Определяем тип перебора по количеству символов
+        seq_type = f"{len(sequence)}-gram"
+
+        # Определяем удобство
+        if comfort_score > 0:
+            comfort = "udp"  # Удобный перебор
+        elif comfort_score == 0:
+            comfort = "chudp"  # Частично удобный
+        else:
+            comfort = "nudp"  # Неудобный перебор
+
+        return {
+            "type": seq_type,
+            "comfort": comfort,
+            "score": comfort_score,
+            "fingers": fingers,
+            "hand": hands[0],
+            "sequence": sequence
+        }
