@@ -56,6 +56,7 @@ if __name__ == "__main__":
         analyzer = analyze_large_file_parallel_merge("voina-i-mir.txt", chunk_size=50000)
 
 
+
     # Детальный анализ перемещений
     print("Детальный анализ перемещений...")
     analyzer.print_final_results()
@@ -72,7 +73,28 @@ if __name__ == "__main__":
     data = analyzer.reverser
     storage = RedisStorage()
 
+    # Анализ последовательностей
+    print("\nАнализ пальцевых переборов...")
+    if hasattr(analyzer, 'sequence_stats_accumulated'):
+        analyzer.print_sequence_analysis(analyzer.sequence_stats_accumulated)
+    else:
+        # Если нет накопленных данных, анализируем последний блок
+        last_block_text = storage.load("last_block")
+        if last_block_text:
+            sequence_stats = analyzer.analyze_sequences(last_block_text)
+            analyzer.print_sequence_analysis(sequence_stats)
+
+            # Детальные примеры
+            examples = analyzer.analyze_sequences_detailed(last_block_text)
+            analyzer.print_detailed_sequences(examples)
+
+    # Сохраняем данные последовательностей
+    if hasattr(analyzer, 'sequence_stats_accumulated'):
+        storage.save("sequence_stats", analyzer.sequence_stats_accumulated)
+
     storage.save("layouts", data)
+
+
     #with open("/app/data_output/layouts.json", "w", encoding="utf-8") as f:
         #json.dump(data, f, ensure_ascii=False, indent=2)
 
