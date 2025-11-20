@@ -4,15 +4,6 @@
 Transforming typing for a healthier, smarter future.
 </h6>
 
-
-<p align="center">
-  <img src="https://img.shields.io/github/last-commit/soloomn/keyboard?style=flat&logo=git&logoColor=white&color=0080ff" alt="last-commit" />
-  <img src="https://img.shields.io/github/languages/top/soloomn/keyboard?style=flat&logo=python&logoColor=white&color=0080ff" alt="python" />
-  <img src="https://img.shields.io/github/languages/count/soloomn/keyboard?style=flat&color=0080ff" alt="languages" />
-  <img src="https://img.shields.io/github/v/tag/soloomn/keyboard.svg?label=Release&style=flat&color=0080ff" alt="release" />
-</p>
-
-
 |          |                                                                                                                                                                                                                                        |
 |----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Bio      | ![top_Lang](https://img.shields.io/github/languages/top/soloomn/keyboard?style=flat&logo=python&logoColor=white&color=0080ff) ![langs](https://img.shields.io/github/languages/count/soloomn/keyboard?style=flat&color=0080ff)         |
@@ -25,22 +16,16 @@ Transforming typing for a healthier, smarter future.
 Built with the tools and technologies:
 </h6>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Docker-2496ED.svg?style=flat&logo=Docker&logoColor=white" alt="docker" />
-  <img src="https://img.shields.io/badge/Python-3776AB.svg?style=flat&logo=Python&logoColor=white" alt="python" />
-  <img src="https://img.shields.io/badge/Poetry-60A5FA.svg?style=flat&logo=Poetry&logoColor=white" alt="poetry" />
-  <img src="https://img.shields.io/badge/Redis-FF4438.svg?style=flat&logo=Redis&logoColor=white" alt="redis" />
-  <img src="https://img.shields.io/badge/RabbitMQ-FF6600.svg?style=flat&logo=RabbitMQ&logoColor=white" alt="rabbitmq" />
-  <img src="https://img.shields.io/badge/NumPy-013243.svg?style=flat&logo=NumPy&logoColor=white" alt="numpy" />
-  <img src="https://img.shields.io/badge/pandas-150458.svg?style=flat&logo=pandas&logoColor=white" alt="pandas" />
-  <img src="https://custom-icon-badges.demolab.com/badge/Matplotlib-71D291?logo=matplotlib&logoColor=fff" alt="matplotlib" />
-  <img src="https://img.shields.io/badge/Rich-FAE742.svg?style=flat&logo=Rich&logoColor=black" alt="rich" />
-  <img src="https://img.shields.io/badge/Pytest-0A9EDC.svg?style=flat&logo=Pytest&logoColor=white" alt="pytest" />
-  <img src="https://img.shields.io/badge/Sphinx-000000.svg?style=flat&logo=Sphinx&logoColor=white)" alt="sphinx"/>
-  <img src="https://img.shields.io/badge/Markdown-000000.svg?style=flat&logo=Markdown&logoColor=white" alt="markdown" />
-  <img src="https://img.shields.io/badge/TOML-9C4121.svg?style=flat&logo=TOML&logoColor=white" alt="TOML" />
-  <img src="https://img.shields.io/badge/GitHub%20Actions-2088FF.svg?style=flat&logo=GitHub-Actions&logoColor=white" alt="github actions" />
-</p>
+
+|              |                                                                                                                                                                                                                                                                                                                                                                                                       |
+|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Languages    | ![python](https://img.shields.io/badge/Python-3776AB.svg?style=flat&logo=Python&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=000&style=flat-square) ![HTML5](https://img.shields.io/badge/HTML-%23E34F26.svg?logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/CSS-639?logo=css&logoColor=fff)                              |
+| Services     | ![poetry](https://img.shields.io/badge/Poetry-60A5FA.svg?style=flat&logo=Poetry&logoColor=white) ![docker](https://img.shields.io/badge/Docker-2496ED.svg?style=flat&logo=Docker&logoColor=white) ![pytest](https://img.shields.io/badge/Pytest-0A9EDC.svg?style=flat&logo=Pytest&logoColor=white) ![sphinx](https://img.shields.io/badge/Sphinx-000000.svg?style=flat&logo=Sphinx&logoColor=white)   |
+| Technologies | ![redis](https://img.shields.io/badge/Redis-FF4438.svg?style=flat&logo=Redis&logoColor=white) ![rabbitmq](https://img.shields.io/badge/RabbitMQ-FF6600.svg?style=flat&logo=RabbitMQ&logoColor=white)                                                                                                                                                                                                  |
+| Core         | ![numpy](https://img.shields.io/badge/NumPy-013243.svg?style=flat&logo=NumPy&logoColor=white) ![pandas](https://img.shields.io/badge/pandas-150458.svg?style=flat&logo=pandas&logoColor=white) ![matplotlib](https://custom-icon-badges.demolab.com/badge/Matplotlib-71D291?logo=matplotlib&logoColor=fff) ![rich](https://img.shields.io/badge/Rich-FAE742.svg?style=flat&logo=Rich&logoColor=black) |
+| Web core     | ![fastapi](https://img.shields.io/badge/FastAPI-009485.svg?logo=fastapi&logoColor=white) ![pydantic](https://img.shields.io/badge/Pydantic-E92063?logo=Pydantic&logoColor=white)                                                                                                                                                                                                                      |
+| CI           | ![githubactions](https://img.shields.io/badge/GitHub%20Actions-2088FF.svg?style=flat&logo=GitHub-Actions&logoColor=white)                                                                                                                                                                                                                                                                             |
+
 
 ---
 
