@@ -70,29 +70,16 @@ if __name__ == "__main__":
     print(f"\nСтатистика по выбранной раскладке {layout_name}:")
     df = show_finger_stats(analyzer, layout_name)
 
-    data = analyzer.reverser
-    storage = RedisStorage()
-
     # Анализ последовательностей
     print("\nАнализ пальцевых переборов...")
-    if hasattr(analyzer, 'sequence_stats_accumulated'):
-        analyzer.print_sequence_analysis(analyzer.sequence_stats_accumulated)
-    else:
-        # Если нет накопленных данных, анализируем последний блок
-        last_block_text = storage.load("last_block")
-        if last_block_text:
-            sequence_stats = analyzer.analyze_sequences(last_block_text)
-            analyzer.print_sequence_analysis(sequence_stats)
+    analyzer.print_sequence_analysis()
 
-            # Детальные примеры
-            examples = analyzer.analyze_sequences_detailed(last_block_text)
-            analyzer.print_detailed_sequences(examples)
+    data_fingers = analyzer.reverser
+    data_sequences = analyzer.stats_reverser
+    storage = RedisStorage()
 
-    # Сохраняем данные последовательностей
-    if hasattr(analyzer, 'sequence_stats_accumulated'):
-        storage.save("sequence_stats", analyzer.sequence_stats_accumulated)
-
-    storage.save("layouts", data)
+    storage.save("layouts", data_fingers)
+    storage.save("sequences", data_sequences)
 
 
     #with open("/app/data_output/layouts.json", "w", encoding="utf-8") as f:

@@ -62,7 +62,24 @@ class KeyboardLayout:
             'f1r': 0, 'f2r': 0, 'f3r': 0, 'f4r': 0, 'f5r': 0
         }
         self.hand_changes = 0
-        self.last_hand = None  # 'left', 'right', или Nonez
+        self.last_hand = None  # 'left', 'right', или None
+
+        self.twogram = {
+            'udp_2gram': 0, 'chudp_2gram': 0, 'nudp_2gram': 0,
+            'one_handed_2gram': 0, 'two_handed_2gram': 0
+        }
+
+        self.threegram = {
+            'udp_3gram': 0, 'chudp_3gram': 0, 'nudp_3gram': 0,
+            'one_handed_3gram': 0, 'two_handed_3gram': 0
+        }
+
+        self.fourgram = {
+            'udp_4gram': 0, 'chudp_4gram': 0, 'nudp_4gram': 0,
+            'one_handed_4gram': 0, 'two_handed_4gram': 0
+        }
+
+        self.total_sequences = 0
 
     @property
     def get_symbol_field(self) -> str:
@@ -517,6 +534,52 @@ class KeyboardLayout:
             int: Количество переходов между руками
         """
         return self.hand_changes
+
+
+    def add_sequence_result(self, sequence: str) -> None:
+        """Накопление статистики по одной последовательности."""
+        result = self.analyze_finger_sequence(sequence)
+        seq_len = len(sequence)
+
+        if result["type"] == "two_handed":
+            # Разноручные — только в двухрукие
+            if seq_len == 2:
+                self.twogram["two_handed_2gram"] += 1
+            elif seq_len == 3:
+                self.threegram["two_handed_3gram"] += 1
+            elif seq_len == 4:
+                self.fourgram["two_handed_4gram"] += 1
+            self.total_sequences += 1
+            return
+
+        # Одноручные
+        comfort = result["comfort"]
+        if seq_len == 2:
+            self.twogram["one_handed_2gram"] += 1
+            if comfort == "udp":
+                self.twogram["udp_2gram"] += 1
+            elif comfort == "chudp":
+                self.twogram["chudp_2gram"] += 1
+            elif comfort == "nudp":
+                self.twogram["nudp_2gram"] += 1
+        elif seq_len == 3:
+            self.threegram["one_handed_3gram"] += 1
+            if comfort == "udp":
+                self.threegram["udp_3gram"] += 1
+            elif comfort == "chudp":
+                self.threegram["chudp_3gram"] += 1
+            elif comfort == "nudp":
+                self.threegram["nudp_3gram"] += 1
+        elif seq_len == 4:
+            self.fourgram["one_handed_4gram"] += 1
+            if comfort == "udp":
+                self.fourgram["udp_4gram"] += 1
+            elif comfort == "chudp":
+                self.fourgram["chudp_4gram"] += 1
+            elif comfort == "nudp":
+                self.fourgram["nudp_4gram"] += 1
+
+        self.total_sequences += 1
 
     def analyze_finger_sequence(self, sequence: str) -> dict:
         """
