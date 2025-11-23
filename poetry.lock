@@ -227,6 +227,30 @@ docs = ["ipython", "matplotlib", "numpydoc", "sphinx"]
 tests = ["pytest", "pytest-cov", "pytest-xdist"]
 
 [[package]]
+name = "fakeredis"
+version = "2.32.1"
+description = "Python implementation of redis API, can be used for testing purposes."
+optional = false
+python-versions = ">=3.7"
+groups = ["main"]
+files = [
+    {file = "fakeredis-2.32.1-py3-none-any.whl", hash = "sha256:e80c8886db2e47ba784f7dfe66aad6cd2eab76093c6bfda50041e5bc890d46cf"},
+    {file = "fakeredis-2.32.1.tar.gz", hash = "sha256:dd8246db159f0b66a1ced7800c9d5ef07769e3d2fde44b389a57f2ce2834e444"},
+]
+
+[package.dependencies]
+redis = {version = ">=4.3", markers = "python_version > \"3.8\""}
+sortedcontainers = ">=2"
+
+[package.extras]
+bf = ["pyprobables (>=0.6)"]
+cf = ["pyprobables (>=0.6)"]
+json = ["jsonpath-ng (>=1.6)"]
+lua = ["lupa (>=2.1)"]
+probabilistic = ["pyprobables (>=0.6)"]
+valkey = ["valkey (>=6) ; python_version >= \"3.8\""]
+
+[[package]]
 name = "fonttools"
 version = "4.60.1"
 description = "Tools to manipulate font files"
@@ -1028,6 +1052,18 @@ files = [
 ]
 
 [[package]]
+name = "sortedcontainers"
+version = "2.4.0"
+description = "Sorted Containers -- Sorted List, Sorted Dict, Sorted Set"
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "sortedcontainers-2.4.0-py2.py3-none-any.whl", hash = "sha256:a163dcaede0f1c021485e957a39245190e74249897e2ae4b2aa38595db237ee0"},
+    {file = "sortedcontainers-2.4.0.tar.gz", hash = "sha256:25caa5a06cc30b6b83d11423433f65d1f9d76c4c6a0c90e3379eaa43b9bfdb88"},
+]
+
+[[package]]
 name = "tzdata"
 version = "2025.2"
 description = "Provider of IANA time zone data"
@@ -1042,4 +1078,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "3.12.3"
-content-hash = "4982d5e753ddd6fadb3275168a2dc243f0eccb0cf932ca0a4a5a4371cc9b0c31"
+content-hash = "950962b3fa6197492b60430b6a5e795e830ee355e5511f4cdc4a4d2fad646eae"

@@ -33,15 +33,6 @@ jobs:
           docker compose up -d redis
           sleep 10  # Ждем запуска Redis
 
-      - name: Initialize Redis with test data
-        run: |
-          docker compose run --rm analyzer python -c "
-          from models import RedisStorage
-          storage = RedisStorage()
-          data = {'diktor': {'left': [0, 0, 0, 0, 0], 'right': [0, 0, 0, 0, 0], 'two_handed': 0, 'left_press': [0, 0, 0, 0, 0], 'right_press': [0, 0, 0, 0, 0]}, 'qwer': {'left': [0, 0, 0, 0, 0], 'right': [0, 0, 0, 0, 0], 'two_handed': 0, 'left_press': [0, 0, 0, 0, 0], 'right_press': [0, 0, 0, 0, 0]}, 'vyzov': {'left': [0, 0, 0, 0, 0], 'right': [0, 0, 0, 0, 0], 'two_handed': 0, 'left_press': [0, 0, 0, 0, 0], 'right_press': [0, 0, 0, 0, 0]}, 'ant': {'left': [0, 0, 0, 0, 0], 'right': [0, 0, 0, 0, 0], 'two_handed': 0, 'left_press': [0, 0, 0, 0, 0], 'right_press': [0, 0, 0, 0, 0]}, 'skoropis': {'left': [0, 0, 0, 0, 0], 'right': [0, 0, 0, 0, 0], 'two_handed': 0, 'left_press': [0, 0, 0, 0, 0], 'right_press': [0, 0, 0, 0, 0]}, 'rusphone': {'left': [0, 0, 0, 0, 0], 'right': [0, 0, 0, 0, 0], 'two_handed': 0, 'left_press': [0, 0, 0, 0, 0], 'right_press': [0, 0, 0, 0, 0]}, 'zubachew': {'left': [0, 0, 0, 0, 0], 'right': [0, 0, 0, 0, 0], 'two_handed': 0, 'left_press': [0, 0, 0, 0, 0], 'right_press': [0, 0, 0, 0, 0]}}
-          storage.save('layouts', data)
-          "
-
       - name: Run tests in analyzer container
         run: |
           docker compose run --rm analyzer pytest tests/ --maxfail=1 --disable-warnings -q
