@@ -15,19 +15,33 @@
 """
 
 import pytest
+import fakeredis
+
 from models import RedisStorage
 
 @pytest.fixture(scope="module")
 def storage():
-    """
-    Фикстура для подключения к Redis.
+    data = {
+        'diktor': {'left': [0, 0, 0, 0, 0], 'right': [0, 0, 0, 0, 0], 'two_handed': 0, 'left_press': [0, 0, 0, 0, 0],
+                   'right_press': [0, 0, 0, 0, 0]},
+        'qwer': {'left': [0, 0, 0, 0, 0], 'right': [0, 0, 0, 0, 0], 'two_handed': 0, 'left_press': [0, 0, 0, 0, 0],
+                 'right_press': [0, 0, 0, 0, 0]},
+        'vyzov': {'left': [0, 0, 0, 0, 0], 'right': [0, 0, 0, 0, 0], 'two_handed': 0, 'left_press': [0, 0, 0, 0, 0],
+                  'right_press': [0, 0, 0, 0, 0]},
+        'ant': {'left': [0, 0, 0, 0, 0], 'right': [0, 0, 0, 0, 0], 'two_handed': 0, 'left_press': [0, 0, 0, 0, 0],
+                'right_press': [0, 0, 0, 0, 0]},
+        'skoropis': {'left': [0, 0, 0, 0, 0], 'right': [0, 0, 0, 0, 0], 'two_handed': 0, 'left_press': [0, 0, 0, 0, 0],
+                     'right_press': [0, 0, 0, 0, 0]},
+        'rusphone': {'left': [0, 0, 0, 0, 0], 'right': [0, 0, 0, 0, 0], 'two_handed': 0, 'left_press': [0, 0, 0, 0, 0],
+                     'right_press': [0, 0, 0, 0, 0]},
+        'zubachew': {'left': [0, 0, 0, 0, 0], 'right': [0, 0, 0, 0, 0], 'two_handed': 0, 'left_press': [0, 0, 0, 0, 0],
+                     'right_press': [0, 0, 0, 0, 0]}
+    }
 
-    ВХОД: Нет
-
-    ВЫХОД:
-        RedisStorage: Экземпляр класса RedisStorage для тестирования
-    """
-    return RedisStorage()
+    s = RedisStorage()
+    s.client = fakeredis.FakeRedis()
+    s.save("layouts", data)
+    return s
 
 
 def test_layouts_saved_to_redis(storage):
@@ -46,7 +60,6 @@ def test_layouts_saved_to_redis(storage):
         - Корректность структуры данных для каждой раскладки
         - Наличие обязательных полей: left, right, two_handed
     """
-    # ключ, под которым сохраняется словарь всех раскладок (должен совпадать с тем, что в коде analyzer)
     key = "layouts"
 
     data = storage.load(key)

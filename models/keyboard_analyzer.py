@@ -94,6 +94,30 @@ class LayoutAnalyzer:
 
         return all_data
 
+    @property
+    def stats_reverser(self) -> dict:
+        stats = {}
+        for key, layout in self.layouts.items():
+            stats[key] = {
+                "udp_2gram": layout.twogram["udp_2gram"],
+                "chudp_2gram": layout.twogram["chudp_2gram"],
+                "nudp_2gram": layout.twogram["nudp_2gram"],
+                "udp_3gram": layout.threegram["udp_3gram"],
+                "chudp_3gram": layout.threegram["chudp_3gram"],
+                "nudp_3gram": layout.threegram["nudp_3gram"],
+                "udp_4gram": layout.fourgram["udp_4gram"],
+                "chudp_4gram": layout.fourgram["chudp_4gram"],
+                "nudp_4gram": layout.fourgram["nudp_4gram"],
+                "one_handed_2gram": layout.twogram["one_handed_2gram"],
+                "one_handed_3gram": layout.threegram["one_handed_3gram"],
+                "one_handed_4gram": layout.fourgram["one_handed_4gram"],
+                "two_handed_2gram": layout.twogram["two_handed_2gram"],
+                "two_handed_3gram": layout.threegram["two_handed_3gram"],
+                "two_handed_4gram": layout.fourgram["two_handed_4gram"],
+                "total_sequences": layout.total_sequences,
+            }
+        return stats
+
     def analyze_text(self, text: str) -> None:
         """
         Основной анализ текста для всех загруженных раскладок.
@@ -386,6 +410,89 @@ class LayoutAnalyzer:
         best_transitions = min(self.layouts.values(), key=lambda x: x.get_hand_changes)
         print(f"\nЛучшая раскладка по минимуму переходов: {best_transitions.name} "
               f"({best_transitions.get_hand_changes} переходов)")
+
+    def analyze_sequences(self, text: str, max_sequence_length: int = 4) -> None:
+        """
+        Анализирует все последовательности в тексте на удобство перебора.
+
+        ВХОД:
+            text (str): Текст для анализа
+            max_sequence_length (int): Максимальная длина анализируемых последовательностей
+
+        ВЫХОД:
+            dict: Статистика по всем типам переборов для каждой раскладки
+        """
+        # Очистка текста
+        text_clean = re.sub(r'[^А-Яа-яёЁ\s]', '', text)
+        text_lower = text_clean.lower()
+
+        for layout in self.layouts.values():
+            for seq_len in range(2, max_sequence_length + 1):
+                for i in range(len(text_lower) - seq_len + 1):
+                    sequence = text_lower[i:i + seq_len]
+                    if ' ' in sequence:
+                        continue
+                    layout.add_sequence_result(sequence)
+
+
+    def print_sequence_analysis(self) -> None:
+        print("\n" + "=" * 120)
+        print("АНАЛИЗ ПАЛЬЦЕВЫХ ПЕРЕБОРОВ В РАСКЛАДКАХ")
+        print("=" * 120)
+
+        headers = ["Раскладка", "2-граммы", "3-граммы", "4-граммы", "УдП", "ЧудП", "НудП", "Однорукие", "Двурукие"]
+        print(
+            f"{headers[0]:<12} | {headers[1]:<10} | {headers[2]:<10} | {headers[3]:<10} | "f"{headers[4]:<6} | {headers[5]:<6} | {headers[6]:<6} | {headers[7]:<10} | {headers[8]:<10}")
+        print("-" * 120)
+
+        for layout in self.layouts.values():
+            total_2gram = (
+                    layout.twogram["udp_2gram"] +
+                    layout.twogram["chudp_2gram"] +
+                    layout.twogram["nudp_2gram"]
+            )
+            total_3gram = (
+                    layout.threegram["udp_3gram"] +
+                    layout.threegram["chudp_3gram"] +
+                    layout.threegram["nudp_3gram"]
+            )
+            total_4gram = (
+                    layout.fourgram["udp_4gram"] +
+                    layout.fourgram["chudp_4gram"] +
+                    layout.fourgram["nudp_4gram"]
+            )
+
+            total_udp = (
+                    layout.twogram["udp_2gram"] +
+                    layout.threegram["udp_3gram"] +
+                    layout.fourgram["udp_4gram"]
+            )
+            total_chudp = (
+                    layout.twogram["chudp_2gram"] +
+                    layout.threegram["chudp_3gram"] +
+                    layout.fourgram["chudp_4gram"]
+            )
+            total_nudp = (
+                    layout.twogram["nudp_2gram"] +
+                    layout.threegram["nudp_3gram"] +
+                    layout.fourgram["nudp_4gram"]
+            )
+
+            total_one_handed = (
+                    layout.twogram["one_handed_2gram"] +
+                    layout.threegram["one_handed_3gram"] +
+                    layout.fourgram["one_handed_4gram"]
+            )
+            total_two_handed = (
+                    layout.twogram["two_handed_2gram"] +
+                    layout.threegram["two_handed_3gram"] +
+                    layout.fourgram["two_handed_4gram"]
+            )
+
+            print(
+                f"{layout.name:<12} | {total_2gram:<10} | {total_3gram:<10} | {total_4gram:<10} | "
+                f"{total_udp:<6} | {total_chudp:<6} | {total_nudp:<6} | {total_one_handed:<10} | {total_two_handed:<10}"
+            )
 
     def print_comparative_analysis(self) -> None:
         """

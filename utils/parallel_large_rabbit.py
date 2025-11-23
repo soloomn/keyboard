@@ -50,6 +50,8 @@ def send_blocks_to_workers(filename: str, chunk_size: int = 50000):
         if buffer:
             blocks.append(''.join(buffer))
 
+    storage.save("blocks_len", len(blocks))
+
     # Подключаемся к RabbitMQ
     connection = pika.BlockingConnection(
         pika.ConnectionParameters('rabbitmq', 5672, credentials=pika.PlainCredentials('user', 'password'))
@@ -72,7 +74,6 @@ def send_blocks_to_workers(filename: str, chunk_size: int = 50000):
     last_block_text = blocks[-1] if blocks else ''.join(buffer)
 
     storage.save("last_block", last_block_text)
-    storage.save("blocks_len", len(blocks))
 
     return connection
 

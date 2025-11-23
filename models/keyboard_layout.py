@@ -64,6 +64,23 @@ class KeyboardLayout:
         self.hand_changes = 0
         self.last_hand = None  # 'left', 'right', или None
 
+        self.twogram = {
+            'udp_2gram': 0, 'chudp_2gram': 0, 'nudp_2gram': 0,
+            'one_handed_2gram': 0, 'two_handed_2gram': 0
+        }
+
+        self.threegram = {
+            'udp_3gram': 0, 'chudp_3gram': 0, 'nudp_3gram': 0,
+            'one_handed_3gram': 0, 'two_handed_3gram': 0
+        }
+
+        self.fourgram = {
+            'udp_4gram': 0, 'chudp_4gram': 0, 'nudp_4gram': 0,
+            'one_handed_4gram': 0, 'two_handed_4gram': 0
+        }
+
+        self.total_sequences = 0
+
     @property
     def get_symbol_field(self) -> str:
         """
@@ -517,3 +534,114 @@ class KeyboardLayout:
             int: Количество переходов между руками
         """
         return self.hand_changes
+
+
+    def add_sequence_result(self, sequence: str) -> None:
+        """Накопление статистики по одной последовательности."""
+        result = self.analyze_finger_sequence(sequence)
+        seq_len = len(sequence)
+
+        if result["type"] == "two_handed":
+            # Разноручные — только в двухрукие
+            if seq_len == 2:
+                self.twogram["two_handed_2gram"] += 1
+            elif seq_len == 3:
+                self.threegram["two_handed_3gram"] += 1
+            elif seq_len == 4:
+                self.fourgram["two_handed_4gram"] += 1
+            self.total_sequences += 1
+            return
+
+        # Одноручные
+        comfort = result["comfort"]
+        if seq_len == 2:
+            self.twogram["one_handed_2gram"] += 1
+            if comfort == "udp":
+                self.twogram["udp_2gram"] += 1
+            elif comfort == "chudp":
+                self.twogram["chudp_2gram"] += 1
+            elif comfort == "nudp":
+                self.twogram["nudp_2gram"] += 1
+        elif seq_len == 3:
+            self.threegram["one_handed_3gram"] += 1
+            if comfort == "udp":
+                self.threegram["udp_3gram"] += 1
+            elif comfort == "chudp":
+                self.threegram["chudp_3gram"] += 1
+            elif comfort == "nudp":
+                self.threegram["nudp_3gram"] += 1
+        elif seq_len == 4:
+            self.fourgram["one_handed_4gram"] += 1
+            if comfort == "udp":
+                self.fourgram["udp_4gram"] += 1
+            elif comfort == "chudp":
+                self.fourgram["chudp_4gram"] += 1
+            elif comfort == "nudp":
+                self.fourgram["nudp_4gram"] += 1
+
+        self.total_sequences += 1
+
+    def analyze_finger_sequence(self, sequence: str) -> dict:
+        """
+        Анализирует последовательность символов на удобство перебора пальцев.
+
+        ВХОД:
+            sequence (str): Последовательность символов (2-4 символа)
+
+        ВЫХОД:
+            dict: Результат анализа с типом перебора и удобством
+        """
+        if len(sequence) < 2:
+            return {"type": "short", "comfort": "N/A", "score": 0}
+
+        fingers = []
+        columns = []
+
+        # Получаем пальцы и колонки для каждого символа
+        for char in sequence:
+            pos = self.get_coords(char)
+            if not pos:
+                return {"type": "unknown", "comfort": "N/A", "score": 0}
+            finger = self.get_finger_by_column(pos[1])
+            fingers.append(finger)
+            columns.append(pos[1])
+
+        # Определяем руку (все символы должны быть на одной руке)
+        hands = [self.get_hand_by_finger(f) for f in fingers]
+        if len(set(hands)) != 1:
+            return {"type": "two_handed", "comfort": "mixed", "score": 0}
+
+        # Анализируем направление перебора
+        direction_changes = 0
+        comfort_score = 0
+
+        for i in range(1, len(columns)):
+            prev_col = columns[i - 1]
+            curr_col = columns[i]
+
+            # Определяем направление (от мизинца к указательному = удобное)
+            if prev_col < curr_col:  # от внешнего к внутреннему
+                comfort_score += 1
+            elif prev_col > curr_col:  # от внутреннего к внешнему
+                comfort_score -= 1
+            # else - та же колонка
+
+        # Определяем тип перебора по количеству символов
+        seq_type = f"{len(sequence)}-gram"
+
+        # Определяем удобство
+        if comfort_score > 0:
+            comfort = "udp"  # Удобный перебор
+        elif comfort_score == 0:
+            comfort = "chudp"  # Частично удобный
+        else:
+            comfort = "nudp"  # Неудобный перебор
+
+        return {
+            "type": seq_type,
+            "comfort": comfort,
+            "score": comfort_score,
+            "fingers": fingers,
+            "hand": hands[0],
+            "sequence": sequence
+        }

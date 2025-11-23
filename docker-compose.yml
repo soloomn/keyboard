@@ -57,6 +57,7 @@ services:
       - RABBIT_HOST=rabbitmq
       - RABBIT_USER=user
       - RABBIT_PASSWORD=password
+      - NUM_WORKERS=8
     depends_on:
       rabbitmq:
         condition: service_healthy

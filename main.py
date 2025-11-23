@@ -56,6 +56,7 @@ if __name__ == "__main__":
         analyzer = analyze_large_file_parallel_merge("voina-i-mir.txt", chunk_size=50000)
 
 
+
     # Детальный анализ перемещений
     print("Детальный анализ перемещений...")
     analyzer.print_final_results()
@@ -69,10 +70,18 @@ if __name__ == "__main__":
     print(f"\nСтатистика по выбранной раскладке {layout_name}:")
     df = show_finger_stats(analyzer, layout_name)
 
-    data = analyzer.reverser
+    # Анализ последовательностей
+    print("\nАнализ пальцевых переборов...")
+    analyzer.print_sequence_analysis()
+
+    data_fingers = analyzer.reverser
+    data_sequences = analyzer.stats_reverser
     storage = RedisStorage()
 
-    storage.save("layouts", data)
+    storage.save("layouts", data_fingers)
+    storage.save("sequences", data_sequences)
+
+
     #with open("/app/data_output/layouts.json", "w", encoding="utf-8") as f:
         #json.dump(data, f, ensure_ascii=False, indent=2)
 

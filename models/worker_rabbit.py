@@ -17,7 +17,7 @@
 - Redis для хранения промежуточных результатов
 - JSON для сериализации данных
 """
-
+import os
 import pika
 import json
 import time
@@ -43,7 +43,7 @@ def main():
         - Отправляет подтверждения в очередь results
     """
     storage = RedisStorage()
-    blocks_len = storage.load("blocks_len")
+
 
     # Подключаемся к RabbitMQ для получения заданий
     connection = pika.BlockingConnection(
@@ -99,7 +99,7 @@ def main():
             ch.basic_ack(delivery_tag=method.delivery_tag)
             print(f"Блок {block_id} обработан и подтвержден")
 
-            if block_id >= (blocks_len-8):
+            if block_id >= delta:
                 time.sleep(10)
                 connection.close()
         except Exception as e:
@@ -108,6 +108,10 @@ def main():
     # Начинаем слушать задания
     print("Worker запущен и ожидает сообщения...")
     channel.basic_consume(queue='analysis_tasks', on_message_callback=callback)
+
+    time.sleep(0.5)
+    delta = storage.load("blocks_len") - int(os.getenv("NUM_WORKERS"))
+
     channel.start_consuming()
 
 if __name__ == "__main__":
