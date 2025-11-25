@@ -166,7 +166,7 @@ def test_print_results_without_errors(analyzer, capsys):
     captured = capsys.readouterr().out
     assert "СТАТИСТИКА НАЖАТИЙ" in captured
     assert "ВСЕГО НАЖАТИЙ" in captured
-    assert "ПЕРЕХОДЫ МЕЖДУ РУКАМИ" in captured
+    assert "СТАТИСТИКА ПЕРЕХОДОВ" in captured
 
     analyzer.print_comparative_analysis()
     captured = capsys.readouterr().out
