@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keyboard Animation</title>
+    <!-- Подключаем шрифт Google Sans Code -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <!-- Верхняя панель (логотип | навигация | действия) -->
+    <header class="topbar" role="banner">
+        <div class="logo" aria-hidden="true">
+            <!-- Логотип: заменён на предоставленный пивО_темн.svg -->
+            <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M31.9126 16.1114C31.6806 13.1488 31.3819 11.9185 31.2868 11.5834C31.2156 11.3322 31.0762 11.1055 30.8839 10.9287C30.6917 10.7518 30.4543 10.6317 30.1979 10.5817C29.6628 10.4759 26.2708 9.88922 17.5455 9.88922C8.82022 9.88922 5.42823 10.4768 4.89312 10.5817C4.63678 10.6317 4.39933 10.7518 4.20711 10.9287C4.0149 11.1055 3.87545 11.3322 3.80424 11.5834C3.64157 12.1585 2.87891 15.3683 2.87891 25.4447C2.87891 28.3958 2.97668 30.7603 3.12157 32.6447C3.49668 37.5425 7.25489 40.7282 12.0229 40.9069C13.5393 40.9638 15.3633 41.0002 17.5455 41.0002C19.7277 41.0002 21.5517 40.9638 23.0682 40.9069C26.7659 40.7682 29.8575 38.8198 31.2335 35.6669H33.0299C36.5544 35.6669 39.8255 33.1496 40.093 29.3238C40.2541 27.0369 40.2541 24.7415 40.093 22.4545C39.8264 18.6288 36.5544 16.1114 33.0299 16.1114H31.9126ZM32.1437 20.5559C32.1864 21.971 32.2122 23.5914 32.2122 25.4447C32.2122 27.6963 32.1553 29.6065 32.0637 31.2225H33.0299C34.5375 31.2225 35.5757 30.2065 35.6593 29.0136C35.8044 26.9332 35.8044 24.8452 35.6593 22.7647C35.5757 21.5719 34.5375 20.5559 33.0299 20.5559H32.1437Z" fill="#778899" fill-opacity="0.3"/>
+<path d="M17.545 1C16.1445 0.999101 14.7658 1.3469 13.5334 2.01201C12.3009 2.67713 11.2534 3.63863 10.4854 4.80977C9.58702 4.55499 8.64508 4.49181 7.72067 4.62433C6.79626 4.75684 5.91 5.08209 5.11932 5.57899C4.32863 6.0759 3.65117 6.73338 3.13082 7.50884C2.61047 8.28429 2.25885 9.16042 2.09873 10.0805C1.93861 11.0005 1.97357 11.9439 2.20134 12.8495C2.42911 13.7552 2.84462 14.6029 3.42093 15.3377C3.99725 16.0725 4.72152 16.6781 5.54681 17.1151C6.3721 17.5521 7.28 17.8109 8.21168 17.8746V18.3333C8.21168 19.6648 8.22501 20.7848 8.24457 21.7057C8.29168 23.9688 9.85345 25.8888 12.2117 25.8888C14.5699 25.8888 16.1317 23.9679 16.1788 21.7057C16.2047 20.4336 16.2156 19.1612 16.2117 17.8888H26.4338C27.3869 17.888 28.3286 17.6828 29.1956 17.2872C30.0626 16.8916 30.8347 16.3147 31.4598 15.5954C32.085 14.876 32.5486 14.0311 32.8196 13.1174C33.0905 12.2037 33.1624 11.2426 33.0303 10.2987C32.8983 9.35493 32.5655 8.45039 32.0543 7.6461C31.5431 6.84181 30.8654 6.15647 30.0669 5.63628C29.2684 5.1161 28.3676 4.77316 27.4253 4.63058C26.4831 4.488 25.5212 4.54911 24.6045 4.80977C23.8365 3.63863 22.7891 2.67713 21.5566 2.01201C20.3241 1.3469 18.9455 0.999101 17.545 1Z" fill="#778899"/>
+</svg>
+        </div>
+
+        <nav>
+            <ul class="nav" role="navigation">
+                <li><a href="/index.html" class="active">Главная</a></li>
+                <li><a href="/analysis.html">Анализ</a></li>
+                <li><a href="/statistics.html">Статистика</a></li>
+                <li><a href="#">GA</a></li>
+                <li><a href="#">О программе</a></li>
+            </ul>
+        </nav>
+
+        <div class="actions" aria-hidden="true">
+            <!-- Луна (тема) -->
+            <button id="themeToggle" class="icon-btn icon-oval" title="theme" aria-label="theme" aria-pressed="false">
+                <!-- default: moon (light theme) -->
+                <svg id="iconTheme" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M12.9688 1.00781C13.6618 1.07889 14.0122 1.6598 14.0762 2.12891C14.141 2.61065 13.9623 3.22325 13.4092 3.55762C12.4757 4.12047 11.703 4.91506 11.167 5.86426C10.6311 6.81342 10.3495 7.88557 10.3496 8.97559C10.3497 10.6528 11.0163 12.2612 12.2021 13.4473C13.3883 14.6334 14.9974 15.2998 16.6748 15.2998C17.7649 15.3 18.8369 15.0184 19.7861 14.4824C20.7352 13.9464 21.53 13.1746 22.0928 12.2412L22.1582 12.1416C22.5028 11.6663 23.0698 11.5134 23.5215 11.5742C24.022 11.6424 24.6504 12.0365 24.6504 12.8252C24.6504 19.3558 19.3558 24.6503 12.8252 24.6504C6.2945 24.6504 1.00001 19.3559 1 12.8252C1 6.2945 6.2945 1 12.8252 1L12.9688 1.00781Z" fill="#778899"/>
+</svg>
+            </button>
+
+            <!-- GitHub: заменил кнопку на ссылку на репозиторий пользователя -->
+            <a id="githubLink" class="icon-btn icon-oval" title="github" aria-label="github" href="https://github.com/soloomn/keyboard" target="_blank" rel="noopener noreferrer">
+                <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M7.52665 1.36282C8.3531 1.64171 9.13907 2.02859 9.86415 2.51342C10.8888 2.25115 11.9426 2.11957 13.0003 2.12182C14.0926 2.12182 15.1464 2.25822 16.1342 2.51232C16.8589 2.02796 17.6445 1.64145 18.4706 1.36282C19.2373 1.10212 20.3296 0.679721 20.9786 1.39802C21.4186 1.88642 21.5286 2.70482 21.6067 3.32962C21.6947 4.02702 21.7156 4.93562 21.4846 5.83762C22.3679 6.97832 22.9003 8.33902 22.9003 9.82182C22.9003 12.068 21.6837 14.0183 19.883 15.3691C19.0159 16.0103 18.0549 16.5135 17.034 16.8607C17.2694 17.3997 17.4003 17.9959 17.4003 18.6218V21.9218C17.4003 22.2136 17.2844 22.4933 17.0781 22.6996C16.8718 22.9059 16.592 23.0218 16.3003 23.0218H9.70025C9.40851 23.0218 9.12873 22.9059 8.92244 22.6996C8.71615 22.4933 8.60025 22.2136 8.60025 21.9218V20.8317C7.54975 20.9604 6.66865 20.846 5.91955 20.5281C5.13635 20.1959 4.59075 19.6811 4.18045 19.1883C3.79105 18.7219 3.36645 17.6703 2.75265 17.4657C2.61557 17.4201 2.48881 17.3479 2.37963 17.2532C2.27045 17.1586 2.18097 17.0434 2.11631 16.9142C1.98573 16.6532 1.96416 16.3511 2.05635 16.0742C2.14854 15.7974 2.34694 15.5685 2.60789 15.4379C2.86885 15.3073 3.17099 15.2857 3.44785 15.3779C4.18045 15.6221 4.65785 16.1501 4.98455 16.5747C5.51255 17.2567 5.94155 18.1477 6.77755 18.503C7.12185 18.6493 7.62675 18.745 8.41655 18.6372L8.60025 18.5998C8.60279 18.0012 8.72743 17.4095 8.96655 16.8607C7.94561 16.5135 6.98457 16.0103 6.11755 15.3691C4.31685 14.0183 3.10025 12.0691 3.10025 9.82182C3.10025 8.34122 3.63155 6.98162 4.51265 5.84202C4.28165 4.94002 4.30145 4.02922 4.38945 3.33072L4.39495 3.28892C4.47525 2.64872 4.56875 1.89522 5.01755 1.39802C5.66655 0.679721 6.75995 1.10322 7.52555 1.36392L7.52665 1.36282Z" fill="#778899"/>
+</svg>
+            </a>
+
+            <!-- Документация -->
+            <button id="docsBtn" class="icon-btn icon-oval" title="docs" aria-label="docs">
+                <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M3.2892 3.2892C2 4.5773 2 6.6519 2 10.8V15.2C2 19.3481 2 21.4227 3.2892 22.7108C4.5784 23.9989 6.6519 24 10.8 24H13C17.1481 24 19.2227 24 20.5108 22.7108C21.7989 21.4216 21.8 19.3481 21.8 15.2V10.8C21.8 6.6519 21.8 4.5773 20.5108 3.2892C19.2216 2.0011 17.1481 2 13 2H10.8C6.6519 2 4.5773 2 3.2892 3.2892ZM7.5 9.975C7.2812 9.975 7.07135 10.0619 6.91664 10.2166C6.76192 10.3714 6.675 10.5812 6.675 10.8C6.675 11.0188 6.76192 11.2286 6.91664 11.3834C7.07135 11.5381 7.2812 11.625 7.5 11.625H16.3C16.5188 11.625 16.7286 11.5381 16.8834 11.3834C17.0381 11.2286 17.125 11.0188 17.125 10.8C17.125 10.5812 17.0381 10.3714 16.8834 10.2166C16.7286 10.0619 16.5188 9.975 16.3 9.975H7.5ZM7.5 14.375C7.2812 14.375 7.07135 14.4619 6.91664 14.6166C6.76192 14.7714 6.675 14.9812 6.675 15.2C6.675 15.4188 6.76192 15.6286 6.91664 15.7834C7.07135 15.9381 7.2812 16.025 7.5 16.025H13C13.2188 16.025 13.4286 15.9381 13.5834 15.7834C13.7381 15.6286 13.825 15.4188 13.825 15.2C13.825 14.9812 13.7381 14.7714 13.5834 14.6166C13.4286 14.4619 13.2188 14.375 13 14.375H7.5Z" fill="#778899"/>
+</svg>
+            </button>
+        </div>
+    </header>
+    <!-- Заголовок сразу вверху -->
+    <div class="title reveal-title">
+        KEYBOARD
+    </div>
+
+    <!-- Текст который будет печататься -->
+    <div class="text-display" id="textDisplay">
+        <span id="typedText"></span><span class="cursor" id="cursor"></span>
+    </div>
+
+    <!-- Клавиатура -->
+    <div class="keyboard-area">
+        <div class="halo pulse" aria-hidden="true"></div>
+        <div class="keyboard reveal-keyboard">
+        <!-- Ряд F-клавиш -->
+        <div class="key-row">
+            <div class="key">Esc</div>
+            <div class="key">F1</div>
+            <div class="key">F2</div>
+            <div class="key">F3</div>
+            <div class="key">F4</div>
+            <div class="key">F5</div>
+            <div class="key">F6</div>
+            <div class="key">F7</div>
+            <div class="key">F8</div>
+            <div class="key">F9</div>
+            <div class="key">F10</div>
+            <div class="key">F11</div>
+            <div class="key">F12</div>
+        </div>
+
+        <!-- Ряд цифр -->
+        <div class="key-row">
+            <div class="key">
+                <span class="key-top">~</span>
+                <span class="key-main">`</span>
+            </div>
+            <div class="key">
+                <span class="key-top">!</span>
+                <span class="key-main">1</span>
+            </div>
+            <div class="key">
+                <span class="key-top">@</span>
+                <span class="key-main">2</span>
+            </div>
+            <div class="key">
+                <span class="key-top">#</span>
+                <span class="key-main">3</span>
+            </div>
+            <div class="key">
+                <span class="key-top">$</span>
+                <span class="key-main">4</span>
+            </div>
+            <div class="key">
+                <span class="key-top">%</span>
+                <span class="key-main">5</span>
+            </div>
+            <div class="key">
+                <span class="key-top">^</span>
+                <span class="key-main">6</span>
+            </div>
+            <div class="key">
+                <span class="key-top">&</span>
+                <span class="key-main">7</span>
+            </div>
+            <div class="key">
+                <span class="key-top">*</span>
+                <span class="key-main">8</span>
+            </div>
+            <div class="key">
+                <span class="key-top">(</span>
+                <span class="key-main">9</span>
+            </div>
+            <div class="key">
+                <span class="key-top">)</span>
+                <span class="key-main">0</span>
+            </div>
+            <div class="key w-105">←</div>
+        </div>
+
+        <!-- Ряд QWERTY -->
+        <div class="key-row">
+            <div class="key w-75">Tab<br>→</div>
+            <div class="key" data-key="q">Q</div>
+            <div class="key" data-key="w">W</div>
+            <div class="key" data-key="e">E</div>
+            <div class="key" data-key="r">R</div>
+            <div class="key" data-key="t">T</div>
+            <div class="key" data-key="y">Y</div>
+            <div class="key" data-key="u">U</div>
+            <div class="key" data-key="i">I</div>
+            <div class="key" data-key="o">O</div>
+            <div class="key" data-key="p">P</div>
+            <div class="key">
+                <span class="key-top">{</span>
+                <span class="key-main">[</span>
+            </div>
+            <div class="key">
+                <span class="key-top">}</span>
+                <span class="key-main">]</span>
+            </div>
+        </div>
+
+        <!-- Ряд ASDF -->
+        <div class="key-row">
+            <div class="key w-85">⇪</div>
+            <div class="key" data-key="a">A</div>
+            <div class="key" data-key="s">S</div>
+            <div class="key" data-key="d">D</div>
+            <div class="key" data-key="f">F</div>
+            <div class="key" data-key="g">G</div>
+            <div class="key" data-key="h">H</div>
+            <div class="key" data-key="j">J</div>
+            <div class="key" data-key="k">K</div>
+            <div class="key" data-key="l">L</div>
+            <div class="key">
+                <span class="key-top">:</span>
+                <span class="key-main">;</span>
+            </div>
+            <div class="key">
+                <span class="key-top">"</span>
+                <span class="key-main">'</span>
+            </div>
+            <div class="key w-85">⏎</div>
+        </div>
+
+        <!-- Ряд ZXCV -->
+        <div class="key-row">
+            <div class="key w-150">⇧</div>
+            <div class="key" data-key="z">Z</div>
+            <div class="key" data-key="x">X</div>
+            <div class="key" data-key="c">C</div>
+            <div class="key" data-key="v">V</div>
+            <div class="key" data-key="b">B</div>
+            <div class="key" data-key="n">N</div>
+            <div class="key" data-key="m">M</div>
+            <div class="key">
+                <span class="key-top">&lt;</span>
+                <span class="key-main">,</span>
+            </div>
+            <div class="key">
+                <span class="key-top">&gt;</span>
+                <span class="key-main">.</span>
+            </div>
+            <div class="key w-150">⇧</div>
+        </div>
+
+        <!-- Нижний ряд -->
+        <div class="key-row">
+            <div class="key w-70" aria-label="Control">
+                <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <text x="12" y="12" dominant-baseline="middle" text-anchor="middle">⌃</text>
+                </svg>
+            </div>
+            <div class="key w-70" aria-label="Option">
+                <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <text x="12" y="12" dominant-baseline="middle" text-anchor="middle">⌥</text>
+                </svg>
+            </div>
+            <div class="key w-70" aria-label="Command">
+                <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <text x="12" y="12" dominant-baseline="middle" text-anchor="middle">⌘</text>
+                </svg>
+            </div>
+            <div class="key w-300" data-key=" "></div>
+            <div class="key w-70" aria-label="Command">
+                <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <text x="12" y="12" dominant-baseline="middle" text-anchor="middle">⌘</text>
+                </svg>
+            </div>
+            <div class="key w-70" aria-label="Option">
+                <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <text x="12" y="12" dominant-baseline="middle" text-anchor="middle">⌥</text>
+                </svg>
+            </div>
+            <div class="key w-70" aria-label="Control">
+                <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <text x="12" y="12" dominant-baseline="middle" text-anchor="middle">⌃</text>
+                </svg>
+            </div>
+            <div class="key w-60">Fn</div>
+        </div>
+        </div>
+    </div>
+    <div class="smoke" aria-hidden="true"></div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
+
