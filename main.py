@@ -17,9 +17,11 @@
 - Сравнение 7 русскоязычных клавиатурных раскладок
 - Сохранение результатов в Redis и вывод статистики
 """
-
-from utils import show_finger_stats, analyze_large_file_rabbit, analyze_large_file_parallel_merge
+import time
+from utils import show_finger_stats, analyze_large_file_rabbit
 from models import RedisStorage
+
+storage = RedisStorage()
 
 if __name__ == "__main__":
     """
@@ -47,34 +49,72 @@ if __name__ == "__main__":
     """
     # Основной анализ
 
-    print("Анализируем 'Войну и мир' по частям...")
+    CONTROL_KEY = "control:start_analysis"
+    FILENAMES_KEY = "control:filenames"
+    JOB_ID_KEY = "control:current_job_id"
 
-    use_rabbit = True
-    if use_rabbit:
-        analyzer = analyze_large_file_rabbit("voina-i-mir.txt")
-    else:
-        analyzer = analyze_large_file_parallel_merge("voina-i-mir.txt", chunk_size=50000)
+    print("Ожидаем разрешения на запуск анализа от FastAPI (Redis флаг)...")
+
+    while True:
+        val = storage.load(CONTROL_KEY)
+        if val == "ready":
+            print("Получен сигнал 'ready' — запускаем анализ.")
+            break
+        time.sleep(1)
+
+    # сразу сбрасываем флаг, чтобы не стартовать повторно
+    storage.save(CONTROL_KEY, "blocked")
+
+    job_id = storage.load(JOB_ID_KEY)
+
+    filenames = storage.load(FILENAMES_KEY)
+
+    print(f"Анализируем {filenames} по частям...")
+
+    filename = ["voina-i-mir.txt", "1grams-3.txt"]
+
+    if job_id:
+        storage.save(f"job:{job_id}:status", "running")
+
+    try:
+
+        # Запускаем анализ
+        analyzer = analyze_large_file_rabbit(filenames)
+
+        print("Детальный анализ перемещений...")
+
+        analyzer.print_final_results()
+
+        analyzer.print_press_statistics()
+
+        analyzer.print_comparative_analysis()
+
+        layout_name = "qwer"
+
+        df = show_finger_stats(analyzer, layout_name, output_file="/app/data_output/output.txt")
+
+        # Анализ последовательностей
+        print("\nАнализ пальцевых переборов...")
+        analyzer.print_sequence_analysis()
+
+        data_fingers = analyzer.reverser
+        data_sequences = analyzer.stats_reverser
+
+        storage.save("analysis:status", "finished")
+        storage.save("layouts", data_fingers)
+        storage.save("sequences", data_sequences)
+
+        print("Анализ завершён!")
+
+        # ставим статус "finished"
+        if job_id:
+            storage.save(f"job:{job_id}:status", "finished")
+
+    except Exception as e:
+        print(f"Ошибка анализа: {e}")
+        # ставим статус "error"
+        if job_id:
+            storage.save(f"job:{job_id}:status", f"error:{e}")
 
 
-    # Детальный анализ перемещений
-    print("Детальный анализ перемещений...")
-    analyzer.print_final_results()
-
-    analyzer.print_press_statistics()
-
-    analyzer.print_comparative_analysis()
-
-    layout_name = "qwer"
-
-    print(f"\nСтатистика по выбранной раскладке {layout_name}:")
-    df = show_finger_stats(analyzer, layout_name)
-
-    data = analyzer.reverser
-    storage = RedisStorage()
-
-    storage.save("layouts", data)
-    #with open("/app/data_output/layouts.json", "w", encoding="utf-8") as f:
-        #json.dump(data, f, ensure_ascii=False, indent=2)
-
-    #print("Анализ завершен, данные сохранены в /app/data_output/layouts.json")
 

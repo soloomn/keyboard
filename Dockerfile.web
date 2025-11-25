@@ -1,0 +1,10 @@
+# Dockerfile.web
+FROM keyboard-base:latest
+
+WORKDIR /app
+COPY . /app
+
+ENV PYTHONPATH=/app
+
+# uvicorn уже должен быть в зависимостях через poetry (если нет — добавь в pyproject.toml)
+CMD ["uvicorn", "web.api:app", "--host", "0.0.0.0", "--port", "8000"]

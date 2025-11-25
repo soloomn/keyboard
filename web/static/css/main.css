@@ -1,0 +1,506 @@
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Палитра ближе к референсу на скриншоте */
+            --bg: #f9f7ec; /* кремовый фон */
+            --accent: #778899; /* серо-голубой для иконок */
+            --muted: #7A7A7A;
+            --title-color: #7A7A7A;
+            --cursor: #4A5568;
+            --keyboard-border: #9aa7a8; /* внешний контур */
+            --keyboard-inner-border: rgba(120,130,135,0.12); /* тонкая внутренняя линия */
+            --key-border: #9fb0b3; /* обводка клавиш */
+            --key-fill: #fffefb; /* чуть светлее фона */
+            --key-top: #ffffff;
+            --typed-text: #7A7A7A;
+            --key-text: #5b6b73;
+            --key-pressed: #516073;
+            --key-pressed-border: #3d4b55;
+            --halo-dark: rgba(80,80,80,0.18);
+            --halo-mid: rgba(130,130,130,0.10);
+            --halo-light: rgba(180,180,180,0.04);
+
+            /* размеры */
+            --key-width: 56px;
+            --key-height: 46px;
+            --key-border-width: 2px;
+            --key-radius: 8px;
+            --key-gap: 12px;
+            --keyboard-padding-vertical: 18px;
+            --keyboard-padding-horizontal: 20px;
+            --keyboard-border-width: 3.6px;
+            --keyboard-radius: 14px;
+            --top-oval-fill: rgba(255,255,255,0.88);
+            --top-oval-border: rgba(120,130,135,0.12);
+            --icon-oval-bg: var(--top-oval-fill);
+            --icon-oval-border: var(--top-oval-border);
+            --icon-oval-top: rgba(255,255,255,0.88);
+            --icon-oval-bottom: rgba(250,250,250,0.7);
+            /* nav pill (topbar) variables for light theme */
+            --nav-pill-bg: rgba(255,255,255,0.88);
+            --nav-pill-top: rgba(255,255,255,0.98);
+            --nav-pill-bottom: rgba(245,245,240,0.84);
+            --nav-pill-border: rgba(120,130,135,0.12);
+            --nav-pill-text: #5f6f76;
+            /* allow using dark-theme surface color in light theme for a highlight/border effect */
+            --dark-theme-bg: #6f7f89;
+            --dark-theme-bg-soft: rgba(111,127,137,0.08);
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--muted);
+            font-family: 'Source Code Pro', 'Courier New', monospace;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Верхняя панель */
+        .topbar {
+            position: absolute;
+            top: 12px;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 40px;
+            z-index: 50;
+            pointer-events: auto;
+        }
+
+        .topbar .logo {
+            position: absolute;
+            left: 28px;
+            top: 6px;
+        }
+
+        .topbar .nav {
+            display: flex;
+            gap: 22px;
+            list-style: none;
+            padding: 6px 12px;
+            margin: 0;
+            align-items: center;
+        }
+
+        .topbar .nav a {
+            color: var(--accent);
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 18px;
+            font-size: 15px;
+            font-weight: 500;
+            opacity: 0.95;
+            transition: transform 180ms ease, box-shadow 180ms ease, background 160ms ease, color 160ms ease;
+        }
+
+        .topbar .nav a.active {
+            background: linear-gradient(180deg, var(--nav-pill-top), var(--nav-pill-bottom));
+            background-color: var(--nav-pill-bg);
+            border: 1px solid var(--nav-pill-border);
+            color: var(--nav-pill-text);
+            /* stronger inner edge highlight using dark-theme color to emulate a 'rim' */
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), inset 0 0 0 1px var(--dark-theme-bg-soft), 0 10px 28px rgba(80,90,90,0.06);
+            -webkit-backdrop-filter: blur(6px) saturate(1.06);
+            backdrop-filter: blur(6px) saturate(1.06);
+        }
+
+        .topbar .nav a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 26px rgba(80,90,90,0.06);
+        }
+
+        .topbar .actions {
+            position: absolute;
+            right: 28px;
+            top: 8px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Овал вокруг иконки (как в референсе) */
+        .icon-oval {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 8px;
+            border-radius: 14px;
+            background: linear-gradient(180deg, var(--icon-oval-top), var(--icon-oval-bottom));
+            background-color: var(--icon-oval-bg);
+            border: 1px solid var(--icon-oval-border);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), inset 0 0 0 1px var(--dark-theme-bg-soft), 0 6px 18px rgba(80,90,90,0.04);
+            backdrop-filter: blur(6px) saturate(1.06);
+            -webkit-backdrop-filter: blur(6px) saturate(1.06);
+            transition: transform 180ms ease, box-shadow 180ms ease;
+        }
+
+        .icon-oval:hover {
+            transform: translateY(-2px);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 10px 26px rgba(80,90,90,0.06);
+        }
+
+        /* Заголовок KEYBOARD */
+        .title {
+            text-align: center;
+            font-size: 44px;
+            letter-spacing: 10px;
+            color: var(--title-color);
+            margin-top: 72px;
+            margin-bottom: 16px;
+            font-weight: 300;
+        }
+
+        /* Мигающая каретка */
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background-color: var(--cursor);
+            margin-left: 6px;
+            opacity: 0; /* hidden until reveal finished */
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* Каретка видима и мигает только после reveal */
+        .cursor.blink {
+            opacity: 1;
+            animation: blink 0.7s infinite;
+        }
+
+        /* Контейнер для текста под заголовком */
+        .text-display {
+            text-align: center;
+            font-size: 18px;
+            color: var(--typed-text);
+            margin-bottom: 36px;
+            min-height: 30px;
+            font-weight: 300;
+            font-family: 'Source Code Pro', monospace;
+            letter-spacing: 0.8px;
+        }
+
+        /* Клавиатура */
+        /* Обёртка клавиатуры — добавляем область для скрытых кнопок и смещаем вниз */
+        .keyboard-area {
+            position: relative;
+            margin-top: 30px; /* отступ вниз, чтобы сверху можно было показать кнопки */
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* (controls temporarily removed) */
+
+        /* Клавиатура — фон совпадает с фоном страницы, чтобы выглядеть как часть макета */
+        .keyboard {
+            display: inline-block;
+            position: relative;
+            z-index: 12; /* над ореолом */
+            padding: var(--keyboard-padding-vertical) var(--keyboard-padding-horizontal); /* отступ внутри рамки */
+            border-radius: var(--keyboard-radius);
+            background-color: transparent; /* совпадает с `body` */
+            width: 920px;
+            max-width: 86vw;
+            /* внешний контур */
+            box-shadow: 0 0 0 var(--keyboard-border-width) var(--keyboard-border), inset 0 2px 0 rgba(255,255,255,0.6);
+        }
+
+        /* тонкая внутренняя линия (как на скриншоте) */
+        .keyboard:before {
+            content: '';
+            position: absolute;
+            inset: 6px;
+            border-radius: calc(var(--keyboard-radius) - 6px);
+            pointer-events: none;
+            border: 1px solid var(--keyboard-inner-border);
+            mix-blend-mode: normal;
+        }
+
+        /* Ряд клавиш */
+        .key-row {
+            display: flex;
+            gap: var(--key-gap); /* промежуток между клавишами */
+            margin-bottom: 12px;
+            align-items: center;
+        }
+
+        /* Делает каждую строку визуально одной длины: добавляет гибкие спейсеры слева/справа */
+        .key-row::before,
+        .key-row::after {
+            content: '';
+            flex: 1 1 auto;
+            width: 0;
+        }
+
+        /* Если нужно отключить фейковые отступы для конкретного ряда */
+        .key-row.no-spacer::before,
+        .key-row.no-spacer::after {
+            display: none;
+        }
+
+        .key-row:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Одна клавиша (ровная, аккуратная) */
+        .key {
+            width: var(--key-width);
+            height: var(--key-height);
+            background: linear-gradient(180deg, var(--key-top) 0%, var(--key-fill) 100%);
+            border: var(--key-border-width) solid var(--key-border);
+            border-radius: var(--key-radius);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--key-text);
+            box-shadow: 0 2px 0 rgba(120,130,135,0.06), inset 0 1px 0 rgba(255,255,255,0.6);
+            transition: background-color 0.12s, border-color 0.12s, color 0.12s, transform 120ms;
+            font-weight: 600; /* чуть жирнее шрифт */
+        }
+
+        /* Эффект нажатия клавиши: тёмная плитка без смещения */
+        .key.pressed {
+            background: linear-gradient(180deg, #5f6f78 0%, var(--key-pressed) 100%);
+            color: #ffffff;
+            transform: none;
+            box-shadow: inset 0 -6px 12px rgba(0,0,0,0.12);
+            border-color: rgba(61,75,85,0.95);
+        }
+
+        /* Ensure inner text/icons go white on press */
+        .key.pressed .key-main,
+        .key.pressed .key-top,
+        .key.pressed .icon text {
+            color: #ffffff;
+            fill: #ffffff;
+        }
+
+        /* Специальные размеры клавиш */
+        .key.w-60 { width: 60px; }
+        .key.w-70 { width: 70px; }
+        .key.w-75 { width: 75px; }
+        .key.w-85 { width: 85px; }
+        .key.w-95 { width: 95px; }
+        .key.w-100 { width: 100px; }
+        .key.w-105 { width: 105px; }
+        .key.w-300 { width: 300px; }
+
+        /* Прячем элемент */
+        .hidden {
+            opacity: 0;
+        }
+
+        /* Текст на клавише - верхний символ */
+        .key-top {
+            font-size: 10px;
+            margin-bottom: 2px;
+        }
+
+        /* Текст на клавише - основной символ */
+        .key-main {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Иконки внутри клавиш (SVG glyphs) */
+        .key .icon {
+            width: 20px;
+            height: 18px;
+            display: block;
+        }
+        .key .icon text {
+            font-family: 'Source Code Pro', monospace;
+            font-size: 16px;
+            fill: var(--key-text);
+            font-weight: 700;
+        }
+        .key.w-300 { display:flex; align-items:center; justify-content:center; }
+
+        /* Дополнительные размеры клавиш */
+        .key.w-120 { width: 120px; }
+        .key.w-150 { width: 150px; }
+
+        /* --- Ореол и эффекты появления (smoke / dissipate) --- */
+        .halo {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -46%);
+            width: 92%;
+            height: 78%;
+            pointer-events: none;
+            border-radius: 22px;
+            /* Halo: gradient from darker gray toward lighter gray, subtle texture */
+            background:
+                radial-gradient(circle at 50% 45%, rgba(110,120,125,0.24), rgba(160,170,175,0.12) 26%, rgba(200,200,200,0.06) 46%, transparent 68%),
+                radial-gradient(120px 60px at 50% 62%, rgba(240,240,240,0.06), transparent 60%),
+                repeating-radial-gradient(circle at 50% 45%, rgba(180,180,180,0.03) 0 3px, rgba(0,0,0,0) 4px 8px);
+            filter: blur(20px) saturate(1.02);
+            opacity: 0.98;
+            mix-blend-mode: multiply;
+            z-index: 8;
+        }
+
+        .halo.pulse {
+            animation: haloPulse 1600ms cubic-bezier(.2,.8,.2,1) infinite;
+        }
+
+        @keyframes haloPulse {
+            0% { transform: translate(-50%, -46%) scale(0.985); opacity: 0.88; }
+            25% { transform: translate(-50%, -46%) scale(1.02); opacity: 0.98; }
+            50% { transform: translate(-50%, -46%) scale(1.045); opacity: 1; }
+            75% { transform: translate(-50%, -46%) scale(1.015); opacity: 0.97; }
+            100% { transform: translate(-50%, -46%) scale(1); opacity: 0.9; }
+        }
+
+        /* Смоук-оверлей, который рассеивается при загрузке */
+        .smoke {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(circle at 50% 30%, rgba(150,160,170,0.26), rgba(150,160,170,0.12) 28%, rgba(245,245,238,0.0) 52%),
+                        linear-gradient(180deg, rgba(245,245,238,0.6), rgba(245,245,238,0.0));
+            mix-blend-mode: normal;
+            z-index: 40;
+            animation: smokeOut 1800ms ease-out forwards;
+        }
+
+        @keyframes smokeOut {
+            0% { opacity: 1; filter: blur(8px) saturate(1.05); transform: scale(1.02); }
+            60% { opacity: 0.45; filter: blur(6px) saturate(1.02); transform: scale(1.01); }
+            100% { opacity: 0; filter: blur(0px) saturate(1); transform: scale(1); }
+        }
+
+        /* Анимация появления — эффект рассеивания (blur -> clear, translateY -> 0) */
+        .reveal-title, .reveal-keyboard {
+            opacity: 0;
+            transform: translateY(20px) scale(1.03);
+            filter: blur(20px);
+            will-change: transform, opacity, filter;
+        }
+
+        /* title starts slightly earlier, keyboard follows shortly after; both smoother and slower */
+        .reveal-title {
+            animation: smokeIn 1100ms cubic-bezier(.16,.78,.24,1) 140ms forwards;
+        }
+
+        .reveal-keyboard {
+            /* короче, но более гладко: много контрольных точек */
+            animation: smokeInKeyboard 760ms cubic-bezier(.18,.9,.28,1) 220ms forwards;
+        }
+
+        @keyframes smokeInKeyboard {
+            0% { opacity: 0; transform: translateY(30px) scale(1.05); filter: blur(26px); }
+            15% { opacity: 0.18; transform: translateY(22px) scale(1.04); filter: blur(20px); }
+            30% { opacity: 0.38; transform: translateY(14px) scale(1.03); filter: blur(14px); }
+            45% { opacity: 0.58; transform: translateY(8px) scale(1.015); filter: blur(8px); }
+            60% { opacity: 0.77; transform: translateY(4px) scale(1.007); filter: blur(5px); }
+            80% { opacity: 0.94; transform: translateY(1px) scale(1.002); filter: blur(2px); }
+            100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        }
+        @keyframes smokeIn {
+            0% { opacity: 0; transform: translateY(30px) scale(1.06); filter: blur(30px); }
+            6% { opacity: 0.08; transform: translateY(26px) scale(1.05); filter: blur(26px); }
+            12% { opacity: 0.16; transform: translateY(22px) scale(1.045); filter: blur(22px); }
+            20% { opacity: 0.28; transform: translateY(18px) scale(1.035); filter: blur(18px); }
+            28% { opacity: 0.40; transform: translateY(14px) scale(1.025); filter: blur(14px); }
+            36% { opacity: 0.52; transform: translateY(10px) scale(1.02); filter: blur(10px); }
+            44% { opacity: 0.64; transform: translateY(7px) scale(1.014); filter: blur(8px); }
+            54% { opacity: 0.75; transform: translateY(5px) scale(1.01); filter: blur(6px); }
+            66% { opacity: 0.84; transform: translateY(3px) scale(1.006); filter: blur(3px); }
+            80% { opacity: 0.94; transform: translateY(1px) scale(1.002); filter: blur(1.5px); }
+            92% { opacity: 0.98; transform: translateY(0.4px) scale(1.0005); filter: blur(0.6px); }
+            100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        }
+        /* Dark theme overrides */
+        :root[data-theme='dark'] {
+            --bg: #6f7f89; /* bluish grey background from reference */
+            --accent: #FFFFF0;
+            --muted: rgba(255,255,255,0.85);
+            --title-color: rgba(255,255,255,0.95);
+            --cursor: #ffffff;
+            --keyboard-border: rgba(255,255,255,0.9);
+            --keyboard-inner-border: rgba(255,255,255,0.12);
+            --key-border: rgba(255,255,255,0.9);
+            --key-fill: rgba(120,140,150,0.06);
+            --key-top: rgba(255,255,255,0.02);
+            --key-text: rgba(255,255,255,0.95);
+            --key-pressed: rgba(255,255,255,0.06);
+            --key-pressed-border: rgba(255,255,255,0.95);
+            --top-oval-fill: rgba(255,255,255,0.06);
+            --top-oval-border: rgba(255,255,255,0.14);
+            --typed-text: rgba(255,255,255,0.92);
+            --icon-oval-bg: rgba(255,255,255,0.10);
+            --icon-oval-border: rgba(255,255,255,0.20);
+            --icon-oval-top: rgba(255,255,255,0.26);
+            --icon-oval-bottom: rgba(255,255,255,0.12);
+            /* nav pill (topbar) variables for dark theme */
+            --nav-pill-bg: rgba(255,255,255,0.06);
+            --nav-pill-top: rgba(255,255,255,0.16);
+            --nav-pill-bottom: rgba(255,255,255,0.04);
+            --nav-pill-border: rgba(255,255,255,0.14);
+            --nav-pill-text: rgba(255,255,255,0.95);
+        }
+
+        /* Dark-theme: pressed key style (different color than light) */
+        :root[data-theme='dark'] .key.pressed {
+            background: linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 100%);
+            color: var(--key-text);
+            box-shadow: inset 0 -6px 12px rgba(0,0,0,0.06);
+            border-color: var(--key-pressed-border);
+        }
+
+        /* Dark-theme: icon ovals should use slightly tinted bg instead of white */
+        :root[data-theme='dark'] .icon-oval {
+            background-color: var(--icon-oval-bg);
+            border: 1px solid var(--icon-oval-border);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 6px 18px rgba(0,0,0,0.03);
+        }
+
+        /* Dark-theme: nav pills (topbar) — make central nav buttons look like polished ovals */
+        :root[data-theme='dark'] .topbar .nav a {
+            transition: transform 180ms ease, box-shadow 180ms ease, background 160ms ease, color 160ms ease;
+        }
+
+        :root[data-theme='dark'] .topbar .nav a.active {
+            background: linear-gradient(180deg, var(--nav-pill-top), var(--nav-pill-bottom));
+            background-color: var(--nav-pill-bg);
+            border: 1px solid var(--nav-pill-border);
+            color: var(--nav-pill-text);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 22px rgba(0,0,0,0.12);
+            -webkit-backdrop-filter: blur(6px) saturate(1.06);
+            backdrop-filter: blur(6px) saturate(1.06);
+        }
+
+        :root[data-theme='dark'] .topbar .nav a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(0,0,0,0.16);
+        }

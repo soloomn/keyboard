@@ -74,9 +74,19 @@ def test_reverser_returns_correct_structure(analyzer):
             )
 
     for layout_key, layout_data in reverser_data.items():
-        assert 'left' in layout_data and 'right' in layout_data
+        assert ('left' in layout_data
+                and 'right' in layout_data
+                and 'two_handed' in layout_data
+                and 'left_press' in layout_data
+                and 'right_press' in layout_data
+                and 'two_handed' in layout_data
+                )
         assert len(layout_data['left']) == 5
         assert len(layout_data['right']) == 5
+        assert len(layout_data['left_press']) == 5
+        assert len(layout_data['right_press']) == 5
+        assert isinstance(layout_data['two_handed'], int)
+
 
 
 def test_format_coords_formats_correctly():
@@ -136,7 +146,7 @@ def test_analyze_movement_details_returns_list(analyzer):
         assert f'move_type_{layout_name}' in move
 
 
-def test_print_final_results_executes_without_errors(analyzer, capsys):
+def test_print_results_without_errors(analyzer, capsys):
     """
     Проверяет, что вывод финальных результатов работает без ошибок.
 
@@ -151,3 +161,15 @@ def test_print_final_results_executes_without_errors(analyzer, capsys):
     analyzer.print_final_results()
     captured = capsys.readouterr()
     assert "ФИНАЛЬНЫЕ РЕЗУЛЬТАТЫ" in captured.out
+
+    analyzer.print_press_statistics()
+    captured = capsys.readouterr().out
+    assert "СТАТИСТИКА НАЖАТИЙ" in captured
+    assert "ВСЕГО НАЖАТИЙ" in captured
+    assert "СТАТИСТИКА ПЕРЕХОДОВ" in captured
+
+    analyzer.print_comparative_analysis()
+    captured = capsys.readouterr().out
+    assert "СРАВНИТЕЛЬНЫЙ АНАЛИЗ РАСКЛАДОК" in captured
+    assert "Рейтинг" in captured
+    assert "ЛУЧШИЕ РАСКЛАДКИ" in captured

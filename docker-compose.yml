@@ -36,6 +36,7 @@ services:
     volumes:
       # монтируем локальную папку ./data_output к /app/data_output
       - ./data_output:/app/data_output
+      - ./uploads:/app/uploads
     environment:
       - PYTHONPATH=/app
       - REDIS_HOST=redis
@@ -57,6 +58,7 @@ services:
       - RABBIT_HOST=rabbitmq
       - RABBIT_USER=user
       - RABBIT_PASSWORD=password
+      - NUM_WORKERS=8
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -76,3 +78,19 @@ services:
     depends_on:
       analyzer:
         condition: service_completed_successfully
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    container_name: keyboard-web
+    environment:
+      - PYTHONPATH=/app
+      - REDIS_HOST=redis
+    depends_on:
+      redis:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "8000:8000"

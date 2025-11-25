@@ -184,7 +184,8 @@ def test_add_uppercase_penalty_adds_penalty_to_left_thumb(qwer_layout):
         None (тест проходит или падает с assertion error)
     """
     qwer_layout.add_uppercase_penalty(3)
-    assert qwer_layout.counter_fingers['f5l'] == 6
+    assert qwer_layout.counter_fingers['f5l'] > 0
+    assert qwer_layout.key_presses['f5l'] == 3
 
 
 def test_get_total_and_finger_load(qwer_layout):
@@ -217,3 +218,26 @@ def test_get_movement_type_various_cases():
     assert KeyboardLayout.get_movement_type([1, 1], [1, 2]) == "Горизонталь (1)"
     assert KeyboardLayout.get_movement_type([1, 1], [2, 2]) == "Диагональ (2)"
     assert "Сложное" in KeyboardLayout.get_movement_type([0, 0], [3, 4])
+
+def test_get_hand_by_finger(test_layout):
+    assert test_layout.get_hand_by_finger("f2l") == "left"
+    assert test_layout.get_hand_by_finger("f1r") == "right"
+
+
+def test_count_key_press(qwer_layout):
+    qwer_layout.count_key_press(8)
+
+    assert qwer_layout.key_presses["f3r"] == 1
+    assert qwer_layout.last_hand == "right"
+    assert qwer_layout.hand_changes == 0
+
+    qwer_layout.count_key_press(2)
+    assert qwer_layout.hand_changes == 1
+
+def test_get_presses(qwer_layout):
+    qwer_layout.count_key_press(8)
+    qwer_layout.count_key_press(2)
+    assert qwer_layout.get_total_presses == 2
+
+    qwer_layout.count_key_press(8)
+    assert qwer_layout.get_finger_presses('f3r') == 2

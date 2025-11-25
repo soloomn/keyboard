@@ -15,12 +15,41 @@
 """
 
 import pandas as pd
+from pathlib import Path
+from typing import Optional
 from pandas import DataFrame
 from rich.console import Console
 from rich.table import Table
 
+MARKER = "Статистика по выбранной раскладке"
 
-def show_finger_stats(analyzer, layout_name: str = "qwer") -> DataFrame:
+def process_file(path: Path):
+    lines = path.read_text(encoding="utf-8").splitlines(keepends=True)
+
+    result = []
+    i = 0
+    n = len(lines)
+
+    while i < n:
+        line = lines[i]
+        result.append(line)
+
+        # Если нашли строку с маркером — пропускаем 4 строки после неё
+        if MARKER in line and i + 4 < n:
+            i += 1  # перейдём на следующую
+            result.append(lines[i])  # оставляем 1‑ю после маркера
+            i += 1
+            result.append(lines[i])  # оставляем 2‑ю после маркера
+            i += 1
+            result.append(lines[i])  # оставляем 3‑ю после маркера
+            i += 1  # теперь на 4‑й строке (её пропускаем)
+        i += 1
+
+    path.write_text("".join(result), encoding="utf-8")
+
+def show_finger_stats(analyzer,
+                      layout_name: str = "qwer",
+                      output_file: Optional[str] = "/app/data_output/output.txt") -> DataFrame:
     """
     Формирует и красиво выводит статистику по пальцам с помощью pandas и rich.
 
@@ -53,16 +82,32 @@ def show_finger_stats(analyzer, layout_name: str = "qwer") -> DataFrame:
     df["percent"] = df["presses"] / df["presses"].sum() * 100
     df = df.sort_values("presses", ascending=False)
 
-    console = Console()
-    table = Table(title=f"Нагрузка по пальцам ({layout_name.upper()})")
+    console_kwargs = {}
+    if output_file:
+        console_kwargs["file"] = open(output_file, 'a', encoding='utf-8')
+
+    console = Console(**console_kwargs)
+
+    console.print("=" * 80)
+    console.print(f"Статистика по выбранной раскладке {layout_name}:")
+    console.print("=" * 80)
+
+    table = Table()
 
     table.add_column("Палец", justify="left")
     table.add_column("Нажатий", justify="right")
     table.add_column("Доля (%)", justify="right")
 
     for _, row in df.iterrows():
-        table.add_row(str(row["finger"]), str(row["presses"]), f"{row['percent']:.2f}")
+        table.add_row(str(row["finger"]),
+                      str(row["presses"]),
+                      f"{row['percent']:.2f}")
 
     console.print(table)
+
+    if output_file and console.file:
+        console.file.close()
+
+    process_file(Path(output_file))
 
     return df
