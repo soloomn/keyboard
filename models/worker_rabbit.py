@@ -69,6 +69,7 @@ def main():
         ВЫХОД:
             None
         """
+        delta = storage.load("blocks_len") - int(os.getenv("NUM_WORKERS"))
         data = json.loads(body)
         block_id = data["id"]
         block_text = data["text"]
@@ -110,7 +111,6 @@ def main():
     channel.basic_consume(queue='analysis_tasks', on_message_callback=callback)
 
     time.sleep(0.5)
-    delta = storage.load("blocks_len") - int(os.getenv("NUM_WORKERS"))
 
     channel.start_consuming()
 
