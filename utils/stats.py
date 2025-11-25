@@ -21,9 +21,35 @@ from pandas import DataFrame
 from rich.console import Console
 from rich.table import Table
 
+MARKER = "Статистика по выбранной раскладке"
+
+def process_file(path: Path):
+    lines = path.read_text(encoding="utf-8").splitlines(keepends=True)
+
+    result = []
+    i = 0
+    n = len(lines)
+
+    while i < n:
+        line = lines[i]
+        result.append(line)
+
+        # Если нашли строку с маркером — пропускаем 4 строки после неё
+        if MARKER in line and i + 4 < n:
+            i += 1  # перейдём на следующую
+            result.append(lines[i])  # оставляем 1‑ю после маркера
+            i += 1
+            result.append(lines[i])  # оставляем 2‑ю после маркера
+            i += 1
+            result.append(lines[i])  # оставляем 3‑ю после маркера
+            i += 1  # теперь на 4‑й строке (её пропускаем)
+        i += 1
+
+    path.write_text("".join(result), encoding="utf-8")
+
 def show_finger_stats(analyzer,
                       layout_name: str = "qwer",
-                      output_file: Optional[str] = None) -> DataFrame:
+                      output_file: Optional[str] = "/app/data_output/output.txt") -> DataFrame:
     """
     Формирует и красиво выводит статистику по пальцам с помощью pandas и rich.
 
@@ -81,5 +107,7 @@ def show_finger_stats(analyzer,
 
     if output_file and console.file:
         console.file.close()
+
+    process_file(Path(output_file))
 
     return df

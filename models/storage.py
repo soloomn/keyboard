@@ -45,7 +45,7 @@ class RedisStorage:
         """
         self.client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
 
-    def save(self, key: str, data: dict | str | int):
+    def save(self, key: str, data: dict | str | int | list[str]):
         """
         Сохраняет данные в Redis (аналог записи в JSON-файл).
 
@@ -64,7 +64,7 @@ class RedisStorage:
         self.client.set(key, json.dumps(data, ensure_ascii=False, indent=2))
         print(f"[Redis] saved key={key}")
 
-    def load(self, key: str) -> dict | str | int | None:
+    def load(self, key: str) -> dict | str | int | list[str] | None:
         """
         Загружает данные из Redis (аналог чтения JSON-файла).
 

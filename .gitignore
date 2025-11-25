@@ -2,6 +2,7 @@ docs/
 __pycache__/
 .pytest_cache/
 data_output/
+uploads/
 .DS_Store
 *.pyc
 *.png
