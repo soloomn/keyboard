@@ -49,11 +49,13 @@ if __name__ == "__main__":
 
     print("Анализируем 'Войну и мир' по частям...")
 
+    filename = ["voina-i-mir.txt", "1grams-3.txt"]
+
     use_rabbit = True
     if use_rabbit:
-        analyzer = analyze_large_file_rabbit("voina-i-mir.txt")
+        analyzer = analyze_large_file_rabbit(filename)
     else:
-        analyzer = analyze_large_file_parallel_merge("voina-i-mir.txt", chunk_size=50000)
+        analyzer = analyze_large_file_parallel_merge(filename, chunk_size=50000)
 
 
 
@@ -67,8 +69,7 @@ if __name__ == "__main__":
 
     layout_name = "qwer"
 
-    print(f"\nСтатистика по выбранной раскладке {layout_name}:")
-    df = show_finger_stats(analyzer, layout_name)
+    df = show_finger_stats(analyzer, layout_name, output_file="/app/data_output/output.txt")
 
     # Анализ последовательностей
     print("\nАнализ пальцевых переборов...")

@@ -26,7 +26,8 @@
 """
 
 import re
-from typing import Any
+from typing import Any, TextIO, Optional
+from pathlib import Path
 
 from models import KeyboardLayout
 
@@ -42,7 +43,7 @@ class LayoutAnalyzer:
         layouts (dict): Словарь с экземплярами раскладок для анализа
     """
 
-    def __init__(self):
+    def __init__(self, output_file: Optional[str] = None):
         """
         Инициализация анализатора с набором раскладок для сравнения.
 
@@ -61,6 +62,25 @@ class LayoutAnalyzer:
             'rusphone': KeyboardLayout("русфон", 'rusphone'),
             'zubachew': KeyboardLayout("зубачев", 'zubachew')
         }
+
+        self.output_file = Path("/app/data_output/output.txt")
+        # Очищаем файл при инициализации
+        if self.output_file:
+            self.output_file.write_text("", encoding='utf-8')
+
+    def _print(self, text: str = "", end: str = "\n") -> None:
+        """
+        Внутренняя функция для вывода в console и файл одновременно.
+
+        Args:
+            text: Текст для вывода
+            end: Символ конца строки
+        """
+        print(text, end=end)  # В консоль
+
+        if self.output_file:  # В файл
+            with open(self.output_file, 'a', encoding='utf-8') as f:
+                f.write(text + end)
 
     @property
     def reverser(self) -> dict[Any, Any]:
@@ -276,9 +296,9 @@ class LayoutAnalyzer:
         ВЫХОД:
             None (результаты выводятся в консоль)
         """
-        print("\n" + "=" * 100)
-        print("ФИНАЛЬНЫЕ РЕЗУЛЬТАТЫ НАГРУЗКИ НА ПАЛЬЦЫ")
-        print("=" * 100)
+        self._print("\n" + "=" * 100)
+        self._print("ФИНАЛЬНЫЕ РЕЗУЛЬТАТЫ НАГРУЗКИ НА ПАЛЬЦЫ")
+        self._print("=" * 100)
 
         # Заголовок таблицы
         header = f'\n{"":<15}'
@@ -310,7 +330,7 @@ class LayoutAnalyzer:
             best_layouts = [layout.name for layout, val in zip(self.layouts.values(), values) if val == best_val]
             best = best_layouts[0] if best_layouts else "Нет"
             row += f" | {best:<10}"
-            print(row)
+            self._print(row)
 
         # Общие результаты
         print("-" * 80)
@@ -322,14 +342,14 @@ class LayoutAnalyzer:
         for i, layout in enumerate(self.layouts.values()):
             total_row += f" | {totals[i]:<15}"
         total_row += f" | {best_total_name:<10}"
-        print(total_row)
+        self._print(total_row)
 
         # Эффективность
         eff_row = f"{'Эффективность':<15}"
         for total in totals:
             eff_row += f" | {'Лучшая' if total == best_total else 'Хуже':<15}"
         eff_row += f" | {best_total_name:<10}"
-        print(eff_row)
+        self._print(eff_row)
 
     def print_press_statistics(self) -> None:
         """
@@ -340,9 +360,9 @@ class LayoutAnalyzer:
         ВЫХОД:
             None (результаты выводятся в консоль)
         """
-        print("\n" + "=" * 100)
-        print("СТАТИСТИКА НАЖАТИЙ И ПЕРЕХОДОВ МЕЖДУ РУКАМИ")
-        print("=" * 100)
+        self._print("\n" + "=" * 100)
+        self._print("СТАТИСТИКА НАЖАТИЙ")
+        self._print("=" * 100)
 
         # Статистика нажатий по пальцам
         print("\nКОЛИЧЕСТВО НАЖАТИЙ НА КАЖДЫЙ ПАЛЕЦ:")
@@ -377,7 +397,7 @@ class LayoutAnalyzer:
             best_layouts = [layout.name for layout, val in zip(self.layouts.values(), values) if val == best_val]
             best = best_layouts[0] if best_layouts else "Нет"
             row += f" | {best:<10}"
-            print(row)
+            self._print(row)
 
         # Общее количество нажатий
         print("-" * 80)
@@ -389,14 +409,16 @@ class LayoutAnalyzer:
         for i, layout in enumerate(self.layouts.values()):
             total_row += f" | {total_presses[i]:<15}"
         total_row += f" | {best_presses_name:<10}"
-        print(total_row)
+        self._print(total_row)
 
         # Статистика переходов между руками
-        print("\nПЕРЕХОДЫ МЕЖДУ РУКАМИ:")
-        print("-" * 80)
+        self._print("\n" + "=" * 100)
+        self._print("СТАТИСТИКА ПЕРЕХОДОВ")
+        self._print("=" * 100)
+
 
         header = f'{"Раскладка":<15} | {"Переходы":<15} | {"% от нажатий":<15}'
-        print(header)
+        print('\n'+header)
         print("-" * 80)
 
         for layout_name, layout in self.layouts.items():
@@ -404,7 +426,7 @@ class LayoutAnalyzer:
             total_presses = layout.get_total_presses  # Убрал скобки здесь
             percentage = (hand_changes / total_presses * 100) if total_presses > 0 else 0
 
-            print(f"{layout.name:<15} | {hand_changes:<15} | {percentage:<15.1f}%")
+            self._print(f"{layout.name:<15} | {hand_changes:<15} | {percentage:<15.1f}%")
 
         # Определение лучшей раскладки по переходам
         best_transitions = min(self.layouts.values(), key=lambda x: x.get_hand_changes)
@@ -436,9 +458,9 @@ class LayoutAnalyzer:
 
 
     def print_sequence_analysis(self) -> None:
-        print("\n" + "=" * 120)
-        print("АНАЛИЗ ПАЛЬЦЕВЫХ ПЕРЕБОРОВ В РАСКЛАДКАХ")
-        print("=" * 120)
+        self._print("\n" + "=" * 120)
+        self._print("АНАЛИЗ ПАЛЬЦЕВЫХ ПЕРЕБОРОВ В РАСКЛАДКАХ")
+        self._print("=" * 120)
 
         headers = ["Раскладка", "2-граммы", "3-граммы", "4-граммы", "УдП", "ЧудП", "НудП", "Однорукие", "Двурукие"]
         print(
@@ -489,7 +511,7 @@ class LayoutAnalyzer:
                     layout.fourgram["two_handed_4gram"]
             )
 
-            print(
+            self._print(
                 f"{layout.name:<12} | {total_2gram:<10} | {total_3gram:<10} | {total_4gram:<10} | "
                 f"{total_udp:<6} | {total_chudp:<6} | {total_nudp:<6} | {total_one_handed:<10} | {total_two_handed:<10}"
             )
@@ -508,9 +530,9 @@ class LayoutAnalyzer:
             - Выводит рейтинг раскладок по эффективности
             - Определяет лучшие раскладки по различным категориям
         """
-        print("\n" + "=" * 100)
-        print("СРАВНИТЕЛЬНЫЙ АНАЛИЗ РАСКЛАДОК")
-        print("=" * 100)
+        self._print("\n" + "=" * 100)
+        self._print("СРАВНИТЕЛЬНЫЙ АНАЛИЗ РАСКЛАДОК")
+        self._print("=" * 100)
 
         metrics = []
         for layout_name, layout in self.layouts.items():
@@ -530,20 +552,24 @@ class LayoutAnalyzer:
         print("-" * 90)
 
         for i, metric in enumerate(metrics, 1):
-            print(f"{i:<10} | {metric['name']:<15} | {metric['total_load']:<15} | "
+            self._print(f"{i:<10} | {metric['name']:<15} | {metric['total_load']:<15} | "
                   f"{metric['total_presses']:<10} | {metric['hand_changes']:<10} | "
                   f"{metric['load_per_press']:<15.2f}")
 
         # Также покажем лучшую раскладку по каждому показателю
-        print("\nЛУЧШИЕ РАСКЛАДКИ ПО КАТЕГОРИЯМ:")
-        print("-" * 50)
+        self._print("\n")
+        self._print("=" * 100)
+        self._print("ЛУЧШИЕ РАСКЛАДКИ ПО КАТЕГОРИЯМ")
+        self._print("=" * 100)
+        self._print("\n")
 
         best_by_load = min(metrics, key=lambda x: x['total_load'])
         best_by_presses = min(metrics, key=lambda x: x['total_presses'])
         best_by_changes = min(metrics, key=lambda x: x['hand_changes'])
         best_by_efficiency = min(metrics, key=lambda x: x['load_per_press'])
 
-        print(f"По минимальной нагрузке: {best_by_load['name']} ({best_by_load['total_load']})")
-        print(f"По минимальным нажатиям: {best_by_presses['name']} ({best_by_presses['total_presses']})")
-        print(f"По минимальным переходам: {best_by_changes['name']} ({best_by_changes['hand_changes']})")
-        print(f"По эффективности: {best_by_efficiency['name']} ({best_by_efficiency['load_per_press']:.2f})")
+        self._print(f"По минимальной нагрузке: {best_by_load['name']} ({best_by_load['total_load']})")
+        self._print(f"По минимальным нажатиям: {best_by_presses['name']} ({best_by_presses['total_presses']})")
+        self._print(f"По минимальным переходам: {best_by_changes['name']} ({best_by_changes['hand_changes']})")
+        self._print(f"По эффективности: {best_by_efficiency['name']} ({best_by_efficiency['load_per_press']:.2f})")
+        self._print('\n')

@@ -535,7 +535,6 @@ class KeyboardLayout:
         """
         return self.hand_changes
 
-
     def add_sequence_result(self, sequence: str) -> None:
         """Накопление статистики по одной последовательности."""
         result = self.analyze_finger_sequence(sequence)
