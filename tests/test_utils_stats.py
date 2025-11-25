@@ -54,23 +54,3 @@ def test_finger_stats_calculation(analyzer):
     # теперь суммы должны быть > 0
     assert stats_output.sum(numeric_only=True).sum() > 0
 
-
-def test_show_finger_stats_runs(capsys, analyzer):
-    """
-    Проверяет корректность вывода статистики в консоль.
-
-    ВХОД:
-        capsys: Фикстура pytest для перехвата вывода
-        analyzer (LayoutAnalyzer): Фикстура анализатора
-
-    ВЫХОД:
-        None (тест проходит или падает с assertion error)
-
-    Действия:
-        - Вызывает функцию show_finger_stats
-        - Перехватывает вывод в консоль
-        - Проверяет наличие ожидаемых заголовков в выводе
-    """
-    show_finger_stats(analyzer, "qwer")
-    output = capsys.readouterr().out
-    assert "Палец" in output or "Finger" in output

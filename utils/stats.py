@@ -49,7 +49,7 @@ def process_file(path: Path):
 
 def show_finger_stats(analyzer,
                       layout_name: str = "qwer",
-                      output_file: Optional[str] = None) -> DataFrame:
+                      output_file: Optional[str] = "/app/data_output/output.txt") -> DataFrame:
     """
     Формирует и красиво выводит статистику по пальцам с помощью pandas и rich.
 
