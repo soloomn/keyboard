@@ -21,10 +21,11 @@ import pika
 import time
 from models import RedisStorage, LayoutAnalyzer
 from utils import merge_block_data
+from models import FileBlockProvider, MultiFileBlockProvider
 
 storage = RedisStorage()
 
-def send_blocks_to_workers(filename: str, chunk_size: int = 50000):
+def send_blocks_to_workers(filename: str | list[str], chunk_size: int = 50000):
     """
     Разбивает текст на блоки и отправляет их в очередь RabbitMQ для обработки.
 
@@ -36,19 +37,14 @@ def send_blocks_to_workers(filename: str, chunk_size: int = 50000):
         connection: Объект соединения с RabbitMQ для отслеживания статуса
     """
     # Разбиваем текст на блоки
-    blocks = []
-    buffer = []
-    buffer_len = 0
-    with open(filename, 'r', encoding='utf-8') as f:
-        for line in f:
-            buffer.append(line)
-            buffer_len += len(line)
-            if buffer_len >= chunk_size:
-                blocks.append(''.join(buffer))
-                buffer.clear()
-                buffer_len = 0
-        if buffer:
-            blocks.append(''.join(buffer))
+    # Получаем блоки через провайдер
+    # выбираем провайдер
+    if isinstance(filename, list):
+        block_provider = MultiFileBlockProvider(filename, chunk_size=chunk_size)
+    else:
+        block_provider = FileBlockProvider(filename, chunk_size=chunk_size)
+
+    blocks = list(block_provider.iter_blocks())
 
     storage.save("blocks_len", len(blocks))
 
@@ -71,14 +67,14 @@ def send_blocks_to_workers(filename: str, chunk_size: int = 50000):
 
     print(f"✓ Отправлено {len(blocks)} блоков в обработку")
 
-    last_block_text = blocks[-1] if blocks else ''.join(buffer)
+    last_block_text = blocks[-1] if blocks else ''
 
     storage.save("last_block", last_block_text)
 
     return connection
 
 
-def wait_for_completion(connection, timeout=300):
+def wait_for_completion(connection, timeout=1000):
     """
     Ожидает завершения обработки всех блоков через RabbitMQ results очередь.
 
@@ -127,7 +123,7 @@ def wait_for_completion(connection, timeout=300):
     print("Все блоки обработаны!")
 
 
-def analyze_large_file_rabbit(filename: str):
+def analyze_large_file_rabbit(filename: str | list[str]):
     """
     Основная функция для анализа больших файлов с использованием RabbitMQ.
 
