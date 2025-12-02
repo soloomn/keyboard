@@ -77,19 +77,13 @@ def merge_block_data(main_analyzer: LayoutAnalyzer, block_data: dict):
         layout.twogram["udp_2gram"] += stats["udp_2gram"]
         layout.twogram["chudp_2gram"] += stats["chudp_2gram"]
         layout.twogram["nudp_2gram"] += stats["nudp_2gram"]
-        layout.twogram["one_handed_2gram"] += stats["one_handed_2gram"]
-        layout.twogram["two_handed_2gram"] += stats["two_handed_2gram"]
 
         layout.threegram["udp_3gram"] += stats["udp_3gram"]
         layout.threegram["chudp_3gram"] += stats["chudp_3gram"]
         layout.threegram["nudp_3gram"] += stats["nudp_3gram"]
-        layout.threegram["one_handed_3gram"] += stats["one_handed_3gram"]
-        layout.threegram["two_handed_3gram"] += stats["two_handed_3gram"]
 
         layout.fourgram["udp_4gram"] += stats["udp_4gram"]
         layout.fourgram["chudp_4gram"] += stats["chudp_4gram"]
         layout.fourgram["nudp_4gram"] += stats["nudp_4gram"]
-        layout.fourgram["one_handed_4gram"] += stats["one_handed_4gram"]
-        layout.fourgram["two_handed_4gram"] += stats["two_handed_4gram"]
 
         layout.total_sequences += stats["total_sequences"]
