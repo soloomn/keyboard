@@ -52,15 +52,19 @@ if __name__ == "__main__":
     CONTROL_KEY = "control:start_analysis"
     FILENAMES_KEY = "control:filenames"
     JOB_ID_KEY = "control:current_job_id"
+    DATA_KEY = "control:metrics"
 
     print("Ожидаем разрешения на запуск анализа от FastAPI (Redis флаг)...")
 
     while True:
         val = storage.load(CONTROL_KEY)
         if val == "ready":
+            metrics = storage.load(FILENAMES_KEY)
             print("Получен сигнал 'ready' — запускаем анализ.")
             break
         time.sleep(1)
+
+    print(metrics)
 
     # сразу сбрасываем флаг, чтобы не стартовать повторно
     storage.save(CONTROL_KEY, "blocked")
@@ -70,8 +74,6 @@ if __name__ == "__main__":
     filenames = storage.load(FILENAMES_KEY)
 
     print(f"Анализируем {filenames} по частям...")
-
-    filename = ["voina-i-mir.txt", "1grams-3.txt"]
 
     if job_id:
         storage.save(f"job:{job_id}:status", "running")
