@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, BackgroundTasks, Body
+from fastapi import FastAPI, UploadFile, File, BackgroundTasks, Request
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from typing import List
@@ -118,8 +118,11 @@ async def start_analysis(background_tasks: BackgroundTasks,
     return {"job_id": job_id, "status": "queued"}
 
 @app.post("/metrics")
-async def metrics(data: str):
-    if not data:
+async def metrics(request: Request,
+                  background_tasks: BackgroundTasks):
+    raw = await request.body()
+    data = raw.decode("utf-8") if raw is not None else ""
+    if not data.strip():
         return JSONResponse({"error": "no data uploaded"}, status_code=400)
 
     storage.save(DATA_KEY, data)

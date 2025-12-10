@@ -452,7 +452,10 @@ const svgDark = {
       try {
         const resp = await fetch ('/metrics', {
           method: 'POST',
-          body: selLabels.toString()
+          headers: {
+              'Content-Type': 'text/plain'
+          },
+          body: selLabels
         });
         const data = await resp.json();
       } catch (err) {

@@ -18,6 +18,8 @@
 - Сохранение результатов в Redis и вывод статистики
 """
 import time
+import os
+import re
 from utils import show_finger_stats, analyze_large_file_rabbit
 from models import RedisStorage
 
@@ -49,22 +51,23 @@ if __name__ == "__main__":
     """
     # Основной анализ
 
-    CONTROL_KEY = "control:start_analysis"
-    FILENAMES_KEY = "control:filenames"
-    JOB_ID_KEY = "control:current_job_id"
-    DATA_KEY = "control:metrics"
+    CONTROL_KEY = os.getenv("CONTROL_KEY")
+    FILENAMES_KEY = os.getenv("FILENAMES_KEY")
+    JOB_ID_KEY = os.getenv("JOB_ID_KEY")
+    DATA_KEY = os.getenv("DATA_KEY")
 
     print("Ожидаем разрешения на запуск анализа от FastAPI (Redis флаг)...")
 
     while True:
         val = storage.load(CONTROL_KEY)
         if val == "ready":
-            metrics = storage.load(FILENAMES_KEY)
-            print("Получен сигнал 'ready' — запускаем анализ.")
+            metrics = storage.load(DATA_KEY)
+            print(f"Получен сигнал {CONTROL_KEY} = {val} — запускаем анализ.")
+            print(f"выбраны метрики {metrics}, выполняется подготовка микросервисов.")
             break
         time.sleep(1)
 
-    print(metrics)
+    metrics = (re.sub(r'[,]]', '', metrics)).split(' ')
 
     # сразу сбрасываем флаг, чтобы не стартовать повторно
     storage.save(CONTROL_KEY, "blocked")
@@ -79,25 +82,26 @@ if __name__ == "__main__":
         storage.save(f"job:{job_id}:status", "running")
 
     try:
-
         # Запускаем анализ
         analyzer = analyze_large_file_rabbit(filenames)
 
-        print("Детальный анализ перемещений...")
+        if 'Статические' in metrics:
+            print("Детальный анализ перемещений...")
 
-        analyzer.print_final_results()
+            analyzer.print_final_results()
 
-        analyzer.print_press_statistics()
+            analyzer.print_press_statistics()
 
-        analyzer.print_comparative_analysis()
+            analyzer.print_comparative_analysis()
 
-        layout_name = "qwer"
+            layout_name = "qwer"
 
-        df = show_finger_stats(analyzer, layout_name, output_file="/app/data_output/output.txt")
+            df = show_finger_stats(analyzer, layout_name, output_file="/app/data_output/output.txt")
+        if 'Динамические' in metrics:
+            # Анализ последовательностей
+            print("\nАнализ пальцевых переборов...")
 
-        # Анализ последовательностей
-        print("\nАнализ пальцевых переборов...")
-        analyzer.print_sequence_analysis()
+            analyzer.print_sequence_analysis()
 
         data_fingers = analyzer.reverser
         data_sequences = analyzer.stats_reverser
@@ -117,6 +121,3 @@ if __name__ == "__main__":
         # ставим статус "error"
         if job_id:
             storage.save(f"job:{job_id}:status", f"error:{e}")
-
-
-
