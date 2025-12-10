@@ -44,6 +44,7 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+    restart: always
 
   worker:
     build:
@@ -62,6 +63,7 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+    restart: always
 
   visualizer:
     build:
@@ -78,6 +80,7 @@ services:
     depends_on:
       analyzer:
         condition: service_completed_successfully
+    restart: always
 
   web:
     build:

@@ -128,12 +128,6 @@ class LayoutAnalyzer:
                 "udp_4gram": layout.fourgram["udp_4gram"],
                 "chudp_4gram": layout.fourgram["chudp_4gram"],
                 "nudp_4gram": layout.fourgram["nudp_4gram"],
-                "one_handed_2gram": layout.twogram["one_handed_2gram"],
-                "one_handed_3gram": layout.threegram["one_handed_3gram"],
-                "one_handed_4gram": layout.fourgram["one_handed_4gram"],
-                "two_handed_2gram": layout.twogram["two_handed_2gram"],
-                "two_handed_3gram": layout.threegram["two_handed_3gram"],
-                "two_handed_4gram": layout.fourgram["two_handed_4gram"],
                 "total_sequences": layout.total_sequences,
             }
         return stats
@@ -456,64 +450,34 @@ class LayoutAnalyzer:
                         continue
                     layout.add_sequence_result(sequence)
 
-
     def print_sequence_analysis(self) -> None:
-        self._print("\n" + "=" * 120)
+        self._print("\n" + "=" * 100)
         self._print("АНАЛИЗ ПАЛЬЦЕВЫХ ПЕРЕБОРОВ В РАСКЛАДКАХ")
-        self._print("=" * 120)
+        self._print("=" * 100)
 
-        headers = ["Раскладка", "2-граммы", "3-граммы", "4-граммы", "УдП", "ЧудП", "НудП", "Однорукие", "Двурукие"]
+        headers = ["Раскладка", "2г (однор)", "3г (однор)", "4г (однор)", "УдП", "ЧудП", "НудП"]
         print(
-            f"{headers[0]:<12} | {headers[1]:<10} | {headers[2]:<10} | {headers[3]:<10} | "f"{headers[4]:<6} | {headers[5]:<6} | {headers[6]:<6} | {headers[7]:<10} | {headers[8]:<10}")
-        print("-" * 120)
+            f"{headers[0]:<12} | {headers[1]:<12} | {headers[2]:<12} | {headers[3]:<12} | "
+            f"{headers[4]:<8} | {headers[5]:<8} | {headers[6]:<8}")
+        print("-" * 100)
 
         for layout in self.layouts.values():
-            total_2gram = (
-                    layout.twogram["udp_2gram"] +
-                    layout.twogram["chudp_2gram"] +
-                    layout.twogram["nudp_2gram"]
-            )
-            total_3gram = (
-                    layout.threegram["udp_3gram"] +
-                    layout.threegram["chudp_3gram"] +
-                    layout.threegram["nudp_3gram"]
-            )
-            total_4gram = (
-                    layout.fourgram["udp_4gram"] +
-                    layout.fourgram["chudp_4gram"] +
-                    layout.fourgram["nudp_4gram"]
-            )
+            # Только одноручные последовательности (исключаем НУДП - разноручные)
+            onehand_2gram = layout.twogram["udp_2gram"] + layout.twogram["chudp_2gram"]
+            onehand_3gram = layout.threegram["udp_3gram"] + layout.threegram["chudp_3gram"]
+            onehand_4gram = layout.fourgram["udp_4gram"] + layout.fourgram["chudp_4gram"]
 
-            total_udp = (
-                    layout.twogram["udp_2gram"] +
-                    layout.threegram["udp_3gram"] +
-                    layout.fourgram["udp_4gram"]
-            )
-            total_chudp = (
-                    layout.twogram["chudp_2gram"] +
-                    layout.threegram["chudp_3gram"] +
-                    layout.fourgram["chudp_4gram"]
-            )
-            total_nudp = (
-                    layout.twogram["nudp_2gram"] +
-                    layout.threegram["nudp_3gram"] +
-                    layout.fourgram["nudp_4gram"]
-            )
+            # Качество одноручных
+            total_udp = layout.twogram["udp_2gram"] + layout.threegram["udp_3gram"] + layout.fourgram["udp_4gram"]
+            total_chudp = layout.twogram["chudp_2gram"] + layout.threegram["chudp_3gram"] + layout.fourgram[
+                "chudp_4gram"]
 
-            total_one_handed = (
-                    layout.twogram["one_handed_2gram"] +
-                    layout.threegram["one_handed_3gram"] +
-                    layout.fourgram["one_handed_4gram"]
-            )
-            total_two_handed = (
-                    layout.twogram["two_handed_2gram"] +
-                    layout.threegram["two_handed_3gram"] +
-                    layout.fourgram["two_handed_4gram"]
-            )
+            # Разноручные (НУДП)
+            total_nudp = layout.twogram["nudp_2gram"] + layout.threegram["nudp_3gram"] + layout.fourgram["nudp_4gram"]
 
             self._print(
-                f"{layout.name:<12} | {total_2gram:<10} | {total_3gram:<10} | {total_4gram:<10} | "
-                f"{total_udp:<6} | {total_chudp:<6} | {total_nudp:<6} | {total_one_handed:<10} | {total_two_handed:<10}"
+                f"{layout.name:<12} | {onehand_2gram:<12} | {onehand_3gram:<12} | {onehand_4gram:<12} | "
+                f"{total_udp:<8} | {total_chudp:<8} | {total_nudp:<8}"
             )
 
     def print_comparative_analysis(self) -> None:

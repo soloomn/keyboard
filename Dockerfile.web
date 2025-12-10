@@ -5,6 +5,13 @@ WORKDIR /app
 COPY . /app
 
 ENV PYTHONPATH=/app
+ENV STATIC_DIR=web/static
+ENV CSS_DIR=web/static/css
+ENV JS_DIR=web/static/js
 
-# uvicorn уже должен быть в зависимостях через poetry (если нет — добавь в pyproject.toml)
+ENV CONTROL_KEY=control:start_analysis
+ENV FILENAMES_KEY=control:filenames
+ENV DATA_KEY=control:metrics
+
+# uvicorn уже должен быть в зависимостях через poetry
 CMD ["uvicorn", "web.api:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -7,5 +7,7 @@ COPY . /app
 
 ENV PYTHONPATH=/app
 
+ENV DATA_KEY=control:metrics
+
 # Запуск скрипта воркера
 CMD ["python", "models/worker_rabbit.py"]

@@ -153,11 +153,11 @@ def analyze_large_file_rabbit(filename: str | list[str]):
         merge_block_data(analyzer, block_data)
 
     # Анализ перемещений для последнего блока
-    last_block_text = storage.load("last_block")
-    if last_block_text:
-        movements_info = analyzer.analyze_movement_details(last_block_text)
-        analyzer.print_detailed_analysis(movements_info)
-    else:
-        print("Не удалось получить последний блок для анализа перемещений")
+    #last_block_text = storage.load("last_block")
+    #if last_block_text:
+        #movements_info = analyzer.analyze_movement_details(last_block_text)
+        #analyzer.print_detailed_analysis(movements_info)
+    #else:
+        #print("Не удалось получить последний блок для анализа перемещений")
 
     return analyzer

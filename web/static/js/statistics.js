@@ -749,7 +749,7 @@ const svgDark = {
         table.className = 'stat-table';
 
         const headerRow = document.createElement('tr');
-        const headers = ['Раскладка', '2-граммы', '3-граммы', '4-граммы', 'УдП', 'ЧудП', 'НудП', 'Однорукие', 'Двурукие'];
+        const headers = ['Раскладка', '2-граммы (однор)', '3-граммы (однор)', '4-граммы (однор)', 'УдП', 'ЧудП', 'НудП'];
         headers.forEach(headerText => {
           const th = document.createElement('th');
           const idx = headers.indexOf(headerText);

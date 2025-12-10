@@ -6,4 +6,9 @@ COPY . /app
 
 ENV PYTHONPATH=/app
 
+ENV CONTROL_KEY=control:start_analysis
+ENV FILENAMES_KEY=control:filenames
+ENV JOB_ID_KEY=control:current_job_id
+ENV DATA_KEY=control:metrics
+
 CMD ["python", "main.py"]

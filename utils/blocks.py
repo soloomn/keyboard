@@ -6,6 +6,12 @@
 """
 
 from models import LayoutAnalyzer
+from models import RedisStorage
+import os
+import re
+
+storage = RedisStorage()
+DATA_KEY = os.getenv("DATA_KEY")
 
 def process_block_return(block_text: str) -> dict:
     """
@@ -17,17 +23,40 @@ def process_block_return(block_text: str) -> dict:
     ВЫХОД:
         dict: Словарь с данными нагрузки для всех раскладок в формате reverser
     """
+
     analyzer = LayoutAnalyzer()
-    analyzer.analyze_text(block_text)
-    analyzer.analyze_sequences(block_text)
+    metrics = (re.sub(r'[,]]', '', storage.load(DATA_KEY))).split(' ')
 
-    finger_data = analyzer.reverser
-    sequence_stats = analyzer.stats_reverser
+    if ('Статические' in metrics) and ('Динамические' in metrics):
+        analyzer.analyze_text(block_text)
+        analyzer.analyze_sequences(block_text)
 
-    result = {
-        'finger_data': finger_data,
-        'sequence_stats': sequence_stats
-    }
+        finger_data = analyzer.reverser
+        sequence_stats = analyzer.stats_reverser
+
+        result = {
+            'finger_data': finger_data,
+            'sequence_stats': sequence_stats
+        }
+    elif 'Статические' in metrics:
+        analyzer.analyze_text(block_text)
+
+        finger_data = analyzer.reverser
+
+        result = {
+            'finger_data': finger_data,
+        }
+    elif 'Динамические' in metrics:
+        analyzer.analyze_sequences(block_text)
+
+        sequence_stats = analyzer.stats_reverser
+
+        result = {
+            'sequence_stats': sequence_stats
+        }
+    else:
+        result = {}
+        raise Exception("Blocks Error не выбраны метрики или ошибка их получения")
 
     return result
 
@@ -41,55 +70,98 @@ def merge_block_data(main_analyzer: LayoutAnalyzer, block_data: dict):
 
     ВЫХОД: Нет (данные добавляются в основной анализатор)
     """
-    for layout_name, vals in block_data['finger_data'].items():
-        layout = main_analyzer.layouts[layout_name]
+    metrics = (re.sub(r'[,]]', '', storage.load(DATA_KEY))).split(' ')
+    if ('Статические' in metrics) and ('Динамические' in metrics):
+        for layout_name, vals in block_data['finger_data'].items():
+            layout = main_analyzer.layouts[layout_name]
 
-        # Суммируем нагрузку по пальцам
-        layout.counter_fingers['f1l'] += vals['left'][0]
-        layout.counter_fingers['f2l'] += vals['left'][1]
-        layout.counter_fingers['f3l'] += vals['left'][2]
-        layout.counter_fingers['f4l'] += vals['left'][3]
-        layout.counter_fingers['f5l'] += vals['left'][4]
+            # Суммируем нагрузку по пальцам
+            layout.counter_fingers['f1l'] += vals['left'][0]
+            layout.counter_fingers['f2l'] += vals['left'][1]
+            layout.counter_fingers['f3l'] += vals['left'][2]
+            layout.counter_fingers['f4l'] += vals['left'][3]
+            layout.counter_fingers['f5l'] += vals['left'][4]
 
-        layout.counter_fingers['f1r'] += vals['right'][0]
-        layout.counter_fingers['f2r'] += vals['right'][1]
-        layout.counter_fingers['f3r'] += vals['right'][2]
-        layout.counter_fingers['f4r'] += vals['right'][3]
-        layout.counter_fingers['f5r'] += vals['right'][4]
+            layout.counter_fingers['f1r'] += vals['right'][0]
+            layout.counter_fingers['f2r'] += vals['right'][1]
+            layout.counter_fingers['f3r'] += vals['right'][2]
+            layout.counter_fingers['f4r'] += vals['right'][3]
+            layout.counter_fingers['f5r'] += vals['right'][4]
 
-        layout.hand_changes += vals['two_handed']
+            layout.hand_changes += vals['two_handed']
 
-        layout.key_presses['f1l'] += vals['left_press'][0]
-        layout.key_presses['f2l'] += vals['left_press'][1]
-        layout.key_presses['f3l'] += vals['left_press'][2]
-        layout.key_presses['f4l'] += vals['left_press'][3]
-        layout.key_presses['f5l'] += vals['left_press'][4]
+            layout.key_presses['f1l'] += vals['left_press'][0]
+            layout.key_presses['f2l'] += vals['left_press'][1]
+            layout.key_presses['f3l'] += vals['left_press'][2]
+            layout.key_presses['f4l'] += vals['left_press'][3]
+            layout.key_presses['f5l'] += vals['left_press'][4]
 
-        layout.key_presses['f1r'] += vals['right_press'][0]
-        layout.key_presses['f2r'] += vals['right_press'][1]
-        layout.key_presses['f3r'] += vals['right_press'][2]
-        layout.key_presses['f4r'] += vals['right_press'][3]
-        layout.key_presses['f5r'] += vals['right_press'][4]
+            layout.key_presses['f1r'] += vals['right_press'][0]
+            layout.key_presses['f2r'] += vals['right_press'][1]
+            layout.key_presses['f3r'] += vals['right_press'][2]
+            layout.key_presses['f4r'] += vals['right_press'][3]
+            layout.key_presses['f5r'] += vals['right_press'][4]
 
-    for layout_name, stats in block_data["sequence_stats"].items():
-        layout = main_analyzer.layouts[layout_name]
+        for layout_name, stats in block_data["sequence_stats"].items():
+            layout = main_analyzer.layouts[layout_name]
 
-        layout.twogram["udp_2gram"] += stats["udp_2gram"]
-        layout.twogram["chudp_2gram"] += stats["chudp_2gram"]
-        layout.twogram["nudp_2gram"] += stats["nudp_2gram"]
-        layout.twogram["one_handed_2gram"] += stats["one_handed_2gram"]
-        layout.twogram["two_handed_2gram"] += stats["two_handed_2gram"]
+            layout.twogram["udp_2gram"] += stats["udp_2gram"]
+            layout.twogram["chudp_2gram"] += stats["chudp_2gram"]
+            layout.twogram["nudp_2gram"] += stats["nudp_2gram"]
 
-        layout.threegram["udp_3gram"] += stats["udp_3gram"]
-        layout.threegram["chudp_3gram"] += stats["chudp_3gram"]
-        layout.threegram["nudp_3gram"] += stats["nudp_3gram"]
-        layout.threegram["one_handed_3gram"] += stats["one_handed_3gram"]
-        layout.threegram["two_handed_3gram"] += stats["two_handed_3gram"]
+            layout.threegram["udp_3gram"] += stats["udp_3gram"]
+            layout.threegram["chudp_3gram"] += stats["chudp_3gram"]
+            layout.threegram["nudp_3gram"] += stats["nudp_3gram"]
 
-        layout.fourgram["udp_4gram"] += stats["udp_4gram"]
-        layout.fourgram["chudp_4gram"] += stats["chudp_4gram"]
-        layout.fourgram["nudp_4gram"] += stats["nudp_4gram"]
-        layout.fourgram["one_handed_4gram"] += stats["one_handed_4gram"]
-        layout.fourgram["two_handed_4gram"] += stats["two_handed_4gram"]
+            layout.fourgram["udp_4gram"] += stats["udp_4gram"]
+            layout.fourgram["chudp_4gram"] += stats["chudp_4gram"]
+            layout.fourgram["nudp_4gram"] += stats["nudp_4gram"]
 
-        layout.total_sequences += stats["total_sequences"]
+            layout.total_sequences += stats["total_sequences"]
+    elif 'Статические' in metrics:
+        for layout_name, vals in block_data['finger_data'].items():
+            layout = main_analyzer.layouts[layout_name]
+
+            # Суммируем нагрузку по пальцам
+            layout.counter_fingers['f1l'] += vals['left'][0]
+            layout.counter_fingers['f2l'] += vals['left'][1]
+            layout.counter_fingers['f3l'] += vals['left'][2]
+            layout.counter_fingers['f4l'] += vals['left'][3]
+            layout.counter_fingers['f5l'] += vals['left'][4]
+
+            layout.counter_fingers['f1r'] += vals['right'][0]
+            layout.counter_fingers['f2r'] += vals['right'][1]
+            layout.counter_fingers['f3r'] += vals['right'][2]
+            layout.counter_fingers['f4r'] += vals['right'][3]
+            layout.counter_fingers['f5r'] += vals['right'][4]
+
+            layout.hand_changes += vals['two_handed']
+
+            layout.key_presses['f1l'] += vals['left_press'][0]
+            layout.key_presses['f2l'] += vals['left_press'][1]
+            layout.key_presses['f3l'] += vals['left_press'][2]
+            layout.key_presses['f4l'] += vals['left_press'][3]
+            layout.key_presses['f5l'] += vals['left_press'][4]
+
+            layout.key_presses['f1r'] += vals['right_press'][0]
+            layout.key_presses['f2r'] += vals['right_press'][1]
+            layout.key_presses['f3r'] += vals['right_press'][2]
+            layout.key_presses['f4r'] += vals['right_press'][3]
+            layout.key_presses['f5r'] += vals['right_press'][4]
+    elif 'Динамические' in metrics:
+        for layout_name, stats in block_data["sequence_stats"].items():
+            layout = main_analyzer.layouts[layout_name]
+
+            layout.twogram["udp_2gram"] += stats["udp_2gram"]
+            layout.twogram["chudp_2gram"] += stats["chudp_2gram"]
+            layout.twogram["nudp_2gram"] += stats["nudp_2gram"]
+
+            layout.threegram["udp_3gram"] += stats["udp_3gram"]
+            layout.threegram["chudp_3gram"] += stats["chudp_3gram"]
+            layout.threegram["nudp_3gram"] += stats["nudp_3gram"]
+
+            layout.fourgram["udp_4gram"] += stats["udp_4gram"]
+            layout.fourgram["chudp_4gram"] += stats["chudp_4gram"]
+            layout.fourgram["nudp_4gram"] += stats["nudp_4gram"]
+
+            layout.total_sequences += stats["total_sequences"]
