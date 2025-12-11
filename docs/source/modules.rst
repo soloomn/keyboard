@@ -1,15 +1,16 @@
-lab11
-=====
+Keyboard
+========
 
 .. toctree::
    :maxdepth: 4
 
-   readme
+   api
    blocks
    charts_bar
    charts_multi
    charts_pie
    charts_summary
+   data_providers
    dictr
    keyboard_analyzer
    keyboard_layout
@@ -21,6 +22,7 @@ lab11
    test_integration
    test_keyboard_analyzer
    test_keyboard_layout
+   test_keyboard_storage
    test_utils_stats
    visualmain
    worker_rabbit
