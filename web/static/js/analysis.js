@@ -419,7 +419,7 @@ const svgDark = {
       });
     }
 
-    // ========== НОВОЕ: отправка файлов на API ==========
+    // ========== отправка файлов на API ==========
     let jobId = null;
     const files = window.__kb_uploadedFiles || [];
 
@@ -444,6 +444,25 @@ const svgDark = {
     }
     // ====================================================
 
+    const metricLabels = { static: 'Статические', dynamic: 'Динамические', integration: 'Интеграционные' };
+    const selArr = (window.__kb_selectedMetrics && window.__kb_selectedMetrics.length) ? window.__kb_selectedMetrics : [];
+    const selLabels = (selArr && selArr.length) ? selArr.map(s => metricLabels[s] || s).join(', ') : 'ничего не выбрано';
+
+    if (selArr){
+      try {
+        const resp = await fetch ('/metrics', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'text/plain'
+          },
+          body: selLabels
+        });
+        const data = await resp.json();
+      } catch (err) {
+        console.error('Ошибка отправки метрик:', err);
+      }
+    }
+
     let analysisDone = false;
 
     const lines = [];
@@ -453,9 +472,7 @@ const svgDark = {
     if (jobId) {
       lines.push(`ID задачи: ${jobId}`);
     }
-    const metricLabels = { static: 'Статические', dynamic: 'Динамические', integration: 'Интеграционные' };
-    const selArr = (window.__kb_selectedMetrics && window.__kb_selectedMetrics.length) ? window.__kb_selectedMetrics : [];
-    const selLabels = (selArr && selArr.length) ? selArr.map(s => metricLabels[s] || s).join(', ') : 'ничего не выбрано';
+
     lines.push(`выбраны метрики (${selLabels})`);
 
     (async function runLoop() {

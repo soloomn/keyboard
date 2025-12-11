@@ -30,7 +30,7 @@ def send_blocks_to_workers(filename: str | list[str], chunk_size: int = 50000):
     Разбивает текст на блоки и отправляет их в очередь RabbitMQ для обработки.
 
     ВХОД:
-        filename (str): Путь к файлу для анализа
+        filename (str | list[str]): Путь к файлу или список путей к файлам для анализа
         chunk_size (int): Размер блока в символах (по умолчанию 50000)
 
     ВЫХОД:
@@ -80,7 +80,7 @@ def wait_for_completion(connection, timeout=1000):
 
     ВХОД:
         connection: Объект соединения с RabbitMQ
-        timeout (int): Максимальное время ожидания в секундах (по умолчанию 300)
+        timeout (int): Максимальное время ожидания в секундах (по умолчанию 1000)
 
     ВЫХОД:
         None
@@ -128,7 +128,7 @@ def analyze_large_file_rabbit(filename: str | list[str]):
     Основная функция для анализа больших файлов с использованием RabbitMQ.
 
     ВХОД:
-        filename (str): Путь к файлу для анализа
+        filename (str | list[str]): Путь к файлу или список путей к файлам для анализа
 
     ВЫХОД:
         LayoutAnalyzer: Объект анализатора с объединенными результатами
@@ -153,11 +153,11 @@ def analyze_large_file_rabbit(filename: str | list[str]):
         merge_block_data(analyzer, block_data)
 
     # Анализ перемещений для последнего блока
-    last_block_text = storage.load("last_block")
-    if last_block_text:
-        movements_info = analyzer.analyze_movement_details(last_block_text)
-        analyzer.print_detailed_analysis(movements_info)
-    else:
-        print("Не удалось получить последний блок для анализа перемещений")
+    #last_block_text = storage.load("last_block")
+    #if last_block_text:
+        #movements_info = analyzer.analyze_movement_details(last_block_text)
+        #analyzer.print_detailed_analysis(movements_info)
+    #else:
+        #print("Не удалось получить последний блок для анализа перемещений")
 
     return analyzer

@@ -1,9 +1,9 @@
-.. keyboard documentation master file, created by
-   sphinx-quickstart on Thu Nov  6 00:43:50 2025.
+.. Keyboard documentation master file, created by
+   sphinx-quickstart on Thu Dec 11 21:07:47 2025.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-keyboard documentation
+Keyboard documentation
 ======================
 
 Add your content using ``reStructuredText`` syntax. See the
@@ -16,3 +16,4 @@ documentation for details.
    	:caption: Содержание:cd
 
    	modules
+

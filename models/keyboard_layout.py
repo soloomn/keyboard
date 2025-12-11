@@ -65,18 +65,15 @@ class KeyboardLayout:
         self.last_hand = None  # 'left', 'right', или None
 
         self.twogram = {
-            'udp_2gram': 0, 'chudp_2gram': 0, 'nudp_2gram': 0,
-            'one_handed_2gram': 0, 'two_handed_2gram': 0
+            'udp_2gram': 0, 'chudp_2gram': 0, 'nudp_2gram': 0
         }
 
         self.threegram = {
-            'udp_3gram': 0, 'chudp_3gram': 0, 'nudp_3gram': 0,
-            'one_handed_3gram': 0, 'two_handed_3gram': 0
+            'udp_3gram': 0, 'chudp_3gram': 0, 'nudp_3gram': 0
         }
 
         self.fourgram = {
-            'udp_4gram': 0, 'chudp_4gram': 0, 'nudp_4gram': 0,
-            'one_handed_4gram': 0, 'two_handed_4gram': 0
+            'udp_4gram': 0, 'chudp_4gram': 0, 'nudp_4gram': 0
         }
 
         self.total_sequences = 0
@@ -536,47 +533,46 @@ class KeyboardLayout:
         return self.hand_changes
 
     def add_sequence_result(self, sequence: str) -> None:
-        """Накопление статистики по одной последовательности."""
+        """
+        Накопление статистики по одной последовательности.
+
+        ВХОД:
+            sequence (str): Последовательность символов (2-4 символа)
+
+        ВЫХОД:
+            None (результаты сохраняются во внутренних счетчиках N-грамм)
+        """
         result = self.analyze_finger_sequence(sequence)
         seq_len = len(sequence)
 
-        if result["type"] == "two_handed":
-            # Разноручные — только в двухрукие
-            if seq_len == 2:
-                self.twogram["two_handed_2gram"] += 1
-            elif seq_len == 3:
-                self.threegram["two_handed_3gram"] += 1
-            elif seq_len == 4:
-                self.fourgram["two_handed_4gram"] += 1
-            self.total_sequences += 1
-            return
-
-        # Одноручные
+        # Логика определения типа перебора
         comfort = result["comfort"]
-        if seq_len == 2:
-            self.twogram["one_handed_2gram"] += 1
-            if comfort == "udp":
-                self.twogram["udp_2gram"] += 1
-            elif comfort == "chudp":
-                self.twogram["chudp_2gram"] += 1
-            elif comfort == "nudp":
+
+        # Для разноручных последовательностей всегда НУДП
+        if comfort == "nudp" or result.get("type") == "two_handed":
+            if seq_len == 2:
                 self.twogram["nudp_2gram"] += 1
-        elif seq_len == 3:
-            self.threegram["one_handed_3gram"] += 1
-            if comfort == "udp":
-                self.threegram["udp_3gram"] += 1
-            elif comfort == "chudp":
-                self.threegram["chudp_3gram"] += 1
-            elif comfort == "nudp":
+            elif seq_len == 3:
                 self.threegram["nudp_3gram"] += 1
-        elif seq_len == 4:
-            self.fourgram["one_handed_4gram"] += 1
-            if comfort == "udp":
-                self.fourgram["udp_4gram"] += 1
-            elif comfort == "chudp":
-                self.fourgram["chudp_4gram"] += 1
-            elif comfort == "nudp":
+            elif seq_len == 4:
                 self.fourgram["nudp_4gram"] += 1
+        else:
+            # Одноручные последовательности
+            if seq_len == 2:
+                if comfort == "udp":
+                    self.twogram["udp_2gram"] += 1
+                elif comfort == "chudp":
+                    self.twogram["chudp_2gram"] += 1
+            elif seq_len == 3:
+                if comfort == "udp":
+                    self.threegram["udp_3gram"] += 1
+                elif comfort == "chudp":
+                    self.threegram["chudp_3gram"] += 1
+            elif seq_len == 4:
+                if comfort == "udp":
+                    self.fourgram["udp_4gram"] += 1
+                elif comfort == "chudp":
+                    self.fourgram["chudp_4gram"] += 1
 
         self.total_sequences += 1
 
@@ -589,58 +585,92 @@ class KeyboardLayout:
 
         ВЫХОД:
             dict: Результат анализа с типом перебора и удобством
+                  Формат:
+                  {
+                      "type": тип_последовательности ("2-gram", "3-gram", "4-gram"),
+                      "comfort": уровень_удобства ("udp", "chudp", "nudp"),
+                      "fingers": список_используемых_пальцев,
+                      "hand": рука_использования ("left" или "right"),
+                      "sequence": исходная_последовательность,
+                      "finger_values": числовые_значения_пальцев
+                  }
         """
         if len(sequence) < 2:
             return {"type": "short", "comfort": "N/A", "score": 0}
 
         fingers = []
-        columns = []
+        hands = []
 
-        # Получаем пальцы и колонки для каждого символа
+        # Получаем пальцы и руки для каждого символа
         for char in sequence:
             pos = self.get_coords(char)
             if not pos:
                 return {"type": "unknown", "comfort": "N/A", "score": 0}
             finger = self.get_finger_by_column(pos[1])
             fingers.append(finger)
-            columns.append(pos[1])
+            hands.append(self.get_hand_by_finger(finger))
 
-        # Определяем руку (все символы должны быть на одной руке)
-        hands = [self.get_hand_by_finger(f) for f in fingers]
+        # Проверяем, все ли символы на одной руке
         if len(set(hands)) != 1:
-            return {"type": "two_handed", "comfort": "mixed", "score": 0}
+            # Разноручная последовательность = НУДП
+            return {"type": "two_handed", "comfort": "nudp", "score": -1}
 
-        # Анализируем направление перебора
-        direction_changes = 0
-        comfort_score = 0
+        # Определяем порядок пальцев (от мизинца к указательному)
+        # Правильный порядок пальцев:
+        # Для левой руки: мизинец (f5l) -> безымянный (f4l) -> средний (f3l) -> указательный (f2l) -> большой (f1l)
+        # Для правой руки: мизинец (f5r) -> безымянный (f4r) -> средний (f3r) -> указательный (f2r) -> большой (f1r)
 
-        for i in range(1, len(columns)):
-            prev_col = columns[i - 1]
-            curr_col = columns[i]
+        # Создаем словарь для порядка пальцев
+        finger_order = {
+            'f5l': 1, 'f4l': 2, 'f3l': 3, 'f2l': 4, 'f1l': 5,
+            'f5r': 1, 'f4r': 2, 'f3r': 3, 'f2r': 4, 'f1r': 5
+        }
 
-            # Определяем направление (от мизинца к указательному = удобное)
-            if prev_col < curr_col:  # от внешнего к внутреннему
-                comfort_score += 1
-            elif prev_col > curr_col:  # от внутреннего к внешнему
-                comfort_score -= 1
-            # else - та же колонка
+        # Получаем числовые значения пальцев
+        finger_values = [finger_order[f] for f in fingers]
 
-        # Определяем тип перебора по количеству символов
-        seq_type = f"{len(sequence)}-gram"
+        # Проверяем направление движения пальцев
+        is_sequential = True
+        is_same_finger = all(f == fingers[0] for f in fingers)
 
-        # Определяем удобство
-        if comfort_score > 0:
-            comfort = "udp"  # Удобный перебор
-        elif comfort_score == 0:
-            comfort = "chudp"  # Частично удобный
+        if is_same_finger:
+            # Одинаковые пальцы - это ЧУДП (одним пальцем)
+            comfort = "chudp"
         else:
-            comfort = "nudp"  # Неудобный перебор
+            # Проверяем, идет ли последовательность в естественном порядке
+            # Естественный порядок: от мизинца к указательному (возрастание finger_order)
+            differences = [finger_values[i + 1] - finger_values[i] for i in range(len(finger_values) - 1)]
+
+            # Проверяем, все ли разности имеют одинаковый знак и не равны 0
+            all_positive = all(diff > 0 for diff in differences)
+            all_negative = all(diff < 0 for diff in differences)
+
+            if all_positive:
+                # Движение от мизинца к указательному - УДП
+                comfort = "udp"
+            elif all_negative:
+                # Движение от указательного к мизинцу - ЧУДП
+                comfort = "chudp"
+            else:
+                # Смешанное направление - ЧУДП
+                comfort = "chudp"
+
+        # Определяем тип по длине последовательности
+        seq_len = len(sequence)
+        if seq_len == 2:
+            seq_type = "2-gram"
+        elif seq_len == 3:
+            seq_type = "3-gram"
+        elif seq_len == 4:
+            seq_type = "4-gram"
+        else:
+            seq_type = f"{seq_len}-gram"
 
         return {
             "type": seq_type,
             "comfort": comfort,
-            "score": comfort_score,
             "fingers": fingers,
             "hand": hands[0],
-            "sequence": sequence
+            "sequence": sequence,
+            "finger_values": finger_values
         }

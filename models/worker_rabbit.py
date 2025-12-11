@@ -44,7 +44,6 @@ def main():
     """
     storage = RedisStorage()
 
-
     # Подключаемся к RabbitMQ для получения заданий
     connection = pika.BlockingConnection(
         pika.ConnectionParameters('rabbitmq', 5672, credentials=pika.PlainCredentials('user', 'password'))

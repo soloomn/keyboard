@@ -13,10 +13,16 @@
 Используемые модули:
 - visual: для построения различных типов графиков
 - models: для работы с Redis хранилищем
-- json: для работы с данными (закомментировано)
+
+ВХОД:
+    Модуль принимает данные через функцию show_all в виде семи словарей
+    с данными о нагрузках для каждой раскладки.
+
+ВЫХОД:
+    Модуль не возвращает значения, но последовательно отображает 4 типа графиков
+    через matplotlib.
 """
 
-import json
 from visual import plot_finger_usage_with_values
 from visual import plot_only_pie_charts
 from visual import plot_finger_loads_by_layout
@@ -29,6 +35,10 @@ def show_all(data_diktor: dict, data_qwer: dict, data_vyzov: dict,
     """
     Последовательно отображает все доступные визуализации для анализа раскладок.
 
+    Функция является точкой входа для комплексного визуального анализа
+    данных по клавиатурным раскладкам, отображая четыре типа графиков
+    в последовательном порядке.
+
     ВХОД:
         data_diktor (dict): Данные для раскладки "Диктор" в формате {'left': list, 'right': list}
         data_qwer (dict): Данные для раскладки "Йцукен" в формате {'left': list, 'right': list}
@@ -39,7 +49,7 @@ def show_all(data_diktor: dict, data_qwer: dict, data_vyzov: dict,
         data_rusphone (dict): Данные для раскладки "РусФон" в формате {'left': list, 'right': list}
 
     ВЫХОД:
-        None (последовательно отображает 4 типа графиков с помощью matplotlib)
+        None
 
     Действия функции:
         - Строит горизонтальные гистограммы нагрузок на пальцы
@@ -51,10 +61,6 @@ def show_all(data_diktor: dict, data_qwer: dict, data_vyzov: dict,
     plot_only_pie_charts(data_diktor, data_qwer, data_vyzov, data_ant, data_skoropis, data_zubachew, data_rusphone)
     plot_finger_loads_by_layout(data_diktor, data_qwer, data_vyzov, data_ant, data_skoropis, data_zubachew, data_rusphone)
     create_total_load_pie_chart(data_diktor, data_qwer, data_vyzov)
-
-# загружаем данные из JSON
-#with open("/app/data_output/layouts.json", "r", encoding="utf-8") as f:
-     #data = json.load(f)
 
 storage = RedisStorage()
 data = storage.load("layouts")
