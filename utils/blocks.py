@@ -25,7 +25,7 @@ def process_block_return(block_text: str) -> dict:
     """
 
     analyzer = LayoutAnalyzer()
-    metrics = (re.sub(r'[,]]', '', storage.load(DATA_KEY))).split(' ')
+    metrics = (re.sub(r'[,]', '', storage.load(DATA_KEY))).split(' ')
 
     if ('Статические' in metrics) and ('Динамические' in metrics):
         analyzer.analyze_text(block_text)
@@ -70,7 +70,7 @@ def merge_block_data(main_analyzer: LayoutAnalyzer, block_data: dict):
 
     ВЫХОД: Нет (данные добавляются в основной анализатор)
     """
-    metrics = (re.sub(r'[,]]', '', storage.load(DATA_KEY))).split(' ')
+    metrics = (re.sub(r'[,]', '', storage.load(DATA_KEY))).split(' ')
     if ('Статические' in metrics) and ('Динамические' in metrics):
         for layout_name, vals in block_data['finger_data'].items():
             layout = main_analyzer.layouts[layout_name]

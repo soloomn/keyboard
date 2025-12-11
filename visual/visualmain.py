@@ -13,10 +13,8 @@
 Используемые модули:
 - visual: для построения различных типов графиков
 - models: для работы с Redis хранилищем
-- json: для работы с данными (закомментировано)
 """
 
-import json
 from visual import plot_finger_usage_with_values
 from visual import plot_only_pie_charts
 from visual import plot_finger_loads_by_layout
@@ -51,10 +49,6 @@ def show_all(data_diktor: dict, data_qwer: dict, data_vyzov: dict,
     plot_only_pie_charts(data_diktor, data_qwer, data_vyzov, data_ant, data_skoropis, data_zubachew, data_rusphone)
     plot_finger_loads_by_layout(data_diktor, data_qwer, data_vyzov, data_ant, data_skoropis, data_zubachew, data_rusphone)
     create_total_load_pie_chart(data_diktor, data_qwer, data_vyzov)
-
-# загружаем данные из JSON
-#with open("/app/data_output/layouts.json", "r", encoding="utf-8") as f:
-     #data = json.load(f)
 
 storage = RedisStorage()
 data = storage.load("layouts")
