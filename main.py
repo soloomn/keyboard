@@ -110,7 +110,6 @@ if __name__ == "__main__":
         storage.save("analysis:status", "finished")
         storage.save("layouts", data_fingers)
         storage.save("sequences", data_sequences)
-        print(data_sequences)
 
         print("Анализ завершён!")
 
