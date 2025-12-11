@@ -533,7 +533,15 @@ class KeyboardLayout:
         return self.hand_changes
 
     def add_sequence_result(self, sequence: str) -> None:
-        """Накопление статистики по одной последовательности."""
+        """
+        Накопление статистики по одной последовательности.
+
+        ВХОД:
+            sequence (str): Последовательность символов (2-4 символа)
+
+        ВЫХОД:
+            None (результаты сохраняются во внутренних счетчиках N-грамм)
+        """
         result = self.analyze_finger_sequence(sequence)
         seq_len = len(sequence)
 
@@ -577,6 +585,15 @@ class KeyboardLayout:
 
         ВЫХОД:
             dict: Результат анализа с типом перебора и удобством
+                  Формат:
+                  {
+                      "type": тип_последовательности ("2-gram", "3-gram", "4-gram"),
+                      "comfort": уровень_удобства ("udp", "chudp", "nudp"),
+                      "fingers": список_используемых_пальцев,
+                      "hand": рука_использования ("left" или "right"),
+                      "sequence": исходная_последовательность,
+                      "finger_values": числовые_значения_пальцев
+                  }
         """
         if len(sequence) < 2:
             return {"type": "short", "comfort": "N/A", "score": 0}

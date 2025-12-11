@@ -34,6 +34,7 @@ class RedisStorage:
     Attributes:
         client: Клиент Redis для взаимодействия с сервером
     """
+
     def __init__(self):
         """
         Инициализация клиента Redis.
@@ -51,7 +52,7 @@ class RedisStorage:
 
         ВХОД:
             key (str): Ключ для сохранения данных
-            data (dict | str | int): Данные для сохранения
+            data (dict | str | int | list[str]): Данные для сохранения
 
         ВЫХОД:
             None
@@ -72,7 +73,7 @@ class RedisStorage:
             key (str): Ключ для загрузки данных
 
         ВЫХОД:
-            dict | str | int | None: Загруженные данные или None если ключ не найден
+            dict | str | int | list[str] | None: Загруженные данные или None если ключ не найден
 
         Действия функции:
             - Пытается загрузить данные по указанному ключу

@@ -21,7 +21,12 @@ def process_block_return(block_text: str) -> dict:
         block_text (str): Текстовый блок для анализа
 
     ВЫХОД:
-        dict: Словарь с данными нагрузки для всех раскладок в формате reverser
+        dict: Словарь с данными нагрузки для всех раскладок в формате reverser.
+              Формат возвращаемых данных зависит от выбранных метрик:
+              - Для "Статические" метрики: содержит finger_data
+              - Для "Динамические" метрики: содержит sequence_stats
+              - Для обеих метрик: содержит оба набора данных
+              - В случае ошибки: пустой словарь и исключение
     """
 
     analyzer = LayoutAnalyzer()
@@ -68,7 +73,8 @@ def merge_block_data(main_analyzer: LayoutAnalyzer, block_data: dict):
         main_analyzer (LayoutAnalyzer): Основной анализатор для накопления данных
         block_data (dict): Данные из блока для объединения
 
-    ВЫХОД: Нет (данные добавляются в основной анализатор)
+    ВЫХОД:
+        None (данные добавляются в основной анализатор)
     """
     metrics = (re.sub(r'[,]', '', storage.load(DATA_KEY))).split(' ')
     if ('Статические' in metrics) and ('Динамические' in metrics):
