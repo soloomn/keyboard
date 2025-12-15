@@ -65,6 +65,18 @@ class LayoutAnalyzer:
             'zubachew': KeyboardLayout("зубачев", 'zubachew')
         }
 
+        self.twogram = {
+            'udp_2gram': 0, 'chudp_2gram': 0, 'nudp_2gram': 0
+        }
+
+        self.threegram = {
+            'udp_3gram': 0, 'chudp_3gram': 0, 'nudp_3gram': 0
+        }
+
+        self.fourgram = {
+            'udp_4gram': 0, 'chudp_4gram': 0, 'nudp_4gram': 0
+        }
+
         self.output_file = Path("/app/data_output/output.txt")
         # Очищаем файл при инициализации
         if self.output_file:
@@ -492,30 +504,82 @@ class LayoutAnalyzer:
         self._print("АНАЛИЗ ПАЛЬЦЕВЫХ ПЕРЕБОРОВ В РАСКЛАДКАХ")
         self._print("=" * 100)
 
-        headers = ["Раскладка", "2г (однор)", "3г (однор)", "4г (однор)", "УдП", "ЧудП", "НудП"]
-        print(
-            f"{headers[0]:<12} | {headers[1]:<12} | {headers[2]:<12} | {headers[3]:<12} | "
-            f"{headers[4]:<8} | {headers[5]:<8} | {headers[6]:<8}")
-        print("-" * 100)
+        # Заголовки таблицы
+        headers = ["Раскладка", "2г УдП", "2г ЧудП", "3г УдП", "3г ЧудП", "4г УдП", "4г ЧудП",
+                   "∑ УдП", "∑ ЧудП", "∑ НудП", "Всего"]
 
+        # Вывод заголовка таблицы
+        header_line = f"{headers[0]:<12} | {headers[1]:<8} | {headers[2]:<8} | {headers[3]:<8} | " \
+                      f"{headers[4]:<8} | {headers[5]:<8} | {headers[6]:<8} | " \
+                      f"{headers[7]:<8} | {headers[8]:<8} | {headers[9]:<8} | {headers[10]:<8}"
+        self._print(header_line)
+        self._print("-" * 120)
+
+        # Вывод данных для каждой раскладки
         for layout in self.layouts.values():
-            # Только одноручные последовательности (исключаем НУДП - разноручные)
-            onehand_2gram = layout.twogram["udp_2gram"] + layout.twogram["chudp_2gram"]
-            onehand_3gram = layout.threegram["udp_3gram"] + layout.threegram["chudp_3gram"]
-            onehand_4gram = layout.fourgram["udp_4gram"] + layout.fourgram["chudp_4gram"]
+            # Получаем данные из раскладки
+            udp_2gram = layout.twogram["udp_2gram"]
+            chudp_2gram = layout.twogram["chudp_2gram"]
+            n_2gram = layout.twogram["nudp_2gram"]
 
-            # Качество одноручных
-            total_udp = layout.twogram["udp_2gram"] + layout.threegram["udp_3gram"] + layout.fourgram["udp_4gram"]
-            total_chudp = layout.twogram["chudp_2gram"] + layout.threegram["chudp_3gram"] + layout.fourgram[
-                "chudp_4gram"]
+            udp_3gram = layout.threegram["udp_3gram"]
+            chudp_3gram = layout.threegram["chudp_3gram"]
+            n_3gram = layout.threegram["nudp_3gram"]
 
-            # Разноручные (НУДП)
-            total_nudp = layout.twogram["nudp_2gram"] + layout.threegram["nudp_3gram"] + layout.fourgram["nudp_4gram"]
+            udp_4gram = layout.fourgram["udp_4gram"]
+            chudp_4gram = layout.fourgram["chudp_4gram"]
+            n_4gram = layout.fourgram["nudp_4gram"]
 
-            self._print(
-                f"{layout.name:<12} | {onehand_2gram:<12} | {onehand_3gram:<12} | {onehand_4gram:<12} | "
-                f"{total_udp:<8} | {total_chudp:<8} | {total_nudp:<8}"
-            )
+            # Суммы по категориям
+            total_udp = udp_2gram + udp_3gram + udp_4gram
+            total_chudp = chudp_2gram + chudp_3gram + chudp_4gram
+            total_nudp = n_2gram + n_3gram + n_4gram
+
+            # Общее количество последовательностей
+            total_sequences = layout.total_sequences
+
+            # Формируем строку для вывода
+            row = f"{layout.name:<12} | " \
+                  f"{udp_2gram:<8} | {chudp_2gram:<8} | " \
+                  f"{udp_3gram:<8} | {chudp_3gram:<8} | " \
+                  f"{udp_4gram:<8} | {chudp_4gram:<8} | " \
+                  f"{total_udp:<8} | {total_chudp:<8} | " \
+                  f"{total_nudp:<8} | {total_sequences:<8}"
+
+            self._print(row)
+
+        # Дополнительная статистика: суммы по n-граммам отдельно
+        self._print("\n" + "=" * 100)
+        self._print("СУММАРНЫЕ ПОКАЗАТЕЛИ ПО N-ГРАММАМ")
+        self._print("=" * 100)
+
+        # Заголовки для суммарной таблицы
+        sum_headers = ["Раскладка", "∑ 2-грамм", "∑ 3-грамм", "∑ 4-грамм", "∑ Однор.УдП", "∑ Однор.ЧудП", "∑ Разнор."]
+        sum_header_line = f"{sum_headers[0]:<12} | {sum_headers[1]:<10} | {sum_headers[2]:<10} | " \
+                          f"{sum_headers[3]:<10} | {sum_headers[4]:<12} | {sum_headers[5]:<12} | {sum_headers[6]:<10}"
+        self._print(sum_header_line)
+        self._print("-" * 100)
+
+        # Вывод суммарных данных
+        for layout in self.layouts.values():
+            # Суммы по n-граммам
+            sum_2gram = layout.twogram["udp_2gram"] + layout.twogram["chudp_2gram"]
+            sum_3gram = layout.threegram["udp_3gram"] + layout.threegram["chudp_3gram"]
+            sum_4gram = layout.fourgram["udp_4gram"] + layout.fourgram["chudp_4gram"]
+
+            # Суммы по типам последовательностей
+            sum_onehand_udp = (layout.twogram["udp_2gram"] + layout.threegram["udp_3gram"] +
+                               layout.fourgram["udp_4gram"])
+            sum_onehand_chudp = (layout.twogram["chudp_2gram"] + layout.threegram["chudp_3gram"] +
+                                 layout.fourgram["chudp_4gram"])
+            sum_twohand = (layout.twogram["nudp_2gram"] + layout.threegram["nudp_3gram"] +
+                           layout.fourgram["nudp_4gram"])
+
+            sum_row = f"{layout.name:<12} | " \
+                      f"{sum_2gram:<10} | {sum_3gram:<10} | {sum_4gram:<10} | " \
+                      f"{sum_onehand_udp:<12} | {sum_onehand_chudp:<12} | {sum_twohand:<10}"
+
+            self._print(sum_row)
 
     def print_comparative_analysis(self) -> None:
         """
